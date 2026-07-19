@@ -1,0 +1,10 @@
+@page "/categories"
+@page "/services"
+@page "/specialties"
+@page "/users"
+@page "/roles"
+@layout Layout.SalonLayout
+@inject NavigationManager Navigation
+<PageTitle>@Title | بیوتی سالن</PageTitle>
+<div class="page-title"><div><p>مدیریت اطلاعات</p><h1>@Title</h1><span>@Description</span></div><button type="button" @onclick="AddItem">+ افزودن @Singular</button></div><article class="data-card"><div class="grid-tools"><div class="search">⌕ <input placeholder="جست‌وجو در @Title" /></div><span>@Items.Count مورد</span></div><div class="data-grid"><div class="grid-head"><span>نام @Singular</span><span>توضیحات</span><span>وضعیت</span><span>تاریخ ثبت</span><span>عملیات</span></div>@foreach(var item in Items){<div class="grid-row"><strong>@item.Name</strong><span>@item.Description</span><em class="active">فعال</em><span>۱۴۰۵/۰۴/۲۲</span><div class="row-actions"><button @onclick="() => EditItem(item)">ویرایش</button><button class="delete" @onclick="() => RemoveItem(item)">حذف</button></div></div>}</div></article>
+@code {private List<Row> Items=[];private string Path=>new Uri(Navigation.Uri).AbsolutePath.ToLowerInvariant();private string Title=>Path switch{"/categories"=>"دسته‌بندی‌ها","/services"=>"خدمات","/specialties"=>"تخصص‌ها","/users"=>"مدیریت کاربران","/roles"=>"مدیریت نقش‌ها",_=>"مدیریت"};private string Singular=>Path switch{"/categories"=>"دسته‌بندی","/services"=>"خدمت","/specialties"=>"تخصص","/users"=>"کاربر","/roles"=>"نقش",_=>"مورد"};private string Description=>$"فهرست و مدیریت {Title} در سامانه بیوتی سالن";protected override void OnInitialized(){Items=[new($"{Singular} نمونه اول","اطلاعات ثبت‌شده در سامانه"),new($"{Singular} نمونه دوم","قابل ویرایش توسط مدیر"),new($"{Singular} نمونه سوم","نمایش در پنل مدیریت")];}private void AddItem()=>Items.Add(new($"{Singular} جدید","به‌تازگی اضافه شده"));private void EditItem(Row item)=>item.Description="آخرین ویرایش انجام شد";private void RemoveItem(Row item)=>Items.Remove(item);private sealed class Row(string name,string description){public string Name{get;set;}=name;public string Description{get;set;}=description;}}

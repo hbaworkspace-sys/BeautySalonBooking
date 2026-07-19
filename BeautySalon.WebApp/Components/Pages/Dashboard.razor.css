@@ -1,0 +1,669 @@
+﻿.salon-dashboard {
+    min-height: 100vh;
+    background: #fff8f7;
+    color: #513f4b;
+    display: flex
+}
+
+.salon-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 268px;
+    overflow: auto;
+    padding: 24px 14px 17px;
+    background: #fff;
+    border-left: 1px solid #f5e5e5;
+    display: flex;
+    flex-direction: column
+}
+
+.salon-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 9px 28px;
+    text-decoration: none;
+    color: #543d4a
+}
+
+    .salon-brand img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover
+    }
+
+    .salon-brand span {
+        display: grid
+    }
+
+    .salon-brand b {
+        font-size: 18px
+    }
+
+    .salon-brand small {
+        color: #ac8590;
+        font-size: 10px
+    }
+
+.salon-nav {
+    display: grid;
+    gap: 3px
+}
+
+    .salon-nav p {
+        margin: 17px 11px 5px;
+        color: #c198a3;
+        font-size: 10px
+    }
+
+    .salon-nav a {
+        height: 39px;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 0 12px;
+        border-radius: 9px;
+        color: #876d78;
+        font-size: 12px;
+        text-decoration: none
+    }
+
+        .salon-nav a i, .logout i {
+            font-style: normal;
+            font-size: 17px;
+            color: #dc8191
+        }
+
+        .salon-nav a.selected {
+            color: #c75d74;
+            background: linear-gradient(90deg,#fff0ee,#fff7f6);
+            font-weight: 700
+        }
+
+    .salon-nav .sub-item {
+        height: 29px;
+        padding-right: 39px;
+        font-size: 11px;
+        color: #aa8b94
+    }
+
+.logout {
+    display: flex;
+    gap: 11px;
+    align-items: center;
+    margin: auto 9px 0;
+    padding-top: 18px;
+    border-top: 1px solid #f5e5e5;
+    color: #bd7080;
+    font-size: 12px;
+    text-decoration: none
+}
+
+.salon-content {
+    width: calc(100% - 268px);
+    margin-right: 268px
+}
+
+.salon-header {
+    height: 74px;
+    padding: 0 36px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-bottom: 1px solid #f6e7e7
+}
+
+.crumb {
+    color: #a5848d;
+    font-size: 12px
+}
+
+    .crumb span {
+        margin: 0 8px;
+        color: #dfbbc1
+    }
+
+.header-profile {
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    gap: 9px
+}
+
+    .header-profile button {
+        position: relative;
+        border: 0;
+        background: transparent;
+        color: #bf7482;
+        font-size: 20px
+    }
+
+        .header-profile button b {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #e9647f;
+            top: 2px;
+            right: 2px
+        }
+
+.profile-avatar {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #f6d4cd;
+    color: #a15462;
+    font-weight: bold;
+    font-size: 13px
+}
+
+.header-profile div:not(.profile-avatar) {
+    display: grid
+}
+
+.header-profile strong {
+    font-size: 11px
+}
+
+.header-profile small {
+    font-size: 9px;
+    color: #ad929a
+}
+
+.header-profile i {
+    font-style: normal;
+    color: #b799a1
+}
+
+.mobile-menu {
+    display: none
+}
+
+.salon-body {
+    max-width: 1440px;
+    padding: 29px 36px;
+    margin: auto
+}
+
+.welcome {
+    min-height: 154px;
+    overflow: hidden;
+    position: relative;
+    padding: 26px 30px;
+    border-radius: 17px;
+    background: linear-gradient(110deg,#f9ac8d,#ec8196 58%,#df5a85);
+    color: #fff;
+    display: flex
+}
+
+    .welcome span {
+        font-size: 11px;
+        background: #ffffff2e;
+        padding: 5px 10px;
+        border-radius: 20px
+    }
+
+    .welcome h1 {
+        margin: 10px 0 5px;
+        font-size: 23px
+    }
+
+    .welcome p {
+        margin: 0;
+        font-size: 12px;
+        color: #fff6f4
+    }
+
+    .welcome img {
+        position: absolute;
+        left: 29px;
+        bottom: -54px;
+        width: 185px;
+        height: 185px;
+        opacity: .24;
+        border-radius: 50%;
+        filter: brightness(0) invert(1)
+    }
+
+.stat-cards {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 16px;
+    margin: 20px 0
+}
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    padding: 18px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid #f4e8ea
+}
+
+    .stat-card:after {
+        content: "";
+        position: absolute;
+        left: -16px;
+        bottom: -20px;
+        width: 66px;
+        height: 66px;
+        border-radius: 50%;
+        opacity: .5
+    }
+
+    .stat-card.coral:after {
+        background: #ffd9cf
+    }
+
+    .stat-card.peach:after {
+        background: #ffe7be
+    }
+
+    .stat-card.pink:after {
+        background: #f5d7e2
+    }
+
+    .stat-card.violet:after {
+        background: #e4d9f7
+    }
+
+.stat-icon {
+    width: 37px;
+    height: 37px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    font-size: 18px
+}
+
+.coral .stat-icon {
+    color: #df7180;
+    background: #ffeded
+}
+
+.peach .stat-icon {
+    color: #d69242;
+    background: #fff4df
+}
+
+.pink .stat-icon {
+    color: #bf6f91;
+    background: #fbebf2
+}
+
+.violet .stat-icon {
+    color: #9076bd;
+    background: #f1ecfb
+}
+
+.stat-card p {
+    margin: 13px 0 4px;
+    font-size: 11px;
+    color: #997d86
+}
+
+.stat-card strong {
+    display: block;
+    font-size: 25px;
+    color: #5a3e4b
+}
+
+.stat-card small {
+    font-size: 9px;
+    color: #51a17b
+}
+
+.stat-card .pending {
+    color: #d3904c
+}
+
+.salon-grid {
+    display: grid;
+    grid-template-columns: 1.55fr .7fr;
+    gap: 18px;
+    margin-bottom: 18px
+}
+
+.salon-panel {
+    padding: 20px;
+    border: 1px solid #f3e7e8;
+    border-radius: 14px;
+    background: #fff
+}
+
+.panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 18px
+}
+
+    .panel-head h2 {
+        margin: 0 0 5px;
+        font-size: 14px
+    }
+
+    .panel-head p {
+        margin: 0;
+        color: #ad929a;
+        font-size: 10px
+    }
+
+    .panel-head a {
+        color: #d06d80;
+        font-size: 10px;
+        text-decoration: none
+    }
+
+.table-head, .table-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr .9fr;
+    align-items: center;
+    gap: 8px
+}
+
+.table-head {
+    padding: 0 11px 9px;
+    color: #b39aa2;
+    font-size: 10px
+}
+
+.table-row {
+    min-height: 58px;
+    padding: 8px 11px;
+    border-top: 1px solid #f9eef0;
+    color: #927883;
+    font-size: 10px
+}
+
+.salon-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #654b57
+}
+
+    .salon-name strong {
+        font-size: 11px
+    }
+
+.salon-avatar {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    font-size: 11px
+}
+
+.one {
+    background: #fce1d9;
+    color: #c26959
+}
+
+.two {
+    background: #eadff8;
+    color: #8765bd
+}
+
+.three {
+    background: #dbeef1;
+    color: #47848e
+}
+
+.four {
+    background: #f9e8c9;
+    color: #ac8146
+}
+
+.status {
+    width: max-content;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 9px;
+    font-style: normal
+}
+
+.review {
+    background: #fff2db;
+    color: #cf8a36
+}
+
+.approved {
+    background: #e5f7ef;
+    color: #398d69
+}
+
+.rejected {
+    background: #fce9ec;
+    color: #c75f70
+}
+
+.quick a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-top: 1px solid #faeff0;
+    color: #704f5c;
+    text-decoration: none
+}
+
+    .quick a > i {
+        display: grid;
+        place-items: center;
+        width: 33px;
+        height: 33px;
+        border-radius: 9px;
+        background: #fff0ed;
+        color: #dc7885;
+        font-style: normal
+    }
+
+.quick span {
+    display: grid;
+    gap: 3px
+}
+
+.quick b {
+    font-size: 11px
+}
+
+.quick small {
+    font-size: 9px;
+    color: #b098a0
+}
+
+.quick em {
+    margin-right: auto;
+    color: #d48694;
+    font-style: normal
+}
+
+.chart-panel select {
+    border: 1px solid #f2dcdf;
+    border-radius: 7px;
+    padding: 6px;
+    color: #9e7d87;
+    background: #fff;
+    font: 11px Vazirmatn
+}
+
+.chart {
+    height: 145px;
+    padding: 0 20px;
+    display: flex;
+    align-items: end;
+    justify-content: space-around;
+    border-bottom: 1px solid #f2e3e5;
+    background: repeating-linear-gradient(to bottom,transparent 0,transparent 35px,#f9eff0 36px)
+}
+
+    .chart div {
+        position: relative;
+        width: 34px;
+        border-radius: 7px 7px 0 0;
+        background: linear-gradient(#f7a98e,#e97391)
+    }
+
+        .chart div:last-child {
+            background: linear-gradient(#ec7796,#d95986)
+        }
+
+    .chart span {
+        position: absolute;
+        top: -18px;
+        width: 100%;
+        text-align: center;
+        color: #a97f89;
+        font-size: 9px
+    }
+
+.chart-months {
+    display: flex;
+    justify-content: space-around;
+    padding: 9px 15px 0;
+    color: #b0959c;
+    font-size: 10px
+}
+
+@media(max-width:1100px) {
+    .stat-cards {
+        grid-template-columns: repeat(2,1fr)
+    }
+
+    .salon-grid {
+        grid-template-columns: 1fr
+    }
+
+    .quick {
+        display: none
+    }
+}
+
+@media(max-width:720px) {
+    .salon-sidebar {
+        display: none
+    }
+
+    .salon-content {
+        width: 100%;
+        margin: 0
+    }
+
+    .salon-header {
+        height: 61px;
+        padding: 0 16px
+    }
+
+    .mobile-menu {
+        display: block;
+        border: 0;
+        background: transparent;
+        color: #c36379;
+        font-size: 20px
+    }
+
+    .crumb {
+        font-size: 10px
+    }
+
+    .header-profile div:not(.profile-avatar), .header-profile i {
+        display: none
+    }
+
+    .salon-body {
+        padding: 18px 14px
+    }
+
+    .welcome {
+        min-height: 142px;
+        padding: 21px
+    }
+
+        .welcome h1 {
+            font-size: 19px
+        }
+
+        .welcome p {
+            max-width: 240px;
+            font-size: 10px;
+            line-height: 1.8
+        }
+
+        .welcome img {
+            width: 135px;
+            height: 135px;
+            left: -20px
+        }
+
+    .stat-cards {
+        gap: 10px;
+        margin: 13px 0
+    }
+
+    .stat-card {
+        padding: 13px
+    }
+
+        .stat-card p {
+            font-size: 10px
+        }
+
+        .stat-card strong {
+            font-size: 20px
+        }
+
+        .stat-card small {
+            display: none
+        }
+
+    .salon-panel {
+        padding: 14px
+    }
+
+    .requests {
+        overflow: auto
+    }
+
+        .requests .panel-head {
+            min-width: 520px
+        }
+
+    .request-table {
+        min-width: 530px
+    }
+
+    .salon-grid {
+        margin-bottom: 12px
+    }
+
+    .chart {
+        padding: 0 7px
+    }
+
+        .chart div {
+            width: 25px
+        }
+}
+
+@media(max-width:390px) {
+    .stat-cards {
+        grid-template-columns: 1fr
+    }
+
+    .welcome img {
+        opacity: .12
+    }
+
+    .table-head, .table-row {
+        grid-template-columns: 1.6fr 1fr 1fr .8fr
+    }
+}

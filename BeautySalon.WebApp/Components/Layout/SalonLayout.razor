@@ -1,0 +1,39 @@
+@inherits LayoutComponentBase
+<main class="app-shell" dir="rtl">
+    <aside class="app-sidebar">
+        <a class="app-brand" href="/dashboard">
+            <img src="images/salon-logo.png" alt="بیوتی سالن" />
+            <span><b>بیوتی سالن</b><small>سامانه مدیریت آرایشگاه</small></span>
+        </a>
+        <nav>
+            <NavLink href="/dashboard" Match="NavLinkMatch.All">
+                ▦ <span>داشبورد</span>
+                </NavLink>
+                <p>اطلاعات پایه</p>
+                <NavLink href="/categories">▤ <span>دسته‌بندی</span>
+                    </NavLink>
+                    <NavLink href="/services">✦ <span>خدمات</span></NavLink>
+                    <NavLink href="/specialties">♧ <span>تخصص‌ها</span></NavLink>
+                    <p>مدیریت کاربران</p>
+                    <NavLink href="/users">♙ <span>مدیریت کاربران</span></NavLink>
+                    <NavLink href="/roles">◉ <span>مدیریت نقش‌ها</span></NavLink>
+                    <NavLink href="/permissions">⌘ <span>مدیریت دسترسی‌ها</span></NavLink>
+                    <NavLink href="/menus">☷ <span>مدیریت منوها</span></NavLink>
+                    <p>تنظیمات</p>
+                    <a href="/dashboard">◌ <span>پروفایل</span></a>
+                    <a href="/dashboard">⌑ <span>تغییر رمز عبور</span></a>
+         </nav>
+                    <a class="app-logout" href="/">↪ <span>خروج از حساب</span></a>
+    </aside>
+    <section class="app-main">
+                       <header>
+                           <div>مدیریت آرایشگاه <i>/</i> پنل بیوتی سالن</div>
+                           <div class="app-user"><b>ن</b><span>نسترن احمدی<small>مدیر سیستم</small></span></div>
+                       </header>
+      <div class="app-content">
+          @Body
+      </div>
+    </section>
+                   
+               
+</main>

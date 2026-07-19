@@ -1,0 +1,35 @@
+@page "/dashboard"
+@layout Layout.SalonLayout
+<PageTitle>داشبورد | بیوتی سالن</PageTitle>
+<section class="welcome">
+    <div><span>✦ پنل مدیریت بیوتی سالن</span>
+        <h1>سلام نسترن، خوش آمدید!</h1>
+        <p>وضعیت سالن‌ها و درخواست‌های ثبت‌شده را یک‌جا بررسی کنید.</p>
+    </div><img src="images/salon-logo.png" alt="" />
+</section>
+<div class="stat-cards">
+    <article class="stat-card coral">
+        <div class="stat-icon">▤</div>
+        <p>کل درخواست‌های سالن</p>
+        <strong>۱۲۸</strong>
+        <small>↑ ۱۸٪ نسبت به ماه قبل</small>
+    </article>
+    <article class="stat-card peach">
+        <div class="stat-icon">◷</div>
+        <p>درخواست‌های در انتظار</p>
+        <strong>۲۴</strong>
+        <small class="pending">نیازمند بررسی</small>
+    </article>
+    <article class="stat-card pink">
+        <div class="stat-icon">⌂</div>
+        <p>سالن‌های فعال</p><strong>۳۶</strong>
+        <small>↑ ۴ سالن جدید این ماه</small>
+    </article>
+    <article class="stat-card violet">
+        <div class="stat-icon">♙</div>
+        <p>کارکنان فعال</p>
+        <strong>۱۸۹</strong>
+        <small>↑ ۹٪ نسبت به ماه قبل</small>
+    </article>
+    </div>
+<article class="salon-panel requests"><div class="panel-head"><div><h2>درخواست‌های اخیر سالن</h2><p>آخرین درخواست‌های ثبت‌شده برای همکاری</p></div></div><div class="request-table"><div class="table-head"><span>نام سالن</span><span>مدیر سالن</span><span>تاریخ درخواست</span><span>وضعیت</span></div><div class="table-row"><div class="salon-name"><b class="salon-avatar one">م</b><strong>سالن زیبایی مهتاب</strong></div><span>مهتاب اکبری</span><span>امروز، ۱۰:۳۴</span><em class="status review">در انتظار بررسی</em></div><div class="table-row"><div class="salon-name"><b class="salon-avatar two">آ</b><strong>آرایشگاه آوا</strong></div><span>آوا محمدی</span><span>دیروز، ۱۶:۲۰</span><em class="status approved">تأیید شده</em></div></div></article>

@@ -1,0 +1,188 @@
+.app-shell {
+    min-height: 100vh;
+    background: #fff8f7;
+    color: #553f4b
+}
+
+.app-sidebar {
+    position: fixed;
+    z-index: 4;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 268px;
+    overflow: auto;
+    padding: 24px 14px 17px;
+    background: #fff;
+    border-left: 1px solid #f5e5e5;
+    display: flex;
+    flex-direction: column
+}
+
+.app-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 9px 27px;
+    color: #543d4a;
+    text-decoration: none
+}
+
+    .app-brand img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover
+    }
+
+    .app-brand span, .app-user span {
+        display: grid
+    }
+
+    .app-brand b {
+        font-size: 18px
+    }
+
+    .app-brand small, .app-user small {
+        color: #ac8590;
+        font-size: 10px
+    }
+
+.app-sidebar nav {
+    display: grid;
+    gap: 3px
+}
+
+    .app-sidebar nav p {
+        margin: 17px 11px 5px;
+        color: #c198a3;
+        font-size: 10px
+    }
+
+    .app-sidebar nav a {
+        height: 39px;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 0 12px;
+        border-radius: 9px;
+        color: #876d78;
+        font-size: 12px;
+        text-decoration: none
+    }
+
+        .app-sidebar nav a.active {
+            color: #c75d74;
+            background: linear-gradient(90deg,#fff0ee,#fff7f6);
+            font-weight: 700
+        }
+
+.app-logout {
+    display: flex;
+    gap: 11px;
+    margin: auto 11px 0;
+    padding-top: 18px;
+    border-top: 1px solid #f5e5e5;
+    color: #bd7080;
+    font-size: 12px;
+    text-decoration: none
+}
+
+.app-main {
+    margin-right: 268px;
+    min-height: 100vh
+}
+
+    .app-main > header {
+        height: 74px;
+        padding: 0 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #fff;
+        border-bottom: 1px solid #f6e7e7;
+        color: #a5848d;
+        font-size: 12px
+    }
+
+        .app-main > header i {
+            margin: 0 8px;
+            color: #dfbbc1;
+            font-style: normal
+        }
+
+.app-user {
+    display: flex;
+    gap: 9px;
+    align-items: center;
+    color: #674d58
+}
+
+    .app-user > b {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #f6d4cd;
+        color: #a15462;
+        font-size: 13px
+    }
+
+    .app-user span {
+        font-size: 11px
+    }
+
+.app-content {
+    max-width: 1440px;
+    padding: 30px 36px;
+    margin: auto
+}
+
+@media(max-width:720px) {
+    .app-sidebar {
+        width: 64px;
+        padding: 17px 8px
+    }
+
+    .app-brand {
+        margin: 0 auto 25px
+    }
+
+        .app-brand img {
+            width: 39px;
+            height: 39px
+        }
+
+        .app-brand span, .app-sidebar nav p, .app-sidebar nav a span, .app-logout span {
+            display: none
+        }
+
+    .app-sidebar nav a {
+        justify-content: center;
+        padding: 0;
+        font-size: 18px
+    }
+
+    .app-logout {
+        justify-content: center;
+        font-size: 18px
+    }
+
+    .app-main {
+        margin-right: 64px
+    }
+
+        .app-main > header {
+            height: 61px;
+            padding: 0 16px
+        }
+
+    .app-user span {
+        display: none
+    }
+
+    .app-content {
+        padding: 20px 14px
+    }
+}

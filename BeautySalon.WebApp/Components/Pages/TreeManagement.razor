@@ -1,0 +1,7 @@
+@page "/menus"
+@page "/permissions"
+@layout Layout.SalonLayout
+@inject NavigationManager Navigation
+<PageTitle>@Title | بیوتی سالن</PageTitle>
+<div class="page-title"><div><p>مدیریت ساختار</p><h1>@Title</h1><span>نمایش سلسله‌مراتبی و مدیریت @Title</span></div><button type="button">+ افزودن @Singular</button></div><article class="data-card tree-card"><div class="grid-tools"><div class="search">⌕ <input placeholder="جست‌وجو" /></div><span>نمای درختی</span></div><div class="tree-grid"><div class="tree-head"><span>عنوان</span><span>مسیر / کلید</span><span>وضعیت</span><span>عملیات</span></div><TreeRow Name="داشبورد" Key="dashboard" Level="0" /><TreeRow Name="اطلاعات پایه" Key="base-data" Level="0" Parent="true" /><TreeRow Name="دسته‌بندی‌ها" Key="categories" Level="1" /><TreeRow Name="خدمات" Key="services" Level="1" /><TreeRow Name="تخصص‌ها" Key="specialties" Level="1" /><TreeRow Name="مدیریت کاربران" Key="users" Level="0" Parent="true" /><TreeRow Name="مدیریت نقش‌ها" Key="roles" Level="1" /><TreeRow Name="تنظیمات" Key="settings" Level="0" Parent="true" /></div></article>
+@code {private string Path=>new Uri(Navigation.Uri).AbsolutePath.ToLowerInvariant();private string Title=>Path=="/menus"?"مدیریت منوها":"مدیریت دسترسی‌ها";private string Singular=>Path=="/menus"?"منو":"دسترسی";}
