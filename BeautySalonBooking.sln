@@ -1,9 +1,33 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11822.322 stable
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySalonBooking.Domain", "BeautySalonBooking.Domain\BeautySalonBooking.Domain.csproj", "{EDB27208-F7CE-9F90-EB4B-A438B7C84E62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySalonBooking.Infrastructure", "BeautySalonBooking.Infrastructure\BeautySalonBooking.Infrastructure.csproj", "{7CA69F63-EF12-A210-4B82-7310DD578E4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySalonBooking.API", "BeautySalonBooking.API\BeautySalonBooking.API.csproj", "{D298A78E-30E1-370D-BA8D-706803F8717C}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDB27208-F7CE-9F90-EB4B-A438B7C84E62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB27208-F7CE-9F90-EB4B-A438B7C84E62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB27208-F7CE-9F90-EB4B-A438B7C84E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB27208-F7CE-9F90-EB4B-A438B7C84E62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CA69F63-EF12-A210-4B82-7310DD578E4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CA69F63-EF12-A210-4B82-7310DD578E4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CA69F63-EF12-A210-4B82-7310DD578E4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CA69F63-EF12-A210-4B82-7310DD578E4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D298A78E-30E1-370D-BA8D-706803F8717C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D298A78E-30E1-370D-BA8D-706803F8717C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D298A78E-30E1-370D-BA8D-706803F8717C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D298A78E-30E1-370D-BA8D-706803F8717C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
