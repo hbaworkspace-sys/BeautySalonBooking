@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.Features.Auth.RegisterPage"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
+             BackgroundColor="{StaticResource PrimaryBackground}"
+             xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
+             x:DataType="vm:RegisterViewModel"
+             xmlns:icon="clr-namespace:BeautySalonBooking.Resources">
+
+    <ScrollView>
+        <Grid
+            Padding="30,0,30,0"
+            RowDefinitions="auto,auto,auto,auto,auto,auto,*"
+            RowSpacing="20">
+
+            <Label
+                Grid.Row="0"
+                Style="{x:StaticResource BeautyTitleLable}"/>
+
+            <Image
+                 Grid.Row="1"
+                 Source="girl_logo.png"
+                 HeightRequest="220"
+                 Margin="0,0,0,35"
+                 Aspect="AspectFit"/>
+
+            <uc:TextEntry
+                Grid.Row="2"
+                PlaceHolder="نام"
+                Glyph="{x:Static icon:IconFont.Person}"
+                Text="{Binding FirstName ,Mode=TwoWay}"/>
+
+            <uc:TextEntry
+                Grid.Row="3"
+                PlaceHolder="نام خانوادگی"
+                Glyph="{x:Static icon:IconFont.Person}"
+                Text="{Binding LastName,Mode=TwoWay}"/>
+
+            <uc:PhoneNumberEntry
+                Grid.Row="4"
+                Text="{Binding PhoneNumber,Mode=TwoWay}"
+                PhoneType="Mobile"/>
+
+            <uc:DefaultButton 
+                 Grid.Row="5"
+                 WidthRequest="300"
+                 HCommand="{Binding RegisterCommand}"
+                 Title="ثبت نام"/>
+        </Grid>
+    </ScrollView>
+</ContentPage>

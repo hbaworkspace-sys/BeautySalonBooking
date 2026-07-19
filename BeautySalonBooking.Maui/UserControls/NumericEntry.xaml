@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.UserControls.NumericEntry"
+             x:Name="self">
+
+    <Border
+        x:Name="border"
+        BackgroundColor="{x:StaticResource SecondaryBackground}"
+        StrokeThickness="0"
+        HeightRequest="50">
+
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="25"/>
+        </Border.StrokeShape>
+
+        <Grid
+           ColumnDefinitions="30,*">
+
+            <Label
+                Margin="10,0,0,0"
+                Grid.Column="0"
+                Style="{x:StaticResource GlyphLable}"
+                Text="{Binding Glyph,Source={x:Reference self}}"/>
+
+            <Label
+                 x:Name="lblPalceHolder"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2"
+                 Text="{Binding PlaceHolder, Source={x:Reference self}}"
+                 HorizontalOptions="Center"/>
+
+            <Entry
+                x:Name="mainEntry"
+                Grid.Column="1"
+                Keyboard="Numeric"
+                Text="{Binding Text,Source={x:Reference self}}"
+                ReturnType="{Binding ReturnTypeValue, Source={x:Reference self}}"
+                TextChanged="mainEntry_TextChanged"
+                Completed="mainEntry_Completed"
+                Focused="mainEntry_Focused"
+                Unfocused="mainEntry_Unfocused"
+                Margin="5,0,0,0"
+                TextColor="{x:StaticResource PrimaryText}"/>
+
+        </Grid>
+    </Border>
+</ContentView>

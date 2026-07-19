@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="A1\DTOs\" />
+    <Folder Include="A1\Requests\" />
+    <Folder Include="A1\Responses\" />
+    <Folder Include="SalonVerification\Responses\" />
+  </ItemGroup>
+
+</Project>

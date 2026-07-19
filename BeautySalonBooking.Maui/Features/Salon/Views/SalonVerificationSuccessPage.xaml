@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.Features.Salons.SalonVerificationSuccessPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="{StaticResource PrimaryBackground}">
+    <Grid
+        Padding="20,0,20,0"
+        RowDefinitions="auto,auto,auto,20,auto,auto,auto,*"
+        RowSpacing="5">
+
+        <Label
+            Grid.Row="0"
+            Style="{x:StaticResource BeautyTitleLable}"/>
+
+        <Label
+            Grid.Row="1"
+            FontFamily="BHoma"
+            FontSize="14"
+            Text="هستی عزیز به در خواست شما ثبت شد"
+            HorizontalOptions="Center"/>
+
+        <Label
+            Grid.Row="2"
+            FontFamily="BHoma"
+            FontSize="14"
+            Text="حداقل 48 ساعت زمان برای اعتبار سنجی اطلاعات شما لازم است و پس از آن پنل مدیریت فعال میشود"
+            HorizontalOptions="Center"/>
+
+        <Label
+            Grid.Row="3"
+            FontFamily="BHoma"
+            FontSize="14"
+            Text="از شکیبایی شما سپاس گزاریم"
+            HorizontalOptions="Center"/>
+    </Grid>
+</ContentPage>

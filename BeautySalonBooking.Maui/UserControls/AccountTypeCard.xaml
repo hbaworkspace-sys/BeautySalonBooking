@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.UserControls.AccountTypeCard"
+             xmlns:icon="clr-namespace:BeautySalonBooking.Resources">
+    <Grid>
+        <Border
+            BackgroundColor="#C894AA"
+            HeightRequest="90"
+            Margin="0,10,0,10">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="15"/>
+            </Border.StrokeShape>
+            <Border.Shadow>
+                <Shadow
+                    Brush="Black"
+                    Offset="0,6"
+                    Opacity="0.6"/>
+            </Border.Shadow>
+            <Grid
+               ColumnDefinitions="*,3,3*,0.8*">
+                <Border
+                    WidthRequest="50"
+                    HeightRequest="50"
+                    Background="White">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="50"/>
+                    </Border.StrokeShape>
+                    <Label
+                        TextColor="#C894AA"
+                        Style="{x:StaticResource GlyphLable}"
+                        Text="{x:Static icon:IconSymbols.Person3}"/>
+                </Border>
+                <Border
+                     Grid.Column="1"
+                     WidthRequest="4"
+                     HeightRequest="80"
+                     Background="#aa66023c">
+                </Border>
+                <Grid
+                    Grid.Column="2"
+                    RowDefinitions="*,*,*"
+                    ColumnDefinitions="40, *"
+                    Padding="0,10,0,10">
+
+                    <Label
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        TextColor="White"
+                        FontSize="20"
+                        Style="{x:StaticResource GlyphLable}"
+                        Text="{x:Static icon:IconSymbols.Check}"/>
+
+                    <Label
+                         Grid.Row="0"
+                        Grid.Column="1"
+                         FontFamily="BHoma"
+                         FontSize="13"
+                         Text="ثبت سالن زیبایی"/>
+
+                    <Label
+                      Grid.Column="0"
+                      Grid.Row="1"
+                      TextColor="White"
+                      FontSize="20"
+                      Style="{x:StaticResource GlyphLable}"
+                      Text="{x:Static icon:IconSymbols.Check}"/>
+
+                    <Label
+                         Grid.Row="1"
+                        Grid.Column="1"
+                         FontFamily="BHoma"
+                         FontSize="13"
+                         Text="مدیریت سالن ها"/>
+
+                    <Label
+                      Grid.Column="0"
+                      Grid.Row="2"
+                      TextColor="White"
+                      FontSize="20"
+                      Style="{x:StaticResource GlyphLable}"
+                      Text="{x:Static icon:IconSymbols.Check}"/>
+
+                    <Label
+                         Grid.Row="2"
+                         Grid.Column="1"
+                         FontFamily="BHoma"
+                         FontSize="13"
+                         Text="تعریف خدمات ارایشگاه"/>
+                </Grid>
+                <Border
+                    Grid.Column="3"
+                    WidthRequest="30"
+                    HeightRequest="30"
+                    Background="White">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="50"/>
+                    </Border.StrokeShape>
+                    <Label
+                        TextColor="#C894AA"
+                        Style="{x:StaticResource GlyphLable}"
+                        Text="{x:Static icon:IconSymbols.QuestionMark}"/>
+                </Border>
+            </Grid>
+        </Border>
+        <Button
+            Grid.Row="4"
+                />
+
+    </Grid>
+</ContentView>

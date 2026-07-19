@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.UserControls.DefaultButton"
+             x:Name="self">
+    <Border
+        BackgroundColor="{x:StaticResource SecondaryBackground}"
+        StrokeThickness="0"
+        HeightRequest="42"
+        WidthRequest="100">
+        
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="25"/>
+        </Border.StrokeShape>
+        
+        <Grid>
+            <Label
+                Margin="0,-5,0,0"
+                Text="{Binding Title,Source={x:Reference self}}" 
+                FontFamily="BHoma" 
+                FontSize="18"
+                TextColor="{x:StaticResource PrimaryText}"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                VerticalTextAlignment="Center"
+                HorizontalTextAlignment="Center"/>
+            
+            <Button
+                Background="Transparent"
+                Clicked="Button_Clicked"
+                Command="{x:Binding HCommand, Source={x:Reference self}}"/>
+        </Grid>
+    </Border>
+</ContentView>

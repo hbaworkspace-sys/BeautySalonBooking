@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.Features.Auth.LoginPage"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
+             BackgroundColor="{StaticResource PrimaryBackground}"
+             xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
+             x:DataType="vm:LoginViewModel">
+    <ScrollView>
+        <Grid
+            Padding="30,0,30,0"
+            RowDefinitions="auto,auto,*,*,*,*"
+            RowSpacing="20">
+        
+            <Label
+                Grid.Row="0"
+                 Style="{x:StaticResource BeautyTitleLable}"/>
+
+            <Image
+                 Grid.Row="1"
+                 Source="girl_logo.png"
+                 HeightRequest="220"
+                 Margin="0,0,0,35"
+                 Aspect="AspectFit"/>
+
+            <uc:PhoneNumberEntry
+                Grid.Row="2"
+                Text="{Binding PhoneNumber, Mode=OneWayToSource}"
+                PhoneType="Mobile"/>
+
+            <uc:DefaultButton 
+                 Grid.Row="3"
+                 WidthRequest="300"
+                 HCommand="{Binding LoginCommand}"
+                 Title="ورود"/>
+
+            <uc:TextLink
+                Grid.Row="4"
+                Text="حساب کاربری ندارم"
+                HCommand="{Binding GoToRegisterCommand}"/>
+        </Grid>
+    </ScrollView>
+</ContentPage>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11822.322 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySalonBooking.Domain", "BeautySalonBooking.Domain\BeautySalonBooking.Domain.csproj", "{EDB27208-F7CE-9F90-EB4B-A438B7C84E62}"
 EndProject
@@ -10,6 +10,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySalonBooking.API", "BeautySalonBooking.API\BeautySalonBooking.API.csproj", "{D298A78E-30E1-370D-BA8D-706803F8717C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySalonBooking.WebApp", "BeautySalon.WebApp\BeautySalonBooking.WebApp.csproj", "{4312538C-857D-0BFF-888A-367DBF52BBCA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySalonBooking.Application", "BeautySalonBooking.Application\BeautySalonBooking.Application.csproj", "{F670EFCA-FA05-B04D-2707-7BEF547396B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySalonBooking.Contracts", "BeautySalonBooking.Contracts\BeautySalonBooking.Contracts.csproj", "{75479CD7-3731-A983-4B0F-9620F854A1DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySalonBooking.Maui", "BeautySalonBooking.Maui\BeautySalonBooking.Maui.csproj", "{3D654C4C-40B1-66CC-D07A-30323BC2E5F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +39,18 @@ Global
 		{4312538C-857D-0BFF-888A-367DBF52BBCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4312538C-857D-0BFF-888A-367DBF52BBCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4312538C-857D-0BFF-888A-367DBF52BBCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F670EFCA-FA05-B04D-2707-7BEF547396B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F670EFCA-FA05-B04D-2707-7BEF547396B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F670EFCA-FA05-B04D-2707-7BEF547396B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F670EFCA-FA05-B04D-2707-7BEF547396B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75479CD7-3731-A983-4B0F-9620F854A1DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75479CD7-3731-A983-4B0F-9620F854A1DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75479CD7-3731-A983-4B0F-9620F854A1DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75479CD7-3731-A983-4B0F-9620F854A1DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D654C4C-40B1-66CC-D07A-30323BC2E5F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D654C4C-40B1-66CC-D07A-30323BC2E5F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D654C4C-40B1-66CC-D07A-30323BC2E5F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D654C4C-40B1-66CC-D07A-30323BC2E5F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

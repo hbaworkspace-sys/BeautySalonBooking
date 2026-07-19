@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.Features.Auth.OtpPage"
+             NavigationPage.HasNavigationBar="False"
+             xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
+             BackgroundColor="{StaticResource PrimaryBackground}"
+             xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
+             x:DataType="vm:OtpViewModel"
+             xmlns:icon="clr-namespace:BeautySalonBooking.Resources">
+    <ScrollView>
+        
+        <Grid
+            Padding="30,0,30,0"
+            RowDefinitions="auto,auto,auto,auto,auto,auto"
+            RowSpacing="20">
+            
+            <Label
+                Grid.Row="0"
+                Style="{x:StaticResource BeautyTitleLable}"/>
+
+            <Image
+                 Grid.Row="1"
+                 Source="girl_logo.png"
+                 HeightRequest="220"
+                 Margin="0,0,0,35"
+                 Aspect="AspectFit"/>
+
+
+            <uc:OtpCodeEntry
+                x:Name="txtOtp"
+                Grid.Row="2"
+                OtpCode="{Binding OtpCode, Mode=OneWayToSource}" />
+            
+            <uc:DefaultButton
+                Grid.Row="3"
+                HCommand="{Binding VerifyOtpCommand}"
+                Title="تایید"/>
+            
+        </Grid>
+    </ScrollView>
+</ContentPage>
