@@ -1,35 +1,212 @@
 @page "/dashboard"
 @layout Layout.SalonLayout
+
 <PageTitle>داشبورد | بیوتی سالن</PageTitle>
+
+<!-- بخش خوش‌آمدگویی -->
 <section class="welcome">
-    <div><span>✦ پنل مدیریت بیوتی سالن</span>
-        <h1>سلام نسترن، خوش آمدید!</h1>
+    <div>
+        <span>✦ پنل مدیریت بیوتی سالن</span>
+        <h1>سلام نسترن، خوش آمدید! 👋</h1>
         <p>وضعیت سالن‌ها و درخواست‌های ثبت‌شده را یک‌جا بررسی کنید.</p>
-    </div><img src="images/salon-logo.png" alt="" />
+    </div>
+    <img src="images/salon-logo.png" alt="بیوتی سالن" />
 </section>
+
+<!-- کارت‌های آماری -->
 <div class="stat-cards">
     <article class="stat-card coral">
-        <div class="stat-icon">▤</div>
-        <p>کل درخواست‌های سالن</p>
-        <strong>۱۲۸</strong>
-        <small>↑ ۱۸٪ نسبت به ماه قبل</small>
+        <div class="stat-icon">📝</div>
+        <div>
+            <p>کل درخواست‌های سالن</p>
+            <strong>۱۲۸</strong>
+            <small>↑ ۱۸٪ نسبت به ماه قبل</small>
+        </div>
     </article>
+
     <article class="stat-card peach">
-        <div class="stat-icon">◷</div>
-        <p>درخواست‌های در انتظار</p>
-        <strong>۲۴</strong>
-        <small class="pending">نیازمند بررسی</small>
+        <div class="stat-icon">⏳</div>
+        <div>
+            <p>درخواست‌های در انتظار</p>
+            <strong>۲۴</strong>
+            <small class="pending">⚠️ نیازمند بررسی</small>
+        </div>
     </article>
+
     <article class="stat-card pink">
-        <div class="stat-icon">⌂</div>
-        <p>سالن‌های فعال</p><strong>۳۶</strong>
-        <small>↑ ۴ سالن جدید این ماه</small>
+        <div class="stat-icon">🏢</div>
+        <div>
+            <p>سالن‌های فعال</p>
+            <strong>۳۶</strong>
+            <small>↑ ۴ سالن جدید این ماه</small>
+        </div>
     </article>
+
     <article class="stat-card violet">
-        <div class="stat-icon">♙</div>
-        <p>کارکنان فعال</p>
-        <strong>۱۸۹</strong>
-        <small>↑ ۹٪ نسبت به ماه قبل</small>
+        <div class="stat-icon">👥</div>
+        <div>
+            <p>کارکنان فعال</p>
+            <strong>۱۸۹</strong>
+            <small>↑ ۹٪ نسبت به ماه قبل</small>
+        </div>
     </article>
+</div>
+
+<!-- بخش اصلی: جدول درخواست‌ها و اطلاعات جانبی -->
+<div class="salon-grid">
+    <!-- درخواست‌های اخیر -->
+    <article class="salon-panel requests">
+        <div class="panel-head">
+            <div>
+                <h2>📋 درخواست‌های اخیر سالن</h2>
+                <p>آخرین درخواست‌های ثبت‌شده برای همکاری</p>
+            </div>
+            <a href="/requests">مشاهده همه ←</a>
+        </div>
+
+        <div class="request-table">
+            <div class="table-head">
+                <span>نام سالن</span>
+                <span>مدیر سالن</span>
+                <span>تاریخ درخواست</span>
+                <span>وضعیت</span>
+            </div>
+
+            <div class="table-row">
+                <div class="salon-name">
+                    <span class="salon-avatar one">م</span>
+                    <strong>سالن زیبایی مهتاب</strong>
+                </div>
+                <span>مهتاب اکبری</span>
+                <span>امروز، ۱۰:۳۴</span>
+                <span class="status review">در انتظار بررسی</span>
+            </div>
+
+            <div class="table-row">
+                <div class="salon-name">
+                    <span class="salon-avatar two">آ</span>
+                    <strong>آرایشگاه آوا</strong>
+                </div>
+                <span>آوا محمدی</span>
+                <span>دیروز، ۱۶:۲۰</span>
+                <span class="status approved">✅ تأیید شده</span>
+            </div>
+
+            <div class="table-row">
+                <div class="salon-name">
+                    <span class="salon-avatar three">س</span>
+                    <strong>سالن ساناز</strong>
+                </div>
+                <span>ساناز کریمی</span>
+                <span>دیروز، ۱۴:۱۵</span>
+                <span class="status rejected">❌ رد شده</span>
+            </div>
+
+            <div class="table-row">
+                <div class="salon-name">
+                    <span class="salon-avatar four">ر</span>
+                    <strong>سالن رز سفید</strong>
+                </div>
+                <span>رز فاضلی</span>
+                <span>۲ روز پیش، ۰۹:۴۰</span>
+                <span class="status review">در انتظار بررسی</span>
+            </div>
+        </div>
+    </article>
+
+    <!-- بخش سریع و نمودار -->
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+        <!-- دسترسی‌های سریع -->
+        <article class="salon-panel quick">
+            <div class="panel-head">
+                <h2>⚡ دسترسی‌های سریع</h2>
+            </div>
+
+            <a href="/salons/new">
+                <span>➕</span>
+                <div>
+                    <b>ثبت سالن جدید</b>
+                    <small>افزودن سالن به سامانه</small>
+                </div>
+                <em>←</em>
+            </a>
+
+            <a href="/users/new">
+                <span>👤</span>
+                <div>
+                    <b>افزودن کاربر</b>
+                    <small>ثبت کاربر جدید در سیستم</small>
+                </div>
+                <em>←</em>
+            </a>
+
+            <a href="/reports">
+                <span>📊</span>
+                <div>
+                    <b>گزارشات</b>
+                    <small>مشاهده آمار و تحلیل‌ها</small>
+                </div>
+                <em>←</em>
+            </a>
+        </article>
+
+        <!-- نمودار -->
+        <article class="salon-panel chart-panel">
+            <div class="panel-head">
+                <h2>📈 روند ثبت‌نام سالن‌ها</h2>
+                <select>
+                    <option>۶ ماه اخیر</option>
+                    <option>۱۲ ماه اخیر</option>
+                </select>
+            </div>
+
+            <div class="chart">
+                <div style="height:96px"><span>۲۴</span></div>
+                <div style="height:70px"><span>۱۸</span></div>
+                <div style="height:118px"><span>۳۰</span></div>
+                <div style="height:52px"><span>۱۲</span></div>
+                <div style="height:80px"><span>۲۰</span></div>
+                <div style="height:132px"><span>۳۴</span></div>
+            </div>
+            <div class="chart-months">
+                <span>بهمن</span>
+                <span>اسفند</span>
+                <span>فروردین</span>
+                <span>اردیبهشت</span>
+                <span>خرداد</span>
+                <span>تیر</span>
+            </div>
+        </article>
     </div>
-<article class="salon-panel requests"><div class="panel-head"><div><h2>درخواست‌های اخیر سالن</h2><p>آخرین درخواست‌های ثبت‌شده برای همکاری</p></div></div><div class="request-table"><div class="table-head"><span>نام سالن</span><span>مدیر سالن</span><span>تاریخ درخواست</span><span>وضعیت</span></div><div class="table-row"><div class="salon-name"><b class="salon-avatar one">م</b><strong>سالن زیبایی مهتاب</strong></div><span>مهتاب اکبری</span><span>امروز، ۱۰:۳۴</span><em class="status review">در انتظار بررسی</em></div><div class="table-row"><div class="salon-name"><b class="salon-avatar two">آ</b><strong>آرایشگاه آوا</strong></div><span>آوا محمدی</span><span>دیروز، ۱۶:۲۰</span><em class="status approved">تأیید شده</em></div></div></article>
+</div>
+
+<!-- نکات مهم -->
+<article class="salon-panel" style="margin-top: 18px;">
+    <div class="panel-head">
+        <h2>💡 نکات مهم</h2>
+        <span style="color: #d06d80; font-size: 20px;">• • •</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+        <div style="display: flex; gap: 10px; padding: 12px; background: #faf5f5; border-radius: 10px;">
+            <span style="font-size: 20px;">📌</span>
+            <div>
+                <strong style="font-size: 12px; color: #543d4a;">ثبت سالن جدید</strong>
+                <p style="margin: 0; font-size: 11px; color: #997d86;">به بخش مدیریت سالن‌ها مراجعه کنید</p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 10px; padding: 12px; background: #faf5f5; border-radius: 10px;">
+            <span style="font-size: 20px;">📌</span>
+            <div>
+                <strong style="font-size: 12px; color: #543d4a;">بررسی درخواست‌ها</strong>
+                <p style="margin: 0; font-size: 11px; color: #997d86;">درخواست‌ها را تا ۲۴ ساعت بررسی کنید</p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 10px; padding: 12px; background: #faf5f5; border-radius: 10px;">
+            <span style="font-size: 20px;">📌</span>
+            <div>
+                <strong style="font-size: 12px; color: #543d4a;">گزارشات ماهانه</strong>
+                <p style="margin: 0; font-size: 11px; color: #997d86;">گزارش عملکرد ماهانه را مشاهده کنید</p>
+            </div>
+        </div>
+    </div>
+</article>

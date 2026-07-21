@@ -1,6 +1,10 @@
 @page "/"
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
+@using Microsoft.Extensions.Caching.Memory
+@using BeautySalonBooking.WebApp.Models
+@inject IMemoryCache MemoryCache
+
 <PageTitle>ورود | بیوتی سالن</PageTitle>
 <main class="login-page beauty-login" dir="rtl">
     <section class="login-visual">
@@ -14,52 +18,114 @@
                 <div class="card-top">
                     <span>وضعیت امروز سالن‌ها</span>
                     <span class="more">•••</span>
-                    </div><div class="task-row"><span class="task-check checked">✓</span><span></span><b></b></div><div class="task-row"><span class="task-check checked">✓</span><span></span><b></b></div></div></div><p class="visual-footer">© ۲۰۲۶ بیوتی سالن. همه حقوق محفوظ است.</p>
+                </div>
+                <div class="task-row"><span class="task-check checked">✓</span><span></span><b></b></div>
+                <div class="task-row"><span class="task-check checked">✓</span><span></span><b></b></div>
+            </div>
+        </div>
+        <p class="visual-footer">© ۲۰۲۶ بیوتی سالن. همه حقوق محفوظ است.</p>
     </section>
     <section class="login-panel">
         <div class="form-wrap">
-            <div class="login-identity"><img src="images/salon-logo.png" alt="لوگوی بیوتی سالن" /><div><h1>بیوتی سالن</h1><p>سامانه مدیریت آرایشگاه</p></div></div><EditForm Model="credentials" OnValidSubmit="SignIn" class="login-form">
-                <DataAnnotationsValidator /><div class="field-group"><label for="username">نام کاربری</label><div class="input-shell"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5" /><path d="M4.5 20a7.5 7.5 0 0 1 15 0" /></svg><InputText id="username" @bind-Value="credentials.Username" placeholder="نام کاربری خود را وارد کنید" autocomplete="username" /></div><ValidationMessage For="@(() => credentials.Username)" /></div><div class="field-group"><div class="label-row"><label for="password">رمز عبور</label><a href="/">رمز عبور را فراموش کرده‌اید؟</a></div><div class="input-shell"><svg viewBox="0 0 24 24"><rect x="4.5" y="10" width="15" height="10" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></svg><InputText id="password" type="@(_showPassword ? "text" : "password")" @bind-Value="credentials.Password" placeholder="رمز عبور خود را وارد کنید" autocomplete="current-password" /><button class="password-toggle" type="button" @onclick="TogglePassword">@(_showPassword ? "پنهان" : "نمایش")</button></div><ValidationMessage For="@(() => credentials.Password)" /></div><div class="field-group">
-                    <label for="captcha">کد امنیتی</label><div class="captcha-row"><div class="captcha-code">@_captchaAnswer</div><button class="captcha-refresh" type="button" @onclick="RefreshCaptcha">↻</button><InputText id="captcha" @bind-Value="_captchaInput" placeholder="کد را وارد کنید" inputmode="numeric" /></div>@if (!string.IsNullOrEmpty(_captchaError))
+            <div class="login-identity">
+                <img src="images/salon-logo.png" alt="لوگوی بیوتی سالن" />
+                <div>
+                    <h1>بیوتی سالن</h1>
+                    <p>سامانه مدیریت آرایشگاه</p>
+                </div>
+            </div>
+
+            <EditForm Model="phoneModel" OnValidSubmit="SendOtp" class="login-form">
+                <DataAnnotationsValidator />
+
+                <div class="field-group">
+                    <label for="phone">شماره موبایل</label>
+                    <div class="input-shell">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M6.5 2h11a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                            <path d="M8 6h8" />
+                            <path d="M8 10h8" />
+                            <path d="M8 14h5" />
+                            <circle cx="14" cy="18" r="1.5" />
+                        </svg>
+                        <InputText id="phone" @bind-Value="phoneModel.Phone" placeholder="شماره موبایل را وارد کنید" autocomplete="tel" inputmode="numeric" />
+                    </div>
+                    <ValidationMessage For="@(() => phoneModel.Phone)" />
+                    @if (!string.IsNullOrEmpty(_errorMessage))
                     {
-                        <span class="validation-message">@_captchaError</span>
+                        <span class="validation-message">@_errorMessage</span>
                     }
-                </div><label class="remember"><InputCheckbox @bind-Value="credentials.RememberMe" /> <span>مرا به خاطر بسپار</span></label><button class="submit-button" type="submit">ورود به پنل مدیریت <span>←</span></button>
-            </EditForm><p class="login-help">در صورت نداشتن دسترسی، با مدیر سیستم تماس بگیرید.</p>
+                </div>
+
+                <button class="submit-button" type="submit" disabled="@_isLoading">
+                    @if (_isLoading)
+                    {
+                        <span>در حال ارسال...</span>
+                    }
+                    else
+                    {
+                        <span>دریافت کد تایید <span>←</span></span>
+                    }
+                </button>
+            </EditForm>
+
+            <p class="login-help">در صورت نداشتن دسترسی، با مدیر سیستم تماس بگیرید.</p>
         </div>
     </section>
 </main>
+
 @code {
-    private readonly Credentials credentials = new(); 
-    private bool _showPassword;
-    private int _captchaAnswer = Random.Shared.Next(10000, 99999);
-    private string _captchaInput = string.Empty; 
-    private string? _captchaError; 
-    private void TogglePassword() => _showPassword = !_showPassword;
-    private void RefreshCaptcha() {
-        _captchaAnswer = Random.Shared.Next(10000, 99999);
-        _captchaInput = string.Empty;
-    }
-    private void SignIn() {
-        if (_captchaInput != _captchaAnswer.ToString()) 
+    private readonly PhoneModel phoneModel = new();
+    private string? _errorMessage;
+    private bool _isLoading = false;
+
+    private async Task SendOtp()
+    {
+        _isLoading = true;
+        _errorMessage = null;
+        StateHasChanged();
+
+        try
         {
-            _captchaError = "کد امنیتی درست نیست."; 
-             RefreshCaptcha();
-             return;
-        } 
-        Navigation.NavigateTo("/dashboard");
+            // تولید کد OTP تصادفی
+            var otpCode = Random.Shared.Next(100000, 999999).ToString();
+
+            // تولید SessionId یکتا
+            var sessionId = Guid.NewGuid().ToString();
+
+            // ذخیره اطلاعات در MemoryCache
+            var otpData = new OtpData
+                {
+                    Phone = phoneModel.Phone,
+                    Otp = otpCode,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+            MemoryCache.Set(sessionId, otpData, TimeSpan.FromMinutes(5));
+
+            // لاگ برای دیباگ (در محیط واقعی حذف کنید)
+            Console.WriteLine($"📱 OTP برای شماره {phoneModel.Phone}: {otpCode}");
+            Console.WriteLine($"🔑 SessionId: {sessionId}");
+
+            // رفتن به صفحه تایید با SessionId (فقط SessionId در URL، نه OTP)
+            Navigation.NavigateTo($"/verify-otp?sessionId={sessionId}");
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = "خطا در ارسال کد تایید. لطفاً مجدداً تلاش کنید.";
+            Console.WriteLine($"❌ Error: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
     }
-    private sealed class Credentials 
-    { 
-        [Required(ErrorMessage = "وارد کردن نام کاربری الزامی است.")]
-        [MinLength(3, ErrorMessage = "نام کاربری باید حداقل ۳ کاراکتر باشد.")] 
-        public string Username { get; set; } = string.Empty; 
-        
-        [Required(ErrorMessage = "وارد کردن رمز عبور الزامی است.")]
-        [MinLength(6, ErrorMessage = "رمز عبور باید حداقل ۶ کاراکتر باشد.")]
-        public string Password { get; set; } = string.Empty;
-        
-        public bool RememberMe { get; set; } 
-    
+
+    private sealed class PhoneModel
+    {
+        [Required(ErrorMessage = "وارد کردن شماره موبایل الزامی است.")]
+        [RegularExpression(@"^09\d{9}$", ErrorMessage = "شماره موبایل باید با ۰۹ شروع و ۱۱ رقم باشد.")]
+        public string Phone { get; set; } = string.Empty;
     }
 }
