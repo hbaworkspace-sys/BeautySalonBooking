@@ -1,4 +1,8 @@
+using BeautySalonBooking.Application;
+using BeautySalonBooking.Contracts.Auth.Requests.RequestsValidations;
 using BeautySalonBooking.Infrastructure;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 #region EF Core Migration Command
@@ -25,6 +29,9 @@ builder.Services.AddDbContext<BeautyDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddInfrastructure();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<LoginInitiateRequestValidation>();
+builder.Services.AddApplication();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -43,9 +50,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

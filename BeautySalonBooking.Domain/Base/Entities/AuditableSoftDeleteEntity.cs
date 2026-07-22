@@ -14,8 +14,7 @@ public abstract class AuditableSoftDeleteEntity<TId> : AuditableEntity<TId>
         : base(createdBy)
     {
     }
-
-    public virtual void Delete(long userId)
+    public void Delete(long userId)
     {
         if (IsDeleted)
             return;
@@ -25,10 +24,9 @@ public abstract class AuditableSoftDeleteEntity<TId> : AuditableEntity<TId>
         DeletedBy = userId;
 
         Deactivate();
-        UpdateAudit(userId);
     }
 
-    public virtual void Restore(long userId)
+    public void Restore()
     {
         if (!IsDeleted)
             return;
@@ -38,6 +36,5 @@ public abstract class AuditableSoftDeleteEntity<TId> : AuditableEntity<TId>
         DeletedBy = null;
 
         Activate();
-        UpdateAudit(userId);
     }
 }

@@ -7,10 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SalonVerification\**" />
+    <EmbeddedResource Remove="SalonVerification\**" />
+    <None Remove="SalonVerification\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="A1\DTOs\" />
     <Folder Include="A1\Requests\" />
     <Folder Include="A1\Responses\" />
-    <Folder Include="SalonVerification\Responses\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="9.5.4" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.5.4" />
   </ItemGroup>
 
 </Project>

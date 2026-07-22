@@ -2,7 +2,7 @@
 
 namespace BeautySalonBooking.Contracts.Auth.Requests
 {
-    public class RegisterInitiateRequest : PhoneNumberRequest
+    public class RegisterInitiateRequest : MobileNumberRequest
     {
         public string FirstName { get; init; } = string.Empty;
         public string LastName { get; init; } = string.Empty;

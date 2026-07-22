@@ -1,10 +1,9 @@
-﻿using BeautySalonBooking.Domain.UserAggregate.Entities;
+﻿using BeautySalonBooking.Domain.PersonAggregate.Entities;
 
-namespace BeautySalonBooking.Application.Security.Interfaces
+namespace BeautySalonBooking.Application.Security.Interfaces;
+
+public interface ITokenService
 {
-    public interface ITokenService
-    {
-        string GenerateAccessToken(User user);
-        string GenerateRefreshToken(User user);
-    }
+    string GenerateAccessToken(Person person);
+    string GenerateRefreshToken(Person person);
 }

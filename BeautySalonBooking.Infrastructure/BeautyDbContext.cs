@@ -1,7 +1,10 @@
 ﻿using BeautySalonBooking.Domain.AppointmentAggregate.Entities;
+using BeautySalonBooking.Domain.Base.Entities;
 using BeautySalonBooking.Domain.BranchAggregate.Entities;
 using BeautySalonBooking.Domain.CategoryAggregate.Entities;
 using BeautySalonBooking.Domain.CommonAggregate.Entities;
+using BeautySalonBooking.Domain.ContactAggregate.Entities;
+using BeautySalonBooking.Domain.GeographyAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.PermissionAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.RoleAggregate.Entities;
@@ -30,43 +33,29 @@ public class BeautyDbContext : DbContext
             typeof(BeautyDbContext).Assembly);
     }
 
-    // Service Aggregate
-    public DbSet<Service> Services => Set<Service>();
+    //Appointment Aggregate
+    public DbSet<Appointment> Appointments => Set<Appointment>();
 
 
-    //Scheduling Aggregate
-    public DbSet<BranchHoliday> BranchHolidays => Set<BranchHoliday>();
-    public DbSet<BranchMemberSchedule> BranchMemberSchedules => Set<BranchMemberSchedule>();
-    public DbSet<BranchSchedule> BranchSchedules => Set<BranchSchedule>();
-    public DbSet<BranchWorkingHour> BranchWorkingHours => Set<BranchWorkingHour>();
-    public DbSet<ScheduleException> ScheduleExceptions => Set<ScheduleException>();
-    public DbSet<TimeOff> TimeOffs => Set<TimeOff>();
-    public DbSet<WorkingShift> WorkingShifts => Set<WorkingShift>();
+    //Branch Aggregate
+    public DbSet<Branch> Branches => Set<Branch>();
+    public DbSet<BranchMember> BranchMembers => Set<BranchMember>();
+    public DbSet<BranchMemberService> BranchMemberServices => Set<BranchMemberService>();
+    public DbSet<BranchRole> BranchRoles => Set<BranchRole>();
+    public DbSet<BranchService> BranchServices => Set<BranchService>();
 
 
-    //Request Aggregate
-    public DbSet<DocumentType> DocumentTypes => Set<DocumentType>();
-    public DbSet<Request> Requests => Set<Request>();
-    public DbSet<RequestDetail> RequestDetails => Set<RequestDetail>();
-    public DbSet<OrganizationRequestDetail> OrganizationRequestDetails => Set<OrganizationRequestDetail>();
-    public DbSet<PersonRequestDetail> PersonRequestDetails => Set<PersonRequestDetail>();
-    public DbSet<RequestDocument> RequestDocuments => Set<RequestDocument>();
-    public DbSet<RequestField> RequestFields => Set<RequestField>();
-    public DbSet<RequestFieldLookup> RequestFieldLookups => Set<RequestFieldLookup>();
-    public DbSet<RequestHistory> RequestHistories => Set<RequestHistory>();
-    public DbSet<RequestRequiredDocument> RequestRequiredDocuments => Set<RequestRequiredDocument>();
-    public DbSet<RequestType> RequestTypes => Set<RequestType>();
+    //Category Aggregate
+    public DbSet<Category> Categories => Set<Category>();
 
 
-    //Person Aggregate
-    public DbSet<Person> Persons => Set<Person>();
+    //Common Aggregate
+    public DbSet<Color> Colors => Set<Color>();
 
 
-    //Organization Aggregate
-    public DbSet<Organization> Organizations => Set<Organization>();
-    public DbSet<OrganizationDetail> OrganizationDetails => Set<OrganizationDetail>();
-    public DbSet<OrganizationMedia> OrganizationMedias => Set<OrganizationMedia>();
-    public DbSet<OrganizationOwner> OrganizationOwners => Set<OrganizationOwner>();
+    //Geography Aggregate
+    public DbSet<Address> Addresss => Set<Address>();
+    public DbSet<Region> Regions => Set<Region>();
 
 
     //Identity
@@ -85,24 +74,62 @@ public class BeautyDbContext : DbContext
     public DbSet<UserRole> UserRoles => Set<UserRole>();
 
 
-    //Category Aggregate
-    public DbSet<Category> Categories => Set<Category>();
+    //Organization Aggregate
+    public DbSet<Organization> Organizations => Set<Organization>();
+    public DbSet<OrganizationDetail> OrganizationDetails => Set<OrganizationDetail>();
+    public DbSet<OrganizationMedia> OrganizationMedias => Set<OrganizationMedia>();
+    public DbSet<OrganizationOwner> OrganizationOwners => Set<OrganizationOwner>();
 
 
-    //Branch Aggregate
-    public DbSet<Branch> Branches => Set<Branch>();
-    public DbSet<BranchMember> BranchMembers => Set<BranchMember>();
-    public DbSet<BranchMemberService> BranchMemberServices => Set<BranchMemberService>();
-    public DbSet<BranchRole> BranchRoles => Set<BranchRole>();
-    public DbSet<BranchService> BranchServices => Set<BranchService>();
+    //Person Aggregate
+    public DbSet<Person> Persons => Set<Person>();
 
 
-    //Appointment Aggregate
-    public DbSet<Appointment> Appointments => Set<Appointment>();
+    //Request Aggregate
+    public DbSet<DocumentType> DocumentTypes => Set<DocumentType>();
+    public DbSet<OrganizationRequestDetail> OrganizationRequestDetails => Set<OrganizationRequestDetail>();
+    public DbSet<PersonRequestDetail> PersonRequestDetails => Set<PersonRequestDetail>();
+    public DbSet<Request> Requests => Set<Request>();
+    public DbSet<RequestDetail> RequestDetails => Set<RequestDetail>();
+    public DbSet<RequestDocument> RequestDocuments => Set<RequestDocument>();
+    public DbSet<RequestField> RequestFields => Set<RequestField>();
+    public DbSet<RequestFieldLookup> RequestFieldLookups => Set<RequestFieldLookup>();
+    public DbSet<RequestHistory> RequestHistories => Set<RequestHistory>();
+    public DbSet<RequestRequiredDocument> RequestRequiredDocuments => Set<RequestRequiredDocument>();
+    public DbSet<RequestType> RequestTypes => Set<RequestType>();
 
 
-    //Common Aggregate
-    public DbSet<Color> Colors => Set<Color>();
+    //Scheduling Aggregate
+    public DbSet<BranchHoliday> BranchHolidays => Set<BranchHoliday>();
+    public DbSet<BranchMemberSchedule> BranchMemberSchedules => Set<BranchMemberSchedule>();
+    public DbSet<BranchSchedule> BranchSchedules => Set<BranchSchedule>();
+    public DbSet<BranchWorkingHour> BranchWorkingHours => Set<BranchWorkingHour>();
+    public DbSet<ScheduleException> ScheduleExceptions => Set<ScheduleException>();
+    public DbSet<TimeOff> TimeOffs => Set<TimeOff>();
+    public DbSet<WorkingShift> WorkingShifts => Set<WorkingShift>();
 
 
+    // Service Aggregate
+    public DbSet<Service> Services => Set<Service>();
+
+
+    public override async Task<int> SaveChangesAsync(
+        CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            if (entry.Entity is AuditableEntity<long> entity)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entity.MarkCreated(null);
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    entity.MarkUpdated(null);
+                }
+            }
+        }
+        return await base.SaveChangesAsync(cancellationToken);
+    }
 }

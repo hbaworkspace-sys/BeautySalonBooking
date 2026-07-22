@@ -2,7 +2,7 @@
 
 namespace BeautySalonBooking.Contracts.Auth.Requests
 {
-    public class VerifyOtpRequest : PhoneNumberRequest
+    public class VerifyOtpRequest : MobileNumberRequest
     {
         public string OtpCode { get; init; } = string.Empty;
     }

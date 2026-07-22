@@ -9,13 +9,19 @@ public abstract class BaseEntity<TId>
     {
     }
 
-    public virtual void Activate()
+    public void Activate()
     {
+        if (IsActive)
+            return;
+
         IsActive = true;
     }
 
-    public virtual void Deactivate()
+    public void Deactivate()
     {
+        if (!IsActive)
+            return;
+
         IsActive = false;
     }
 }

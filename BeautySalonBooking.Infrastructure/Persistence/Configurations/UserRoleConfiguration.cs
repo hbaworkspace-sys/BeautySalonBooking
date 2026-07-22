@@ -11,14 +11,11 @@ public sealed class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
     {
         builder.ToTable("USER_ROLES", "GT");
 
-        builder.ConfigureAuditableSoftDeleteEntity<UserRole, int>();
-
-        builder.Property(x => x.IsPrimary)
-            .IsRequired();
+        builder.ConfigureAuditableSoftDeleteEntity<UserRole, long>();
 
         builder.HasOne(x => x.User)
-            .WithMany(x => x.UserRoles)
-            .HasForeignKey(x => x.UserId)
+            .WithOne(x => x.UserRole)
+            .HasForeignKey<UserRole>(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Role)
@@ -31,14 +28,6 @@ public sealed class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
             x.UserId,
             x.RoleId
         })
-        .IsUnique();
-
-        builder.HasIndex(x => new
-        {
-            x.UserId,
-            x.IsPrimary
-        })
-        .HasFilter("[IsPrimary] = 1")
         .IsUnique();
     }
 }

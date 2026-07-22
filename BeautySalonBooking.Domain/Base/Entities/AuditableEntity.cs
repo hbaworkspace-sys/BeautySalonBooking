@@ -16,13 +16,13 @@ public abstract class AuditableEntity<TId> : BaseEntity<TId>
         MarkCreated(createdBy);
     }
 
-    protected void MarkCreated(long userId)
+    public void MarkCreated(long? userId)
     {
         CreatedAt = DateTime.UtcNow;
         CreatedBy = userId;
     }
 
-    public virtual void UpdateAudit(long userId)
+    public void MarkUpdated(long? userId)
     {
         UpdatedAt = DateTime.UtcNow;
         UpdatedBy = userId;

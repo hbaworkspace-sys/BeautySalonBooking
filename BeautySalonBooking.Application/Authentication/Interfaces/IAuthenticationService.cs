@@ -2,13 +2,23 @@
 using BeautySalonBooking.Contracts.Auth.Responses;
 using BeautySalonBooking.Contracts.Common;
 
-namespace BeautySalonBooking.Application.Authentication
+namespace BeautySalonBooking.Application.Authentication;
+
+public interface IAuthenticationService
 {
-    public interface IAuthenticationService
-    {
-        Task<ApiResponse> RequestOtpForRegisterAsync(RegisterInitiateRequest request);
-        Task<ApiResponse<AuthResult>> ConfirmRegistrationAsync(VerifyOtpRequest request);
-        Task<ApiResponse> RequestOtpForLoginAsync(LoginInitiateRequest request);
-        Task<ApiResponse<AuthResult>> ConfirmLoginAsync(VerifyOtpRequest request);
-    }
+    Task<ApiResponse> RequestRegisterOtpAsync(
+        RegisterInitiateRequest request,
+        CancellationToken cancellationToken);
+
+    Task<ApiResponse<AuthResult>> VerifyRegisterOtpAsync(
+        VerifyOtpRequest request,
+        CancellationToken cancellationToken);
+
+    Task<ApiResponse> RequestLoginOtpAsync(
+        LoginInitiateRequest request,
+        CancellationToken cancellationToken);
+
+    Task<ApiResponse<AuthResult>> VerifyLoginOtpAsync(
+        VerifyOtpRequest request,
+        CancellationToken cancellationToken);
 }

@@ -14,11 +14,9 @@ public sealed class OtpCodeConfiguration : IEntityTypeConfiguration<OtpCode>
         builder.ConfigureAuditableEntity<OtpCode, long>();
 
         builder.Property(x => x.FirstName)
-            .IsRequired()
             .HasMaxLength(50);
 
         builder.Property(x => x.LastName)
-            .IsRequired()
             .HasMaxLength(50);
 
         builder.Property(x => x.MobileNumber)

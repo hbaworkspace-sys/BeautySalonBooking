@@ -555,74 +555,6 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.ToTable("COLORS", "BT");
                 });
 
-            modelBuilder.Entity("BeautySalonBooking.Domain.ContactAggregate.Entities.PhoneNumber", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("DeletedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<long>("RelatedId")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte>("RelatedType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte>("Type")
-                        .HasColumnType("tinyint");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("UpdatedBy")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RelatedId", "RelatedType", "IsDefault")
-                        .IsUnique()
-                        .HasFilter("[IsDefault] = 1");
-
-                    b.HasIndex("RelatedId", "RelatedType", "Number")
-                        .IsUnique();
-
-                    b.ToTable("PHONENUMBERS", "GT");
-                });
-
             modelBuilder.Entity("BeautySalonBooking.Domain.GeographyAggregate.Entities.Address", b =>
                 {
                     b.Property<long>("Id")
@@ -774,7 +706,6 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -787,7 +718,6 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -889,10 +819,9 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Code")
-                        .IsRequired()
+                    b.Property<int>("Code")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -988,7 +917,7 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("AccessFailedCount")
+                    b.Property<int?>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<byte>("AuthenticationMode")
@@ -1032,7 +961,6 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -1051,7 +979,7 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("TwoFactorEnabled")
+                    b.Property<bool?>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -1061,7 +989,6 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
@@ -1070,18 +997,19 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.HasIndex("PersonId");
 
                     b.HasIndex("UserName")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[UserName] IS NOT NULL");
 
                     b.ToTable("USERS", "GT");
                 });
 
             modelBuilder.Entity("BeautySalonBooking.Domain.Identity.UserAggregate.Entities.UserRole", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -1105,9 +1033,6 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
-                    b.Property<bool>("IsPrimary")
-                        .HasColumnType("bit");
-
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
@@ -1124,9 +1049,8 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("UserId", "IsPrimary")
-                        .IsUnique()
-                        .HasFilter("[IsPrimary] = 1");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.HasIndex("UserId", "RoleId")
                         .IsUnique();
@@ -2828,7 +2752,35 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.OwnsMany("BeautySalonBooking.Domain.ContactAggregate.Entities.PhoneNumber", "PhoneNumbers", b1 =>
+                        {
+                            b1.Property<long>("UserId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<string>("Number")
+                                .HasMaxLength(10)
+                                .HasColumnType("nvarchar(10)");
+
+                            b1.Property<bool>("IsDefault")
+                                .HasColumnType("bit");
+
+                            b1.Property<bool>("IsVerified")
+                                .HasColumnType("bit");
+
+                            b1.Property<int>("Type")
+                                .HasColumnType("int");
+
+                            b1.HasKey("UserId", "Number");
+
+                            b1.ToTable("USER_PHONE_NUMBERS", "GT");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
                     b.Navigation("Person");
+
+                    b.Navigation("PhoneNumbers");
                 });
 
             modelBuilder.Entity("BeautySalonBooking.Domain.Identity.UserAggregate.Entities.UserRole", b =>
@@ -2840,8 +2792,8 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("BeautySalonBooking.Domain.Identity.UserAggregate.Entities.User", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
+                        .WithOne("UserRole")
+                        .HasForeignKey("BeautySalonBooking.Domain.Identity.UserAggregate.Entities.UserRole", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -3192,7 +3144,8 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("OrganizationOwners");
 
-                    b.Navigation("UserRoles");
+                    b.Navigation("UserRole")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BeautySalonBooking.Domain.OrganizationAggregate.Entities.Organization", b =>

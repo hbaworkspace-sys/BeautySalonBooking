@@ -14,21 +14,18 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ConfigureAuditableSoftDeleteEntity<User, long>();
 
         builder.Property(x => x.UserName)
-            .IsRequired()
-            .HasMaxLength(15);
+               .HasMaxLength(15);
 
         builder.HasIndex(x => x.UserName)
             .IsUnique();
 
         builder.Property(x => x.PasswordHash)
-            .IsRequired()
-            .HasMaxLength(200);
+             .HasMaxLength(200);
 
         builder.Property(x => x.AuthenticationMode)
             .IsRequired();
 
-        builder.Property(x => x.AccessFailedCount)
-            .IsRequired();
+        builder.Property(x => x.AccessFailedCount);
 
         builder.Property(x => x.LockoutEnd);
 
@@ -36,8 +33,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.LastPasswordChangedAt);
 
-        builder.Property(x => x.TwoFactorEnabled)
-            .IsRequired();
+        builder.Property(x => x.TwoFactorEnabled);
 
         builder.Property(x => x.LastFailedLoginAt);
 
@@ -58,11 +54,22 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Metadata
-            .FindNavigation(nameof(User.UserRoles))!
+            .FindNavigation(nameof(User.UserRole))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder.Metadata
             .FindNavigation(nameof(User.OrganizationOwners))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.Metadata
+            .FindNavigation(nameof(User.PhoneNumbers))!
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.OwnsMany(x => x.PhoneNumbers, phone =>
+        {
+            phone.ToTable("USER_PHONE_NUMBERS", "GT");
+
+            PhoneNumberConfiguration.Configure(phone);
+        });
     }
 }

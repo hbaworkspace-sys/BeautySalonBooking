@@ -36,7 +36,7 @@ namespace BeautySalonBooking.Maui.Features.Auth
                 var result = await _authApiService.RequestOtpForLoginAsync(
                     new LoginInitiateRequest
                     {
-                        PhoneNumber = PhoneNumber
+                        MobileNumber = PhoneNumber
                     });
 
                 if (result.IsSuccess)

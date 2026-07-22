@@ -1,49 +1,27 @@
 ﻿using BeautySalonBooking.Domain.ContactAggregate.Entities;
-using BeautySalonBooking.Infrastructure.Persistence.Configurations.Base;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BeautySalonBooking.Infrastructure.Persistence.Configurations;
 
-public sealed class PhoneNumberConfiguration : IEntityTypeConfiguration<PhoneNumber>
+public static class PhoneNumberConfiguration
 {
-    public void Configure(EntityTypeBuilder<PhoneNumber> builder)
+    public static void Configure<TOwner>(
+            OwnedNavigationBuilder<TOwner, PhoneNumber> builder)
+            where TOwner : class
     {
-        builder.ToTable("PHONENUMBERS", "GT");
+        builder.WithOwner()
+               .HasForeignKey("UserId");
+        builder.HasKey("UserId", nameof(PhoneNumber.Number));
 
-        builder.ConfigureAuditableSoftDeleteEntity<PhoneNumber, long>();
-
-        builder.Property(x => x.RelatedType)
+        builder.Property(x => x.Number)
+            .HasMaxLength(10)
             .IsRequired();
 
         builder.Property(x => x.Type)
-            .IsRequired();
+               .HasConversion<int>()
+               .IsRequired();
 
-        builder.Property(x => x.Number)
-            .IsRequired()
-            .HasMaxLength(10);
-
-        builder.Property(x => x.IsDefault)
-            .IsRequired();
-
-        builder.Property(x => x.IsVerified)
-            .IsRequired();
-
-        builder.HasIndex(x => new
-        {
-            x.RelatedId,
-            x.RelatedType,
-            x.Number
-        })
-        .IsUnique();
-
-        builder.HasIndex(x => new
-        {
-            x.RelatedId,
-            x.RelatedType,
-            x.IsDefault
-        })
-        .HasFilter("[IsDefault] = 1")
-        .IsUnique();
+        builder.Property(x => x.IsDefault);
+        builder.Property(x => x.IsVerified);
     }
 }

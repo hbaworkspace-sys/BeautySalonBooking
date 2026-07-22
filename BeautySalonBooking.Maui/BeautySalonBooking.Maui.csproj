@@ -111,12 +111,6 @@
 		<MauiXaml Update="Features\AdminDashboard\Views\SalonRequestsPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Features\Salon\Views\SalonRegistrationPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Features\Salon\Views\SalonVerificationSuccessPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Features\Stylist\Views\StylistRegistrationPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

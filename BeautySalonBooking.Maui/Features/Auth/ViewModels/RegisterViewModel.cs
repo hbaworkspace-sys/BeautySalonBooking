@@ -46,7 +46,7 @@ namespace BeautySalonBooking.Maui.Features.Auth
                     {
                         FirstName = FirstName,
                         LastName = LastName,
-                        PhoneNumber = PhoneNumber,
+                        MobileNumber = PhoneNumber,
                         CountryCode = CountryCode
                     });
 
