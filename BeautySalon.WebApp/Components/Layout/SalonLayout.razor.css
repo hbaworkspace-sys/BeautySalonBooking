@@ -18,7 +18,38 @@
     overflow-y: auto;
     z-index: 100;
 }
+.menu-header.active {
+    background-color: #e8f0fe;
+    color: #1a73e8;
+    font-weight: bold;
+}
 
+.menu-link.active {
+    background-color: #e8f0fe;
+    color: #1a73e8;
+    border-right: 3px solid #1a73e8;
+}
+
+.menu-link.child.active {
+    background-color: #f1f3f4;
+}
+
+.arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+    .arrow.open {
+        transform: rotate(90deg);
+    }
+
+.menu-children {
+    display: none;
+}
+
+    .menu-children.open {
+        display: block;
+    }
 .brand {
     display: flex;
     align-items: center;

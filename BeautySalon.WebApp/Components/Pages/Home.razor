@@ -1,9 +1,14 @@
 @page "/"
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
-@using Microsoft.Extensions.Caching.Memory
+@using BeautySalonBooking.Contracts.Authentication.Requests
+@using BeautySalonBooking.WebApp.Interfaces
+@using BeautySalonBooking.WebApp.Interfaces.Login
 @using BeautySalonBooking.WebApp.Models
+@using BeautySalonBooking.WebApp.Services
+@using Microsoft.Extensions.Caching.Memory
 @inject IMemoryCache MemoryCache
+@inject ILoginService AuthService
 
 <PageTitle>ورود | بیوتی سالن</PageTitle>
 <main class="login-page beauty-login" dir="rtl">
@@ -40,15 +45,17 @@
 
                 <div class="field-group">
                     <label for="phone">شماره موبایل</label>
-                    <div class="input-shell">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M6.5 2h11a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
-                            <path d="M8 6h8" />
-                            <path d="M8 10h8" />
-                            <path d="M8 14h5" />
-                            <circle cx="14" cy="18" r="1.5" />
-                        </svg>
-                        <InputText id="phone" @bind-Value="phoneModel.Phone" placeholder="شماره موبایل را وارد کنید" autocomplete="tel" inputmode="numeric" />
+                    <div class="input-shell phone-input">
+
+                        <InputText id="phone"
+                                   @bind-Value="phoneModel.Phone"
+                                   placeholder="912 345 6789"
+                                   autocomplete="tel"
+                                   inputmode="numeric"
+                                   @oninput="OnPhoneInput" />
+                        <div class="country-code">
+                            <span>98+</span>
+                        </div>
                     </div>
                     <ValidationMessage For="@(() => phoneModel.Phone)" />
                     @if (!string.IsNullOrEmpty(_errorMessage))
@@ -79,6 +86,20 @@
     private string? _errorMessage;
     private bool _isLoading = false;
 
+    private void OnPhoneInput(ChangeEventArgs e)
+    {
+        // فقط اعداد را نگه دارید و حداکثر 10 رقم
+        var value = e.Value?.ToString() ?? string.Empty;
+        var digits = new string(value.Where(char.IsDigit).ToArray());
+
+        if (digits.Length > 10)
+        {
+            digits = digits[..10];
+        }
+
+        phoneModel.Phone = digits;
+    }
+
     private async Task SendOtp()
     {
         _isLoading = true;
@@ -87,28 +108,57 @@
 
         try
         {
-            // تولید کد OTP تصادفی
-            var otpCode = Random.Shared.Next(100000, 999999).ToString();
+            // شماره موبایل بدون صفر (با حذف احتمالی صفر اول)
+            var mobileWithoutZero = phoneModel.Phone.TrimStart('0');
 
-            // تولید SessionId یکتا
-            var sessionId = Guid.NewGuid().ToString();
+            // اگر شماره خالی بود یا کمتر از 10 رقم بود
+            if (string.IsNullOrEmpty(mobileWithoutZero) || mobileWithoutZero.Length < 10)
+            {
+                _errorMessage = "شماره موبایل باید ۱۰ رقم باشد (به جز ۰۹)";
+                return;
+            }
 
-            // ذخیره اطلاعات در MemoryCache
-            var otpData = new OtpData
+            // آماده‌سازی درخواست
+            var request = new LoginInitiateRequest
                 {
-                    Phone = phoneModel.Phone,
-                    Otp = otpCode,
-                    CreatedAt = DateTime.UtcNow
+                    MobileNumber = mobileWithoutZero
                 };
 
-            MemoryCache.Set(sessionId, otpData, TimeSpan.FromMinutes(5));
+            // فراخوانی API
+            var response = await AuthService.RequestLoginOtpAsync(request);
 
-            // لاگ برای دیباگ (در محیط واقعی حذف کنید)
-            Console.WriteLine($"📱 OTP برای شماره {phoneModel.Phone}: {otpCode}");
-            Console.WriteLine($"🔑 SessionId: {sessionId}");
+            if (!response.IsSuccess)
+            {
+                _errorMessage = response.Message;
+                return;
+            }
 
-            // رفتن به صفحه تایید با SessionId (فقط SessionId در URL، نه OTP)
-            Navigation.NavigateTo($"/verify-otp?sessionId={sessionId}");
+            // اگر API موفق بود و SessionId برگرداند
+            if (response.IsSuccess)
+            {
+                // تولید SessionId یکتا
+                var sessionId = Guid.NewGuid().ToString();
+
+                // ذخیره اطلاعات در MemoryCache
+                var otpData = new OtpData
+                    {
+                        Phone = phoneModel.Phone,
+                        Otp = "",
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                MemoryCache.Set(sessionId, otpData, TimeSpan.FromMinutes(5));
+
+
+
+
+
+                Navigation.NavigateTo($"/verify-otp?sessionId={sessionId}");
+            }
+            else
+            {
+                Navigation.NavigateTo($"/verify-otp?mobile={mobileWithoutZero}");
+            }
         }
         catch (Exception ex)
         {
@@ -125,7 +175,9 @@
     private sealed class PhoneModel
     {
         [Required(ErrorMessage = "وارد کردن شماره موبایل الزامی است.")]
-        [RegularExpression(@"^09\d{9}$", ErrorMessage = "شماره موبایل باید با ۰۹ شروع و ۱۱ رقم باشد.")]
+        [MinLength(10, ErrorMessage = "شماره موبایل باید ۱۰ رقم باشد (به جز ۰۹)")]
+        [MaxLength(10, ErrorMessage = "شماره موبایل باید ۱۰ رقم باشد (به جز ۰۹)")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "شماره موبایل باید ۱۰ رقم باشد (به جز ۰۹)")]
         public string Phone { get; set; } = string.Empty;
     }
 }

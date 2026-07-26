@@ -1,13 +1,20 @@
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
+
 <!-- تعریف تابع JavaScript در همین صفحه -->
 <script>
     let activeMenu = null;
 
     function toggleMenu(element) {
-        // مدیریت باز/بسته شدن منو
-        var children = element.nextElementSibling;
-        var arrow = element.querySelector('.arrow');
+        // جلوگیری از انتشار رویداد به لینک‌های فرزند
+        event.stopPropagation();
+
+        // پیدا کردن منوی فرزند (بعد از .menu-header)
+        const parentGroup = element.closest('.menu-group');
+        if (!parentGroup) return;
+
+        const children = parentGroup.querySelector('.menu-children');
+        const arrow = element.querySelector('.arrow');
 
         if (children) {
             if (children.classList.contains('open')) {
@@ -25,11 +32,14 @@
         document.querySelectorAll('.menu-link').forEach(link => {
             link.classList.remove('active');
         });
+        document.querySelectorAll('.menu-header').forEach(header => {
+            header.classList.remove('active');
+        });
 
         // اضافه کردن active به منوی کلیک شده
         element.classList.add('active');
 
-        // اگر منوی والد است، active را به والد هم اضافه کنید
+        // اگر منوی فرزند است، active را به والد هم اضافه کنید
         if (element.classList.contains('child')) {
             const parentGroup = element.closest('.menu-group');
             if (parentGroup) {
@@ -41,6 +51,7 @@
         }
     }
 </script>
+
 <div class="panel">
     <aside class="sidebar">
         <!-- برند -->
@@ -55,46 +66,69 @@
         <!-- منو -->
         <nav class="menu">
             <!-- داشبورد -->
-            <a href="/dashboard" class="menu-link @(IsActive("/dashboard") ? "active" : "")" >
+            <a href="/dashboard"
+               class="menu-link @(IsActive("/dashboard") ? "active" : "")"
+               onclick="setActiveMenu(this)">
                 داشبورد
             </a>
 
             <!-- اطلاعات پایه -->
             <div class="menu-group">
-                <div class="menu-header" onclick="toggleMenu(this)">
-                    <span class="arrow open">▾</span>
+                <div class="menu-header @(IsActive("/services") || IsActive("/categories") || IsActive("/specialties") ? "active" : "")"
+                     onclick="toggleMenu(this)">
+                    <span class="arrow @(IsActive("/services") || IsActive("/categories") || IsActive("/specialties") ? "open" : "")">▾</span>
                     <span>اطلاعات پایه</span>
                 </div>
-                <div class="menu-children open">
-                    <a href="/services" class="menu-link child @(IsActive("/services") ? "active" : "")">خدمات</a>
-                    <a href="/categories" class="menu-link child @(IsActive("/categories") ? "active" : "")">دسته‌بندی</a>
-                    <a href="/specialties" class="menu-link child @(IsActive("/specialties") ? "active" : "")">تخصص‌ها</a>
+                <div class="menu-children @(IsActive("/services") || IsActive("/categories") || IsActive("/specialties") ? "open" : "")">
+                    <a href="/services"
+                       class="menu-link child @(IsActive("/services") ? "active" : "")"
+                       onclick="setActiveMenu(this)">خدمات</a>
+                    <a href="/categories"
+                       class="menu-link child @(IsActive("/categories") ? "active" : "")"
+                       onclick="setActiveMenu(this)">دسته‌بندی</a>
+                    <a href="/specialties"
+                       class="menu-link child @(IsActive("/specialties") ? "active" : "")"
+                       onclick="setActiveMenu(this)">تخصص‌ها</a>
                 </div>
             </div>
 
             <!-- مدیریت کاربران -->
             <div class="menu-group">
-                <div class="menu-header" onclick="toggleMenu(this)">
-                    <span class="arrow open">▾</span>
+                <div class="menu-header @(IsActive("/users") || IsActive("/systems") || IsActive("/roles") || IsActive("/menus") ? "active" : "")"
+                     onclick="toggleMenu(this)">
+                    <span class="arrow @(IsActive("/users") || IsActive("/systems") || IsActive("/roles") || IsActive("/menus") ? "open" : "")">▾</span>
                     <span>مدیریت کاربران</span>
                 </div>
-                <div class="menu-children open">
-                    <a href="/users" class="menu-link child @(IsActive("/users") ? "active" : "")">مدیریت کاربران</a>
-                    <a href="/systems" class="menu-link child @(IsActive("/systems") ? "active" : "")">مدیریت سیستم‌ها</a>
-                    <a href="/roles" class="menu-link child @(IsActive("/roles") ? "active" : "")">نقش‌ها</a>
-                    <a href="/menus" class="menu-link child @(IsActive("/menus") ? "active" : "")">منوها</a>
+                <div class="menu-children @(IsActive("/users") || IsActive("/systems") || IsActive("/roles") || IsActive("/menus") ? "open" : "")">
+                    <a href="/users"
+                       class="menu-link child @(IsActive("/users") ? "active" : "")"
+                       onclick="setActiveMenu(this)">مدیریت کاربران</a>
+                    <a href="/systems"
+                       class="menu-link child @(IsActive("/systems") ? "active" : "")"
+                       onclick="setActiveMenu(this)">مدیریت سیستم‌ها</a>
+                    <a href="/roles"
+                       class="menu-link child @(IsActive("/roles") ? "active" : "")"
+                       onclick="setActiveMenu(this)">نقش‌ها</a>
+                    <a href="/menus"
+                       class="menu-link child @(IsActive("/menus") ? "active" : "")"
+                       onclick="setActiveMenu(this)">منوها</a>
                 </div>
             </div>
 
             <!-- تنظیمات -->
             <div class="menu-group">
-                <div class="menu-header" onclick="toggleMenu(this)">
-                    <span class="arrow open">▾</span>
+                <div class="menu-header @(IsActive("/profile") || IsActive("/change-password") ? "active" : "")"
+                     onclick="toggleMenu(this)">
+                    <span class="arrow @(IsActive("/profile") || IsActive("/change-password") ? "open" : "")">▾</span>
                     <span>تنظیمات</span>
                 </div>
-                <div class="menu-children open">
-                    <a href="/profile" class="menu-link child @(IsActive("/profile") ? "active" : "")">پروفایل</a>
-                    <a href="/change-password" class="menu-link child @(IsActive("/change-password") ? "active" : "")">تغییر رمز عبور</a>
+                <div class="menu-children @(IsActive("/profile") || IsActive("/change-password") ? "open" : "")">
+                    <a href="/profile"
+                       class="menu-link child @(IsActive("/profile") ? "active" : "")"
+                       onclick="setActiveMenu(this)">پروفایل</a>
+                    <a href="/change-password"
+                       class="menu-link child @(IsActive("/change-password") ? "active" : "")"
+                       onclick="setActiveMenu(this)">تغییر رمز عبور</a>
                 </div>
             </div>
         </nav>
@@ -129,6 +163,18 @@
 @code {
     private bool IsActive(string path)
     {
-        return Navigation.Uri.EndsWith(path, StringComparison.OrdinalIgnoreCase);
+        var uri = Navigation.Uri;
+        // حذف قسمت کوئری استرینگ اگر وجود دارد
+        var pathWithoutQuery = uri.Split('?')[0];
+
+        // برای مسیرهای دقیق
+        if (pathWithoutQuery.EndsWith(path, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        // برای مسیرهای تو در تو (مثلاً /services/1)
+        if (pathWithoutQuery.Contains(path + "/", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
     }
 }

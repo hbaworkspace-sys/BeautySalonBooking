@@ -1,7 +1,6 @@
-﻿namespace BeautySalonBooking.Contracts.Common
+﻿namespace BeautySalonBooking.Contracts.Common;
+
+public class MobileNumberRequest
 {
-    public class MobileNumberRequest
-    {
-        public string MobileNumber { get; init; } = string.Empty;
-    }
+    public string MobileNumber { get; init; } = string.Empty;
 }

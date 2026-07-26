@@ -112,7 +112,7 @@ public class BeautyDbContext : DbContext
     // Service Aggregate
     public DbSet<Service> Services => Set<Service>();
 
-
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public override async Task<int> SaveChangesAsync(
         CancellationToken cancellationToken = default)
     {

@@ -13,14 +13,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="A1\DTOs\" />
-    <Folder Include="A1\Requests\" />
-    <Folder Include="A1\Responses\" />
+    <PackageReference Include="FluentValidation" Version="9.5.4" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.5.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="9.5.4" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="9.5.4" />
+    <Folder Include="Permission\Requests\" />
+    <Folder Include="Permission\Responses\" />
+    <Folder Include="A1\Dtos\" />
+    <Folder Include="A1\Responses\" />
+    <Folder Include="A1\Requests\" />
   </ItemGroup>
 
 </Project>

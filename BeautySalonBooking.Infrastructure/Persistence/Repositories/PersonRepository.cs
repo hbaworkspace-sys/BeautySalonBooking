@@ -8,7 +8,6 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Repositories;
 public class PersonRepository : IPersonRepository
 {
     private readonly BeautyDbContext _context;
-
     public PersonRepository(BeautyDbContext context)
     {
         _context = context;
@@ -24,7 +23,7 @@ public class PersonRepository : IPersonRepository
 
     public async Task AddAsync(Person person, CancellationToken cancellationToken)
     {
-       var id = await _context.Persons.AddAsync(person, cancellationToken);
+        var id = await _context.Persons.AddAsync(person, cancellationToken);
     }
 
     public void Update(Person person, CancellationToken cancellationToken)

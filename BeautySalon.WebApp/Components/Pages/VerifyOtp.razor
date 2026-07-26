@@ -2,8 +2,15 @@
 @rendermode InteractiveServer
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
-@using Microsoft.Extensions.Caching.Memory
+@inject ILoginService AuthService
+@using BeautySalonBooking.Contracts.Authentication.Dtos
+@using BeautySalonBooking.Contracts.Authentication.Requests
+@using BeautySalonBooking.Contracts.Authentication.Responses
+@using BeautySalonBooking.WebApp.Interfaces
+@using BeautySalonBooking.WebApp.Interfaces.Login
 @using BeautySalonBooking.WebApp.Models
+@using BeautySalonBooking.WebApp.Services
+@using Microsoft.Extensions.Caching.Memory
 @inject IMemoryCache MemoryCache
 
 <PageTitle>تایید کد | بیوتی سالن</PageTitle>
@@ -21,7 +28,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.574 2.81.7A2 2 0 0 1 22 16.92z" />
                     </svg>
-                    <span>@_phoneNumber</span>
+                    <span style="direction:ltr">@_phoneNumber</span>
                 </div>
             </div>
         </div>
@@ -44,11 +51,10 @@
                 <p style="color: #ad8992; font-size: 12px;">ارسال شد</p>
             </div>
 
-            <!-- 6 باکس جداگانه برای ورود کد - استفاده از متد با id -->
             <div class="otp-container" style="display: flex; gap: 10px; justify-content: center; direction: ltr; margin-bottom: 20px;">
                 @for (int i = 0; i < 6; i++)
                 {
-                    var index = i; // ✅ کلید اصلی: ذخیره مقدار index در یک متغیر محلی
+                    var index = i;
                     <input type="text"
                            class="otp-input @(_isOtpComplete ? "success" : "")"
                            id="otp-@index"
@@ -115,6 +121,10 @@
     [SupplyParameterFromQuery]
     public string SessionId { get; set; } = string.Empty;
 
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Mobile { get; set; }
+
     private string[] _otpDigits = new string[6];
     private string? _otpError;
     private bool _isOtpVerified = false;
@@ -124,8 +134,7 @@
     private int _resendTimer = 60;
     private System.Timers.Timer? _timer;
     private string _phoneNumber = string.Empty;
-    private string? _storedOtp;
-    private OtpData? _otpData;
+    private string? _mobileForApi;
 
     protected override void OnInitialized()
     {
@@ -133,15 +142,20 @@
         {
             if (!string.IsNullOrEmpty(SessionId) && MemoryCache.TryGetValue(SessionId, out OtpData? data))
             {
-                _otpData = data;
-                _storedOtp = data?.Otp;
-                _phoneNumber = data?.Phone ?? "۰۹۱۲XXXXXXX";
-
-                Console.WriteLine($"✅ Session found: Phone={_phoneNumber}, OTP={_storedOtp}");
+                _phoneNumber = FormatPhoneNumber(data?.Phone ?? "");
+                _mobileForApi = data?.Phone ?? "";
+                Console.WriteLine($"✅ Session found: Phone={_phoneNumber}, MobileForApi={_mobileForApi}");
+            }
+            else if (!string.IsNullOrEmpty(Mobile))
+            {
+                _mobileForApi = Mobile;
+                _phoneNumber = FormatPhoneNumber(Mobile);
+                Console.WriteLine($"✅ Using mobile from query: {_mobileForApi}");
             }
             else
             {
-                Console.WriteLine($"❌ Session not found or invalid: {SessionId}");
+                Console.WriteLine($"❌ Session or Mobile not found");
+                _otpError = "اطلاعات ورودی نامعتبر است";
                 Navigation.NavigateTo("/");
                 return;
             }
@@ -163,8 +177,6 @@
         {
             var value = e.Value?.ToString() ?? "";
 
-            Console.WriteLine($"🔹 OnOtpInput[{index}]: value='{value}'");
-
             if (string.IsNullOrEmpty(value))
             {
                 _otpDigits[index] = "";
@@ -178,7 +190,6 @@
             if (char.IsDigit(firstChar))
             {
                 _otpDigits[index] = firstChar.ToString();
-                Console.WriteLine($"✅ Digit set: _otpDigits[{index}] = '{_otpDigits[index]}'");
 
                 if (index < 5)
                 {
@@ -188,13 +199,10 @@
             else
             {
                 _otpDigits[index] = "";
-                Console.WriteLine($"❌ Non-digit entered, cleared");
             }
 
             UpdateOtpStatus();
             StateHasChanged();
-
-            Console.WriteLine($"📊 Current digits: [{string.Join(", ", _otpDigits)}], Complete: {_isOtpComplete}");
         }
         catch (Exception ex)
         {
@@ -206,8 +214,6 @@
     {
         try
         {
-            Console.WriteLine($"🔹 OnOtpKeyDown[{index}]: Key='{e.Key}'");
-
             if (e.Key == "Backspace")
             {
                 if (string.IsNullOrEmpty(_otpDigits[index]) && index > 0)
@@ -296,53 +302,55 @@
 
         _isOtpComplete = allFilled && allDigits;
         _otpError = null;
-
-        var enteredCode = string.Join("", _otpDigits);
-        Console.WriteLine($"🔄 UpdateOtpStatus: allFilled={allFilled}, allDigits={allDigits}, Complete={_isOtpComplete}, Code='{enteredCode}'");
     }
 
     private async Task HandleVerifyOtp()
     {
-        Console.WriteLine($"🔹 HandleVerifyOtp called, _isOtpComplete={_isOtpComplete}");
-
-        if (!_isOtpComplete)
-        {
-            Console.WriteLine("❌ OTP not complete, cannot verify");
-            return;
-        }
+        if (!_isOtpComplete) return;
 
         _isVerifying = true;
+        _otpError = null;
         StateHasChanged();
 
         try
         {
             var enteredOtp = string.Join("", _otpDigits);
+            Console.WriteLine($"🔍 Verifying OTP: {enteredOtp} for mobile: {_mobileForApi}");
 
-            Console.WriteLine($"🔍 Verifying: Entered='{enteredOtp}', Stored='{_storedOtp}'");
+            var request = new VerifyOtpRequest
+                {
+                    MobileNumber = _mobileForApi ?? "",
+                    OtpCode = enteredOtp
+                };
 
-            if (enteredOtp == _storedOtp || enteredOtp == "111111")
+            var response = await AuthService.VerifyLoginOtpAsync(request);
+
+            if (response.IsSuccess && response.Payload?.Tokens != null)
             {
                 _isOtpVerified = true;
-                _otpError = null;
-
                 Console.WriteLine("✅ OTP verified successfully!");
 
-                await Task.Delay(500);
+                // ذخیره توکن در localStorage
+                await SaveAuthTokens(response.Payload.Tokens, response.Payload.User);
 
+                // پاک کردن Session از کش
                 if (!string.IsNullOrEmpty(SessionId))
                 {
                     MemoryCache.Remove(SessionId);
-                    Console.WriteLine($"🗑️ Session removed from cache: {SessionId}");
                 }
 
-                Navigation.NavigateTo("/dashboard");
+                // رفتن به داشبورد
+                Navigation.NavigateTo("/dashboard", true);
+            }
+            else if (response.ListPayload != null && response.ListPayload.Any())
+            {
+                _otpError = "چندین کاربر با این شماره یافت شد. لطفاً با پشتیبانی تماس بگیرید.";
+                Console.WriteLine($"⚠️ Multiple users found: {response.ListPayload.Count}");
             }
             else
             {
-                _otpError = "کد وارد شده نادرست است. مجدداً تلاش کنید.";
+                _otpError = response.Message ?? "کد وارد شده نادرست است. مجدداً تلاش کنید.";
                 _isOtpVerified = false;
-
-                Console.WriteLine("❌ OTP verification failed");
 
                 _otpDigits = new string[6];
                 _isOtpComplete = false;
@@ -363,6 +371,27 @@
         }
     }
 
+    private async Task SaveAuthTokens(TokenResponse token, UserDto? user)
+    {
+        try
+        {
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "accessToken", token.AccessToken);
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "refreshToken", token.RefreshToken);
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "tokenExpiry", token.ExpiresAt.ToString("O"));
+
+            if (user != null)
+            {
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "user", System.Text.Json.JsonSerializer.Serialize(user));
+            }
+
+            Console.WriteLine("✅ Tokens saved successfully");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error saving tokens: {ex.Message}");
+        }
+    }
+
     private void GoBack()
     {
         Navigation.NavigateTo("/");
@@ -374,22 +403,53 @@
 
         try
         {
-            var newOtp = Random.Shared.Next(100000, 999999).ToString();
-            var newSessionId = Guid.NewGuid().ToString();
-
-            var newOtpData = new OtpData
+            var request = new LoginInitiateRequest
                 {
-                    Phone = _phoneNumber,
-                    Otp = newOtp,
-                    CreatedAt = DateTime.UtcNow
+                    MobileNumber = _mobileForApi ?? ""
                 };
 
-            MemoryCache.Set(newSessionId, newOtpData, TimeSpan.FromMinutes(5));
+            var response = await AuthService.RequestLoginOtpAsync(request);
 
-            Console.WriteLine($"📱 New OTP for {_phoneNumber}: {newOtp}");
-            Console.WriteLine($"🔑 New SessionId: {newSessionId}");
+            if (response.IsSuccess)
+            {
 
-            Navigation.NavigateTo($"/verify-otp?sessionId={newSessionId}", true);
+                if (response.IsSuccess)
+                {
+                    var sessionId = Guid.NewGuid().ToString();
+
+                    // ذخیره اطلاعات در MemoryCache
+                    var otpData = new OtpData
+                        {
+                            Phone = request.MobileNumber,
+                            Otp = "",
+                            CreatedAt = DateTime.UtcNow
+                        };
+
+                    MemoryCache.Set(sessionId, otpData, TimeSpan.FromMinutes(5));
+
+
+
+
+
+                    Navigation.NavigateTo($"/verify-otp?sessionId={sessionId}", true);
+
+                }
+                else
+                {
+                    _otpError = null;
+                    _otpDigits = new string[6];
+                    _isOtpComplete = false;
+                    StateHasChanged();
+
+                    await JSRuntime.InvokeVoidAsync("eval", "document.getElementById('otp-0').focus();");
+                    StartResendTimer();
+                }
+            }
+            else
+            {
+                _otpError = response.Message ?? "خطا در ارسال مجدد کد";
+                StateHasChanged();
+            }
         }
         catch (Exception ex)
         {
@@ -397,8 +457,6 @@
             _otpError = "خطا در ارسال مجدد کد";
             StateHasChanged();
         }
-
-        StartResendTimer();
     }
 
     private void StartResendTimer()
@@ -419,6 +477,23 @@
             InvokeAsync(StateHasChanged);
         };
         _timer.Start();
+    }
+
+    private string FormatPhoneNumber(string phone)
+    {
+        if (string.IsNullOrEmpty(phone)) return "۰۹۱۲XXXXXXX";
+
+        if (!phone.StartsWith('0'))
+        {
+            phone = "0" + phone;
+        }
+
+        if (phone.Length >= 11)
+        {
+            return $"{phone[..4]} {phone[4..7]} {phone[7..]}";
+        }
+
+        return phone;
     }
 
     public void Dispose()

@@ -1,8 +1,9 @@
-﻿using BeautySalonBooking.Contracts.Auth.Requests;
-using BeautySalonBooking.Contracts.Auth.Responses;
+﻿using BeautySalonBooking.Contracts.Authentication;
+using BeautySalonBooking.Contracts.Authentication.Requests;
+using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
 
-namespace BeautySalonBooking.Application.Authentication;
+namespace BeautySalonBooking.Application.Authentication.Interfaces;
 
 public interface IAuthenticationService
 {
@@ -10,15 +11,15 @@ public interface IAuthenticationService
         RegisterInitiateRequest request,
         CancellationToken cancellationToken);
 
-    Task<ApiResponse<AuthResult>> VerifyRegisterOtpAsync(
+    Task<ApiResponse_New<AuthResult>> VerifyRegisterOtpAsync(
         VerifyOtpRequest request,
         CancellationToken cancellationToken);
 
-    Task<ApiResponse> RequestLoginOtpAsync(
+    Task<ApiResponse_New<AuthResult>> RequestLoginOtpAsync(
         LoginInitiateRequest request,
         CancellationToken cancellationToken);
 
-    Task<ApiResponse<AuthResult>> VerifyLoginOtpAsync(
+    Task<ApiResponse_New<AuthResult>> VerifyLoginOtpAsync(
         VerifyOtpRequest request,
         CancellationToken cancellationToken);
 }

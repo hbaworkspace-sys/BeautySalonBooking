@@ -1,5 +1,5 @@
-﻿using BeautySalonBooking.Application.Authentication;
-using BeautySalonBooking.Contracts.Auth.Requests;
+﻿using BeautySalonBooking.Application.Authentication.Interfaces;
+using BeautySalonBooking.Contracts.Authentication.Requests;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +7,7 @@ namespace BeautySalonBooking.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;

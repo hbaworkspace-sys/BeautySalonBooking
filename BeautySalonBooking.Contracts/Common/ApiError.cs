@@ -1,9 +1,8 @@
-﻿namespace BeautySalonBooking.Contracts.Common
-{
-    public sealed class ApiError
-    {
-        public string Code { get; init; } = default!;
+﻿namespace BeautySalonBooking.Contracts.Common;
 
-        public string Message { get; init; } = default!;
-    }
+public sealed class ApiError
+{
+    public string Code { get; init; } = default!;
+
+    public string Message { get; init; } = default!;
 }

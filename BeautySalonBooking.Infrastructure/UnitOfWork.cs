@@ -1,9 +1,8 @@
 ﻿using BeautySalonBooking.Domain.Base.UnitOfWork;
+using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Repositories;
 using BeautySalonBooking.Domain.Identity.RoleAggregate.Repositories;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Repositories;
-using BeautySalonBooking.Domain.OTP;
 using BeautySalonBooking.Domain.PersonAggregate.Repositories;
-using BeautySalonBooking.Domain.UserAggregate.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BeautySalonBooking.Infrastructure
@@ -18,9 +17,11 @@ namespace BeautySalonBooking.Infrastructure
         public IRoleRepository RoleRepository { get; }
         public IUserRepository UserRepository { get; }
         public IUserRoleRepository UserRoleRepository { get; }
+        public IRefreshTokenRepository RefreshTokenRepository { get; }
 
         public UnitOfWork(BeautyDbContext _context,
                 IOtpRepository _otpRepository,
+                IRefreshTokenRepository _refreshTokenRepository,
                 IPersonRepository _personRepository,
                 IRoleRepository _roleRepository,
                 IUserRepository _userRepository,
@@ -32,6 +33,7 @@ namespace BeautySalonBooking.Infrastructure
             RoleRepository = _roleRepository;
             UserRepository = _userRepository;
             UserRoleRepository = _userRoleRepository;
+            RefreshTokenRepository = _refreshTokenRepository;
         }
 
         public Task<int> SaveChangesAsync(

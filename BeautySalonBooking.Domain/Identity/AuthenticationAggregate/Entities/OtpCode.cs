@@ -91,7 +91,7 @@ public class OtpCode : AuditableEntity<long>
 
     public bool CanBeUsed()
     {
-        return !IsUsed() || !IsExpired();
+        return IsUsed() && IsExpired();
     }
 
     private static void ValidateMobileNumber(string mobileNumber)
