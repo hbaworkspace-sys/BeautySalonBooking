@@ -1,17 +1,17 @@
 using BeautySalonBooking.Maui.Helper;
-using Icon = BeautySalonBooking.Resources;
+using Icon = BeautySalonBooking.Maui.Resources;
 
 namespace BeautySalonBooking.Maui.UserControls;
 
 public partial class NumericEntry : ContentView
-{        
+{
     public event EventHandler TextChanging;
     public event EventHandler OnCompleted;
 
     public NumericEntry()
-	{
-		InitializeComponent();
-	}
+    {
+        InitializeComponent();
+    }
 
     public string Glyph
     {
@@ -44,6 +44,23 @@ public partial class NumericEntry : ContentView
     }
     public static readonly BindableProperty ReturnTypeValueProperty =
         BindableProperty.Create(nameof(ReturnTypeValue), typeof(ReturnType), typeof(NumericEntry), ReturnType.Next);
+
+    public NumericMode NumericType
+    {
+        get { return (NumericMode)GetValue(NumericTypeProperty); }
+        set { SetValue(NumericTypeProperty, value); }
+    }
+    public static readonly BindableProperty NumericTypeProperty =
+        BindableProperty.Create(nameof(NumericType), typeof(NumericMode), typeof(NumericEntry), NumericMode.None);
+
+    public int MaxLength
+    {
+        get => (int)GetValue(MaxLengthProperty);
+        set => SetValue(MaxLengthProperty, value);
+    }
+    public static readonly BindableProperty MaxLengthProperty =
+            BindableProperty.Create(nameof(MaxLength), typeof(int), typeof(NumericEntry), 10);
+
     public int Text_int
     {
         get
@@ -54,6 +71,7 @@ public partial class NumericEntry : ContentView
                 return Convert.ToInt32(Text);
         }
     }
+
     public double Text_double
     {
         get
@@ -65,6 +83,7 @@ public partial class NumericEntry : ContentView
                 return Convert.ToDouble(Text);
         }
     }
+
     public decimal Text_Decimal
     {
         get
@@ -75,21 +94,6 @@ public partial class NumericEntry : ContentView
                 return Convert.ToDecimal(Text);
         }
     }
-    public enum NumericMode
-    {
-        None = 0,     //اعداد غیر محاسباتی مثل شماره فاکتور یا کد ملی یا ....
-        Quantity = 1, // صحیح مثل تعداد
-        Price = 2,    // پول
-        Weight = 3    // اعشار مثل وزن
-    }
-
-    public NumericMode NumericType
-    {
-        get { return (NumericMode)GetValue(NumericTypeProperty); }
-        set { SetValue(NumericTypeProperty, value); }
-    }
-    public static readonly BindableProperty NumericTypeProperty =
-        BindableProperty.Create(nameof(NumericType), typeof(NumericMode), typeof(NumericEntry), NumericMode.None);
 
     private void mainEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -149,6 +153,18 @@ public partial class NumericEntry : ContentView
         selectAllTexts(sender as Entry);
     }
 
+    private void mainEntry_Unfocused(object sender, FocusEventArgs e)
+    {
+        border.StrokeThickness = 0;
+        if (string.IsNullOrEmpty(Text))
+            lblPalceHolder.IsVisible = true;
+    }
+
+    private void mainEntry_Completed(object sender, EventArgs e)
+    {
+        OnCompleted?.Invoke(sender, e);
+    }
+
     private void selectAllTexts(Entry entry)
     {
 #if ANDROID
@@ -163,20 +179,18 @@ public partial class NumericEntry : ContentView
     }
 #endif
     }
-    private void mainEntry_Unfocused(object sender, FocusEventArgs e)
-    {
-        border.StrokeThickness = 0;
-        if (string.IsNullOrEmpty(Text))
-            lblPalceHolder.IsVisible = true;
-    }
+
     public void ResetControl()
     {
         Text = "";
         mainEntry.Unfocus();
     }
 
-    private void mainEntry_Completed(object sender, EventArgs e)
+    public enum NumericMode
     {
-        OnCompleted?.Invoke(sender, e);
+        None = 0,     //اعداد غیر محاسباتی مثل شماره فاکتور یا کد ملی یا ....
+        Quantity = 1, // صحیح مثل تعداد
+        Price = 2,    // پول
+        Weight = 3    // اعشار مثل وزن
     }
 }

@@ -3,23 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BeautySalonBooking.Maui.UserControls.TextLink"
              x:Name="self">
-    <Grid>
+    <Grid
+        ColumnDefinitions="auto,auto"
+        ColumnSpacing="5">
+
+        <Label
+            Grid.Column="0"
+            FontSize="12"
+            Text="{Binding QuestionText, Source={x:Reference self}}"/>
+
+        <Label
+            Grid.Column="1"
+            FontSize="12"
+            TextColor="#ED7F89"
+            Text="{Binding Text, Source={x:Reference self}}"/>
+
         <Button
-            Background="Transparent"
-            x:Name="Button"
-            HeightRequest="45"
-            FontFamily="BHoma"
-            HorizontalOptions="Center"
-            Text="{Binding Text,Source={x:Reference self}}"
+            Grid.Column="1"
+            BackgroundColor="Transparent"
             Clicked="Button_Clicked"
-            TextColor="{x:StaticResource Black}"
             Command="{Binding HCommand, Source={x:Reference self}}"/>
 
         <BoxView
+            Grid.Column="1"
             x:Name="UnderLineBox"
             HeightRequest="1.5"
             Margin="0,12,0,0"
-            BackgroundColor="DarkCyan"
+            BackgroundColor="#ED7F89"
             IsVisible="False"/>
     </Grid>
 </ContentView>

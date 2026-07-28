@@ -7,7 +7,7 @@
              BackgroundColor="{StaticResource PrimaryBackground}"
              xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.AccountSetup"
              x:DataType="vm:ChooseAccountTypeViewModel"
-             xmlns:icon="clr-namespace:BeautySalonBooking.Resources"
+             xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
              xmlns:enums="clr-namespace:BeautySalonBooking.Contracts.Common.Enums;assembly=BeautySalonBooking.Contracts">
 
     <Grid

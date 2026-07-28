@@ -44,7 +44,6 @@ namespace BeautySalonBooking.Maui.Features.Auth
                     await Shell.Current.GoToAsync(nameof(OtpPage), new Dictionary<string, object>
                     {
                         ["PhoneNumber"] = PhoneNumber,
-                        ["CountryCode"] = "+98",
                         ["OtpPurposeType"] = OtpPurpose.Login
                     });
                 }
@@ -68,6 +67,7 @@ namespace BeautySalonBooking.Maui.Features.Auth
         {
             await Shell.Current.GoToAsync(nameof(RegisterPage));
         }
+
         private static readonly HashSet<string> ValidPrefixes = new()
         {
             // MCI
@@ -108,6 +108,5 @@ namespace BeautySalonBooking.Maui.Features.Auth
             }
             return true;
         }
-
     }
 }

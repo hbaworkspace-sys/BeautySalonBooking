@@ -4,41 +4,62 @@
              x:Class="BeautySalonBooking.Maui.Features.Auth.LoginPage"
              NavigationPage.HasNavigationBar="False"
              xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
-             BackgroundColor="{StaticResource PrimaryBackground}"
+             xmlns:ucBtn="clr-namespace:BeautySalonBooking.Maui.UserControls.ButtonControl"
+             BackgroundColor="{StaticResource White}"
              xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
              x:DataType="vm:LoginViewModel">
-    <ScrollView>
+
+    <Grid
+        RowDefinitions="auto,auto,*,auto,auto,auto,auto"
+        RowSpacing="20"
+        Padding="15,10,15,10">
+
+        <ucBtn:NextAndBackButtonView
+            Grid.Row="0"
+            IsBackVisible="True"/>
+
+        <uc:TitleSubtitleView
+            Grid.Row="1"
+            Title="ورود به حساب کاربری"
+            Subtitle="لطفا شماره موبایل خود را وارد کنید"/>
+
+        <uc:PhoneNumberEntry
+            Grid.Row="2"
+            Text="{Binding PhoneNumber, Mode=OneWayToSource}"
+            PhoneType="Mobile"/>
+
+        <uc:DefaultButton
+            Grid.Row="3"
+            HCommand="{Binding LoginCommand}"
+            Title="ورود"/>
+
+        <Label
+            Grid.Row="4"
+            Text="یا با شبکه های اجتماعی وارد شوید"
+            Style="{StaticResource PageSubtitleStyle}"/>
+
         <Grid
-            Padding="30,0,30,0"
-            RowDefinitions="auto,auto,*,*,*,*"
-            RowSpacing="20">
-        
-            <Label
-                Grid.Row="0"
-                 Style="{x:StaticResource BeautyTitleLable}"/>
+            Grid.Row="5"
+            ColumnDefinitions="*,*,*">
 
-            <Image
-                 Grid.Row="1"
-                 Source="girl_logo.png"
-                 HeightRequest="220"
-                 Margin="0,0,0,35"
-                 Aspect="AspectFit"/>
+            <ucBtn:IconButtonView
+                Grid.Column="0"
+                ImageSource="geography.png"/>
 
-            <uc:PhoneNumberEntry
-                Grid.Row="2"
-                Text="{Binding PhoneNumber, Mode=OneWayToSource}"
-                PhoneType="Mobile"/>
+            <ucBtn:IconButtonView
+                Grid.Column="1"
+                ImageSource="google.png"/>
 
-            <uc:DefaultButton 
-                 Grid.Row="3"
-                 WidthRequest="300"
-                 HCommand="{Binding LoginCommand}"
-                 Title="ورود"/>
-
-            <uc:TextLink
-                Grid.Row="4"
-                Text="حساب کاربری ندارم"
-                HCommand="{Binding GoToRegisterCommand}"/>
+            <ucBtn:IconButtonView
+                Grid.Column="2"
+                ImageSource="apple_logo.png"/>
         </Grid>
-    </ScrollView>
+
+        <uc:TextLink
+            Grid.Row="6"
+            QuestionText="حساب کاربری ندارید؟"
+            Text="ثبت نام کنید"
+            HorizontalOptions="Center"
+            HCommand="{Binding GoToRegisterCommand}"/>
+    </Grid>
 </ContentPage>
