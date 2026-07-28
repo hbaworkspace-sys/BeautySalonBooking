@@ -46,7 +46,6 @@ namespace BeautySalonBooking.Maui.Features.Auth
                 ApiResponse<AuthResult> response = null;
                 var request = new VerifyOtpRequest
                 {
-                    CountryCode = CountryCode,
                     MobileNumber = PhoneNumber,
                     OtpCode = OtpCode
                 };
@@ -83,7 +82,7 @@ namespace BeautySalonBooking.Maui.Features.Auth
                     if (!string.IsNullOrWhiteSpace(data.RefreshToken))
                         await SecureStorage.SetAsync("refresh_token", data.RefreshToken);
 
-                    await SecureStorage.SetAsync("user_id", data.personId.ToString());
+                    // await SecureStorage.SetAsync("user_id", data.personId.ToString());
                 }
                 await Shell.Current.GoToAsync(nameof(ChooseAccountTypePage));
             }

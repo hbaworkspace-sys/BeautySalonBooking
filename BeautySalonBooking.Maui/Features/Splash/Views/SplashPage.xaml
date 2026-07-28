@@ -4,13 +4,10 @@
              x:Class="BeautySalonBooking.Maui.Features.Splash.SplashPage"
              NavigationPage.HasNavigationBar="False"
              Background="#fee0f5"
-             xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
+             xmlns:ucInd="clr-namespace:BeautySalonBooking.Maui.UserControls.Indicator"
+             xmlns:ucImg="clr-namespace:BeautySalonBooking.Maui.UserControls.Images"
              xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Splash"
              x:DataType="vm:SplashViewModel">
-
-    <ContentPage.Resources>
-
-    </ContentPage.Resources>
 
     <Grid
         RowDefinitions="*,1.5*,*">
@@ -46,7 +43,7 @@
             Grid.RowSpan="2">
             <AbsoluteLayout.Resources>
                 <Style TargetType="Label" >
-                    <Setter Property="TextColor" Value="White"/>
+                    <Setter Property="TextColor" Value="{x:StaticResource White}"/>
                     <Setter Property="Text" Value="✦"/>
                 </Style>
             </AbsoluteLayout.Resources>
@@ -98,43 +95,19 @@
                 AbsoluteLayout.LayoutFlags="PositionProportional"/>
         </AbsoluteLayout>
 
-        <Border
-            StrokeThickness="3"
-            Stroke="White"
+        <ucImg:CircularImageView
+            Grid.Row="1"
             VerticalOptions="Start"
-            WidthRequest="165"
-            HeightRequest="165"
-            Grid.Row="1">
-            <Border.Shadow>
-                <Shadow
-                    Brush="#f1e6ee"
-                    Offset="0,10"/>
-            </Border.Shadow>
-            <Border.StrokeShape>
-                <RoundRectangle
-                    CornerRadius="100"/>
-            </Border.StrokeShape>
-            <Border.Background>
-                <LinearGradientBrush
-                    StartPoint="0,0"
-                    EndPoint="0,1">
-                    <GradientStop
-                        Color="#eefabaac"
-                        Offset="0.0" />
-                    <GradientStop
-                        Color="#eef99bd3"
-                        Offset="1.0" />
-                </LinearGradientBrush>
-            </Border.Background>
-            <Image
-                Source="logo_beauty.png"/>
-        </Border>
+            Size="Large"
+            IsGolwEffectVisible="True"
+            ImageSource="logo_beauty.png"/>
 
         <Grid
             Margin="0,220,0,0"
             Grid.Row="1"
             Grid.RowSpan="2"
             RowDefinitions="60,40,*,*,*">
+
             <Label
                 Grid.Row="0"
                 FontAttributes="Bold"
@@ -158,26 +131,29 @@
                 ColumnDefinitions="*,*,*"
                 ColumnSpacing="3">
                 <Border
+                    x:Name="Indicator_Border1"
                     StrokeThickness="0"
                     Background="LightGray"
                     Grid.Column="0"
                     StrokeShape="RoundRectangle 50">
                 </Border>
                 <Border
+                    x:Name="Indicator_Border2"
                     StrokeThickness="0"
                     Background="LightGray"
                     Grid.Column="1"
                     StrokeShape="RoundRectangle 50">
                 </Border>
                 <Border
+                    x:Name="Indicator_Border3"
                     StrokeThickness="0"
-                    Background="PaleVioletRed"
+                    Background="LightGray"
                     Grid.Column="2"
                     StrokeShape="RoundRectangle 50">
                 </Border>
-
-
             </Grid>
         </Grid>
+
     </Grid>
+
 </ContentPage>

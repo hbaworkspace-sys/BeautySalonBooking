@@ -2,7 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BeautySalonBooking.Maui.UserControls.AccountTypeCard"
-             xmlns:icon="clr-namespace:BeautySalonBooking.Resources">
+             xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources">
     <Grid>
         <Border
             BackgroundColor="#C894AA"
@@ -18,7 +18,7 @@
                     Opacity="0.6"/>
             </Border.Shadow>
             <Grid
-               ColumnDefinitions="*,3,3*,0.8*">
+                ColumnDefinitions="*,3,3*,0.8*">
                 <Border
                     WidthRequest="50"
                     HeightRequest="50"
@@ -32,10 +32,10 @@
                         Text="{x:Static icon:IconSymbols.Person3}"/>
                 </Border>
                 <Border
-                     Grid.Column="1"
-                     WidthRequest="4"
-                     HeightRequest="80"
-                     Background="#aa66023c">
+                    Grid.Column="1"
+                    WidthRequest="4"
+                    HeightRequest="80"
+                    Background="#aa66023c">
                 </Border>
                 <Grid
                     Grid.Column="2"
@@ -52,41 +52,41 @@
                         Text="{x:Static icon:IconSymbols.Check}"/>
 
                     <Label
-                         Grid.Row="0"
+                        Grid.Row="0"
                         Grid.Column="1"
-                         FontFamily="BHoma"
-                         FontSize="13"
-                         Text="ثبت سالن زیبایی"/>
+                        FontFamily="BHoma"
+                        FontSize="13"
+                        Text="ثبت سالن زیبایی"/>
 
                     <Label
-                      Grid.Column="0"
-                      Grid.Row="1"
-                      TextColor="White"
-                      FontSize="20"
-                      Style="{x:StaticResource GlyphLable}"
-                      Text="{x:Static icon:IconSymbols.Check}"/>
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        TextColor="White"
+                        FontSize="20"
+                        Style="{x:StaticResource GlyphLable}"
+                        Text="{x:Static icon:IconSymbols.Check}"/>
 
                     <Label
-                         Grid.Row="1"
+                        Grid.Row="1"
                         Grid.Column="1"
-                         FontFamily="BHoma"
-                         FontSize="13"
-                         Text="مدیریت سالن ها"/>
+                        FontFamily="BHoma"
+                        FontSize="13"
+                        Text="مدیریت سالن ها"/>
 
                     <Label
-                      Grid.Column="0"
-                      Grid.Row="2"
-                      TextColor="White"
-                      FontSize="20"
-                      Style="{x:StaticResource GlyphLable}"
-                      Text="{x:Static icon:IconSymbols.Check}"/>
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        TextColor="White"
+                        FontSize="20"
+                        Style="{x:StaticResource GlyphLable}"
+                        Text="{x:Static icon:IconSymbols.Check}"/>
 
                     <Label
-                         Grid.Row="2"
-                         Grid.Column="1"
-                         FontFamily="BHoma"
-                         FontSize="13"
-                         Text="تعریف خدمات ارایشگاه"/>
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        FontFamily="BHoma"
+                        FontSize="13"
+                        Text="تعریف خدمات ارایشگاه"/>
                 </Grid>
                 <Border
                     Grid.Column="3"
@@ -105,7 +105,7 @@
         </Border>
         <Button
             Grid.Row="4"
-                />
+            />
 
     </Grid>
 </ContentView>

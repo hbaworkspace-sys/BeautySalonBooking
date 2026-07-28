@@ -15,6 +15,7 @@ namespace BeautySalonBooking.Maui
                 {
                     fonts.AddFont("IRANSans.ttf", "Sans");
                     fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIcons");
+                    fonts.AddFont("MaterialSymbolsOutlined.ttf", "MaterialIconsOut");
                 });
 
             builder.Services.AddApiServices();

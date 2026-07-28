@@ -1,5 +1,5 @@
 using BeautySalonBooking.Maui.Helper;
-using Icon = BeautySalonBooking.Resources;
+using Icon = BeautySalonBooking.Maui.Resources;
 
 namespace BeautySalonBooking.Maui.UserControls;
 
@@ -58,7 +58,6 @@ public partial class PhoneNumberEntry : ContentView
     }
     public static readonly BindableProperty PhoneTypeProperty =
         BindableProperty.Create(nameof(PhoneType), typeof(PhoneTypes), typeof(PhoneNumberEntry), PhoneTypes.Mobile, propertyChanged: OnPhoneTypeChanged);
-
     private static void OnPhoneTypeChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var control = bindable as PhoneNumberEntry;
@@ -67,7 +66,7 @@ public partial class PhoneNumberEntry : ContentView
         {
             if (control.PhoneType == PhoneTypes.Landline)
             {
-                control.Glyph = Icon.IconSymbols.PointOfSale;
+                control.Glyph = Icon.IconSymbols.Deskphone;
                 control.PlaceHolder = "ثابت";
             }
             else
@@ -77,7 +76,6 @@ public partial class PhoneNumberEntry : ContentView
             }
         }
     }
-
     private void mainEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
         Entry txt = (Entry)sender;
@@ -107,7 +105,6 @@ public partial class PhoneNumberEntry : ContentView
         {
         }
     }
-
     private void mainEntry_Focused(object sender, FocusEventArgs e)
     {
         lblPalceHolder.IsVisible = false;
@@ -122,10 +119,10 @@ public partial class PhoneNumberEntry : ContentView
             editText.Post(() => editText.SelectAll());
         }
 #elif WINDOWS
-    if (entry.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.TextBox textBox)
-    {
-        textBox.SelectAll();
-    }
+        if (entry.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.TextBox textBox)
+        {
+            textBox.SelectAll();
+        }
 #endif
     }
 

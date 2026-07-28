@@ -1,12 +1,12 @@
 ﻿namespace BeautySalonBooking.Maui.Common.Enums
 {
-    public enum OtpPurpose
+    public enum OtpPurpose : byte
     {
-        None = 0,
-        Login = 1,
-        Register = 2,
+        Register = 1,
+        Login = 2,
         ForgotPassword = 3,
-        ChangePhoneNumber = 4,
-        VerifyPhoneNumber = 5
+        ChangeMobileNumber = 4,
+        VerifyMobileNumber = 5,
+        TwoFactorAuthentication = 6
     }
 }

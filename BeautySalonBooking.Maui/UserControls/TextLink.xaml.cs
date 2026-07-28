@@ -1,5 +1,4 @@
 using System.Windows.Input;
-using System.Xml;
 
 namespace BeautySalonBooking.Maui.UserControls;
 
@@ -8,8 +7,17 @@ public partial class TextLink : ContentView
     public TextLink()
     {
         InitializeComponent();
-        UnderLineBox.WidthRequest = Button.Width;
+        //UnderLineBox.WidthRequest = Button.Width;
     }
+
+    public string QuestionText
+    {
+        get => (string)GetValue(QuestionTextProperty);
+        set => SetValue(QuestionTextProperty, value);
+    }
+    public static readonly BindableProperty QuestionTextProperty =
+            BindableProperty.Create(nameof(QuestionText), typeof(string), typeof(TextLink), default(string));
+
     public string Text
     {
         get { return (string)GetValue(TextProperty); }
@@ -28,9 +36,9 @@ public partial class TextLink : ContentView
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        UnderLineBox.IsVisible = true;
-        UnderLineBox.WidthRequest = Button.Width-20;
-        await Task.Delay(400);
-        UnderLineBox.IsVisible = false;
+        //UnderLineBox.IsVisible = true;
+        //UnderLineBox.WidthRequest = Button.Width - 20;
+        //await Task.Delay(400);
+        //UnderLineBox.IsVisible = false;
     }
 }

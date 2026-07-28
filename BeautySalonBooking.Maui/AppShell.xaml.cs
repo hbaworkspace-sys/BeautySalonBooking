@@ -4,7 +4,7 @@ using BeautySalonBooking.Maui.Features.AdminDashboard;
 using BeautySalonBooking.Maui.Features.AdminDashboard.Views;
 using BeautySalonBooking.Maui.Features.Auth;
 using BeautySalonBooking.Maui.Features.Home;
-using BeautySalonBooking.Maui.Features.Salons;
+using BeautySalonBooking.Maui.Features.Splash.Views;
 
 namespace BeautySalonBooking.Maui
 {
@@ -13,6 +13,9 @@ namespace BeautySalonBooking.Maui
         public AppShell()
         {
             InitializeComponent();
+
+            //SPLASH
+            Routing.RegisterRoute(nameof(OnboardingPage), typeof(OnboardingPage));
 
             //AUTH
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
@@ -23,10 +26,6 @@ namespace BeautySalonBooking.Maui
             Routing.RegisterRoute(nameof(ChooseAccountTypePage), typeof(ChooseAccountTypePage));
             Routing.RegisterRoute(nameof(SalonIntroductionPage), typeof(SalonIntroductionPage));
             Routing.RegisterRoute(nameof(StylistIntroductionPage), typeof(StylistIntroductionPage));
-
-            //SALON
-            Routing.RegisterRoute(nameof(SalonRegistrationPage), typeof(SalonRegistrationPage));
-            Routing.RegisterRoute(nameof(SalonVerificationSuccessPage), typeof(SalonVerificationSuccessPage));
 
             //ADMIN DASHBOARD
             Routing.RegisterRoute(nameof(AdminDashboardPage), typeof(AdminDashboardPage));

@@ -1,7 +1,4 @@
-﻿using BeautySalonBooking.Maui.Common.LocalStorage;
-using BeautySalonBooking.Maui.Features.Auth;
-using CommunityToolkit.Mvvm.ComponentModel;
-using BeautySalonBooking.Maui.Features.AdminDashboard;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace BeautySalonBooking.Maui.Features.Splash
 {
@@ -20,7 +17,6 @@ namespace BeautySalonBooking.Maui.Features.Splash
             //if (!string.IsNullOrEmpty(token))
             //    await Shell.Current.GoToAsync(nameof(AdminDashboardPage));
             //else
-            await Shell.Current.GoToAsync(nameof(test));
         }
     }
 }

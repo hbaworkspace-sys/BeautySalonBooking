@@ -23,7 +23,7 @@ namespace BeautySalonBooking.Maui.Features.Auth
         private string phoneNumber;
 
         [ObservableProperty]
-        private string countryCode = "+98";
+        private string nationalCode;
 
         [ObservableProperty]
         private bool isBusy = false;
@@ -46,8 +46,7 @@ namespace BeautySalonBooking.Maui.Features.Auth
                     {
                         FirstName = FirstName,
                         LastName = LastName,
-                        MobileNumber = PhoneNumber,
-                        CountryCode = CountryCode
+                        MobileNumber = PhoneNumber
                     });
 
                 if (result.IsSuccess)
@@ -55,7 +54,6 @@ namespace BeautySalonBooking.Maui.Features.Auth
                     await Shell.Current.GoToAsync(nameof(OtpPage), new Dictionary<string, object>
                     {
                         ["PhoneNumber"] = PhoneNumber,
-                        ["CountryCode"] = CountryCode,
                         ["OtpPurposeType"] = OtpPurpose.Register
                     });
                 }
@@ -74,6 +72,11 @@ namespace BeautySalonBooking.Maui.Features.Auth
             }
         }
 
+        [RelayCommand]
+        private async Task GoToLoginAsync()
+        {
+            await Shell.Current.GoToAsync(nameof(LoginPage));
+        }
         private async Task<bool> ValidateInputAsync()
         {
             if (string.IsNullOrWhiteSpace(PhoneNumber))

@@ -6,16 +6,24 @@
 
     <Border
         x:Name="border"
-        BackgroundColor="{x:StaticResource SecondaryBackground}"
-        StrokeThickness="0"
-        HeightRequest="50">
+        BackgroundColor="{x:StaticResource White}"
+        StrokeThickness="1"
+        Margin="10,0,10,0"
+        Stroke="{StaticResource StrokeColor}"
+        HeightRequest="60">
+
+        <Border.Shadow>
+            <Shadow
+                Brush="{StaticResource ShadowColor}"
+                Offset="0,0.5"/>
+        </Border.Shadow>
 
         <Border.StrokeShape>
-            <RoundRectangle CornerRadius="25"/>
+            <RoundRectangle CornerRadius="10"/>
         </Border.StrokeShape>
 
         <Grid
-           ColumnDefinitions="30,*">
+            ColumnDefinitions="30,*">
 
             <Label
                 Margin="10,0,0,0"
@@ -24,23 +32,24 @@
                 Text="{Binding Glyph,Source={x:Reference self}}"/>
 
             <Label
-                 x:Name="lblPalceHolder"
-                 Grid.Column="0"
-                 Grid.ColumnSpan="2"
-                 Text="{Binding PlaceHolder, Source={x:Reference self}}"
-                 HorizontalOptions="Center"/>
+                x:Name="lblPalceHolder"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Text="{Binding PlaceHolder, Source={x:Reference self}}"
+                HorizontalOptions="Center"/>
 
             <Entry
                 x:Name="mainEntry"
                 Grid.Column="1"
                 Keyboard="Numeric"
-                Text="{Binding Text,Source={x:Reference self}}"
+                FlowDirection="LeftToRight"
+                MaxLength="{x:Binding MaxLength, Source={x:Reference self}}"
                 ReturnType="{Binding ReturnTypeValue, Source={x:Reference self}}"
+                Text="{Binding Text,Source={x:Reference self}}"
                 TextChanged="mainEntry_TextChanged"
                 Completed="mainEntry_Completed"
                 Focused="mainEntry_Focused"
                 Unfocused="mainEntry_Unfocused"
-                Margin="5,0,0,0"
                 TextColor="{x:StaticResource PrimaryText}"/>
 
         </Grid>

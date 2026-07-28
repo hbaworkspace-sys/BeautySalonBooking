@@ -1,4 +1,4 @@
-using Icon = BeautySalonBooking.Resources;
+using Icon = BeautySalonBooking.Maui.Resources;
 
 namespace BeautySalonBooking.Maui.UserControls;
 
@@ -8,9 +8,9 @@ public partial class TextEntry : ContentView
     public event EventHandler OnCompleted;
 
     public TextEntry()
-	{
-		InitializeComponent();
-	}
+    {
+        InitializeComponent();
+    }
 
     public string Glyph
     {

@@ -3,19 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BeautySalonBooking.Maui.UserControls.PhoneNumberEntry"
              x:Name="self">
-    
+
     <Border
         x:Name="border"
-        BackgroundColor="{x:StaticResource SecondaryBackground}"
-        StrokeThickness="0"
-        HeightRequest="45">
+        BackgroundColor="{x:StaticResource White}"
+        StrokeThickness="1"
+        Margin="10,0,10,0"
+        Stroke="{StaticResource StrokeColor}"
+        HeightRequest="60">
+
+        <Border.Shadow>
+            <Shadow
+                Brush="{StaticResource ShadowColor}"
+                Offset="0,0.5"/>
+        </Border.Shadow>
 
         <Border.StrokeShape>
-            <RoundRectangle CornerRadius="25"/>
+            <RoundRectangle CornerRadius="10"/>
         </Border.StrokeShape>
 
         <Grid
-           ColumnDefinitions="30,*,45">
+            ColumnDefinitions="30,*,45">
 
             <Label
                 Margin="10,0,0,0"
@@ -23,34 +31,34 @@
                 Style="{x:StaticResource GlyphLable}"
                 Text="{Binding Glyph,Source={x:Reference self}}"/>
 
-            <Label
-                 x:Name="lblPalceHolder"
-                 Grid.Column="0"
-                 Grid.ColumnSpan="3"
-                 Text="{Binding PlaceHolder, Source={x:Reference self}}"
-                 HorizontalOptions="Center"/>
-
             <Entry
                 x:Name="mainEntry"
                 Grid.Column="1"
                 FlowDirection="LeftToRight"
+                Keyboard="Numeric"
+                ReturnType="{Binding ReturnTypeValue, Source={x:Reference self}}"
+                TextColor="{x:StaticResource PrimaryText}"
+                MaxLength="10"
                 TextChanged="mainEntry_TextChanged"
                 Completed="mainEntry_Completed"
                 Focused="mainEntry_Focused"
                 Unfocused="mainEntry_Unfocused"
-                Margin="5,0,0,0"
-                MaxLength="10"
-                Keyboard="Numeric"
-                Text="{Binding Text,Source={x:Reference self}}"
-                ReturnType="{Binding ReturnTypeValue, Source={x:Reference self}}"
-                TextColor="{x:StaticResource PrimaryText}"/>
-            
+                Text="{Binding Text,Source={x:Reference self}}" />
+
+            <Entry
+                Grid.Column="2"
+                Text=" 98+"
+                IsReadOnly="True"/>
+
             <Label
-                 Grid.Column="2"
-                 Text="98+"
-                 HorizontalOptions="Center"/>
-
-
+                x:Name="lblPalceHolder"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                BackgroundColor="White"
+                HeightRequest="60"
+                HorizontalTextAlignment="Center"
+                HorizontalOptions="FillAndExpand"
+                Text="{Binding PlaceHolder, Source={x:Reference self}}"/>
         </Grid>
     </Border>
 </ContentView>

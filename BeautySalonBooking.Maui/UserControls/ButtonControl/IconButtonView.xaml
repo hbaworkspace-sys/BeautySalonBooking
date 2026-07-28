@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.UserControls.ButtonControl.IconButtonView"
+             x:Name="self">
+    <Border
+        x:Name="border"
+        BackgroundColor="{StaticResource White}"
+        StrokeThickness="1"
+        Stroke="{x:StaticResource StrokeColor}"
+        HeightRequest="60"
+        WidthRequest="110">
+
+        <Border.Shadow>
+            <Shadow
+                Brush="{x:StaticResource ShadowColor}"
+                Offset="0,0.5"/>
+        </Border.Shadow>
+
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="12"/>
+        </Border.StrokeShape>
+
+        <Grid>
+            <Image
+                Margin="12"
+                Source="{Binding ImageSource, Source={x:Reference self}}"
+                Aspect="AspectFit"/>
+            <Button
+                BackgroundColor="Transparent"/>
+        </Grid>
+    </Border>
+</ContentView>

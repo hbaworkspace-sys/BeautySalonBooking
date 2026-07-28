@@ -1,11 +1,11 @@
 ﻿using BeautySalonBooking.Maui.Features.AccountSetup;
+using BeautySalonBooking.Maui.Features.AdminDashboard;
+using BeautySalonBooking.Maui.Features.AdminDashboard.ViewModels;
 using BeautySalonBooking.Maui.Features.AdminDashboard.Views;
 using BeautySalonBooking.Maui.Features.Auth;
 using BeautySalonBooking.Maui.Features.Home;
-using BeautySalonBooking.Maui.Features.Salons;
 using BeautySalonBooking.Maui.Features.Splash;
-using BeautySalonBooking.Maui.Features.AdminDashboard.ViewModels;
-using BeautySalonBooking.Maui.Features.AdminDashboard;
+using BeautySalonBooking.Maui.Features.Splash.Views;
 
 namespace BeautySalonBooking.Maui.Common.DependencyInjection
 {
@@ -15,6 +15,8 @@ namespace BeautySalonBooking.Maui.Common.DependencyInjection
         {
             services.AddTransient<SplashPage>();
             services.AddTransient<SplashViewModel>();
+
+            services.AddTransient<OnboardingPage>();
 
             services.AddTransient<HomePage>();
             services.AddTransient<HomeViewModel>();
@@ -36,9 +38,6 @@ namespace BeautySalonBooking.Maui.Common.DependencyInjection
 
             services.AddTransient<StylistIntroductionPage>();
             services.AddTransient<StylistIntroductionViewModel>();
-
-            services.AddTransient<SalonRegistrationPage>();
-            services.AddTransient<SalonRegistrationViewModel>();
 
             services.AddTransient<AdminDashboardPage>();
             services.AddTransient<AdminDashboardViewModel>();

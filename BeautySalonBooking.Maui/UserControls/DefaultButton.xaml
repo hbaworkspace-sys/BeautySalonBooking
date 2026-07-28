@@ -3,32 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BeautySalonBooking.Maui.UserControls.DefaultButton"
              x:Name="self">
+
     <Border
-        BackgroundColor="{x:StaticResource SecondaryBackground}"
         StrokeThickness="0"
-        HeightRequest="42"
-        WidthRequest="100">
-        
+        Margin="10,0,10,0"
+        HeightRequest="50">
+
+        <Border.Background>
+            <LinearGradientBrush
+                StartPoint="0,0"
+                EndPoint="1,1">
+                <GradientStop
+                    Color="#eefabaac"
+                    Offset="1.0" />
+                <GradientStop
+                    Color="#eef99bd3"
+                    Offset="0.0" />
+            </LinearGradientBrush>
+        </Border.Background>
+
         <Border.StrokeShape>
-            <RoundRectangle CornerRadius="25"/>
+            <RoundRectangle
+                CornerRadius="12"/>
         </Border.StrokeShape>
-        
-        <Grid>
-            <Label
-                Margin="0,-5,0,0"
-                Text="{Binding Title,Source={x:Reference self}}" 
-                FontFamily="BHoma" 
-                FontSize="18"
-                TextColor="{x:StaticResource PrimaryText}"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                VerticalTextAlignment="Center"
-                HorizontalTextAlignment="Center"/>
-            
-            <Button
-                Background="Transparent"
-                Clicked="Button_Clicked"
-                Command="{x:Binding HCommand, Source={x:Reference self}}"/>
-        </Grid>
+
+        <Button
+            FontSize="18"
+            Padding="0"
+            TextColor="{x:StaticResource White}"
+            Text="{Binding Title,Source={x:Reference self}}"
+            Background="Transparent"
+            Clicked="Button_Clicked"
+            FontFamily="Sans"
+            Command="{x:Binding HCommand, Source={x:Reference self}}"/>
+
     </Border>
 </ContentView>
