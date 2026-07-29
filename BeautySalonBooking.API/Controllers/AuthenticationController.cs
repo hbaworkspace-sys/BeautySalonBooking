@@ -1,6 +1,10 @@
 ﻿using BeautySalonBooking.Application.Authentication.Interfaces;
+using BeautySalonBooking.Application.Authentication.Services;
 using BeautySalonBooking.Contracts.Authentication.Requests;
+using BeautySalonBooking.Contracts.Authentication.Responses;
+using BeautySalonBooking.Contracts.Common;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySalonBooking.API.Controllers;
@@ -52,4 +56,91 @@ public class AuthenticationController : ControllerBase
         var result = await _authenticationService.VerifyLoginOtpAsync(request, cancellationToken);
         return Ok(result);
     }
+
+
+    // ========== متد جدید برای Refresh Token ==========
+    [HttpPost("refresh-token")]
+    [AllowAnonymous] // یا [Authorize] اگر نیاز دارید
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+    {
+        try
+        {
+            // دریافت Access Token از هدر
+            var accessToken = HttpContext.Request.Headers["Authorization"]
+                .ToString()
+                .Replace("Bearer ", "");
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return BadRequest(new ApiResponse_New<AuthResult>
+                {
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Access token در هدر ارسال نشده است"
+                });
+            }
+
+            if (string.IsNullOrEmpty(request.RefreshToken))
+            {
+                return BadRequest(new ApiResponse_New<AuthResult>
+                {
+                    IsSuccess = false,
+                    Code = 400,
+                    Message = "Refresh token ارسال نشده است"
+                });
+            }
+
+            var result = await _authenticationService.RefreshTokenAsync(
+                accessToken,
+                request.RefreshToken,
+                CancellationToken.None);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+
+            return Unauthorized(result);
+        }
+        catch (Exception ex)
+        {
+            //_logger.LogError(ex, "Error in RefreshToken endpoint");
+            return StatusCode(500, new ApiResponse_New<AuthResult>
+            {
+                IsSuccess = false,
+                Code = 500,
+                Message = "خطای داخلی سرور"
+            });
+        }
+    }
+
+    // ========== متد Logout ==========
+    [HttpPost("logout")]
+    [Authorize]
+    public async Task<IActionResult> Logout()
+    {
+        try
+        {
+            // دریافت UserId از Claim
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !long.TryParse(userIdClaim, out long userId))
+            {
+                return BadRequest(new { Message = "کاربر نامعتبر" });
+            }
+
+            // غیرفعال کردن Session
+            await _authenticationService.LogoutAsync(userId);
+
+            return Ok(new { Message = "خروج با موفقیت انجام شد" });
+        }
+        catch (Exception ex)
+        {
+            //_logger.LogError(ex, "Error in Logout endpoint");
+            return StatusCode(500, new { Message = "خطای داخلی سرور" });
+        }
+    }
+
+
+
+
 }

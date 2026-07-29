@@ -32,6 +32,11 @@ public class RefreshTokenRepository : IRefreshTokenRepository
     {
         _context.RefreshTokens.Update(refreshToken);
     }
-
+    public async Task<IEnumerable<RefreshToken>> GetAllByUserIdAsync(long userId)
+    {
+        return await _context.RefreshTokens
+            .Where(rt => rt.UserId == userId && !rt.IsRevoked)
+            .ToListAsync();
+    }
 
 }

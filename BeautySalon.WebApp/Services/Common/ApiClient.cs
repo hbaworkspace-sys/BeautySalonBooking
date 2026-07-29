@@ -3,6 +3,8 @@ using System.Text.Json;
 using System.Text;
 using BeautySalonBooking.WebApp.Settings;
 using BeautySalonBooking.WebApp.Interfaces.Common;
+using BeautySalonBooking.Contracts.Authentication.Requests;
+using BeautySalonBooking.Contracts.Authentication.Responses;
 
 namespace BeautySalonBooking.WebApp.Services.Common
 {
@@ -11,19 +13,158 @@ namespace BeautySalonBooking.WebApp.Services.Common
         private readonly HttpClient _httpClient;
         private readonly ILogger<ApiClient> _logger;
         private readonly ApiSettings _settings;
+        private readonly ITokenService _tokenService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly SemaphoreSlim _refreshLock = new SemaphoreSlim(1, 1);
+        private bool _isRefreshing = false;
 
         public ApiClient(
             HttpClient httpClient,
             IOptions<ApiSettings> settings,
-            ILogger<ApiClient> logger)
+            ILogger<ApiClient> logger,
+            ITokenService tokenService,
+            IServiceProvider serviceProvider)
         {
             _httpClient = httpClient;
             _settings = settings.Value;
             _logger = logger;
-
+            _tokenService = tokenService;
+            _serviceProvider = serviceProvider;
             _httpClient.BaseAddress = new Uri(_settings.BaseUrl);
         }
 
+        private async Task AddAuthorizationHeaderAsync()
+        {
+            var token = await _tokenService.GetAccessTokenAsync();
+            if (!string.IsNullOrEmpty(token))
+            {
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            }
+        }
+
+        // ========== متد جدید برای Refresh Token ==========
+        private async Task<bool> RefreshTokenAsync()
+        {
+            // اگر در حال Refresh هستیم، صبر می‌کنیم
+            if (_isRefreshing)
+            {
+                await _refreshLock.WaitAsync();
+                try
+                {
+                    // بعد از اتمام Refresh، توکن جدید رو بررسی می‌کنیم
+                    var newToken = await _tokenService.GetAccessTokenAsync();
+                    return !string.IsNullOrEmpty(newToken);
+                }
+                finally
+                {
+                    _refreshLock.Release();
+                }
+            }
+
+            await _refreshLock.WaitAsync();
+            try
+            {
+                _isRefreshing = true;
+
+                var refreshToken = await _tokenService.GetRefreshTokenAsync();
+                if (string.IsNullOrEmpty(refreshToken))
+                {
+                    _logger.LogWarning("No refresh token available");
+                    return false;
+                }
+
+                _logger.LogInformation("Attempting to refresh token...");
+
+                // درخواست Refresh Token به سرور
+                var refreshRequest = new RefreshTokenRequest
+                {
+                    RefreshToken = refreshToken
+                };
+
+                var json = JsonSerializer.Serialize(refreshRequest);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var endpoint = $"{_settings.BaseUrl}/api/auth/refresh-token"; // آدرس Endpoint Refresh Token
+                var response = await _httpClient.PostAsync(endpoint, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    };
+
+                    var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent, options);
+
+                    if (tokenResponse != null)
+                    {
+                        // ذخیره توکن جدید
+                        await _tokenService.UpdateTokensAsync(tokenResponse);
+                        _logger.LogInformation("Token refreshed successfully");
+                        return true;
+                    }
+                }
+
+                _logger.LogWarning("Token refresh failed");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error refreshing token");
+                return false;
+            }
+            finally
+            {
+                _isRefreshing = false;
+                _refreshLock.Release();
+            }
+        }
+
+        // ========== متد کمکی برای ارسال درخواست با مدیریت 401 ==========
+        private async Task<HttpResponseMessage> SendWithAuthAsync(
+            Func<Task<HttpResponseMessage>> sendRequest,
+            CancellationToken cancellationToken,
+            int retryCount = 0)
+        {
+            // اضافه کردن هدر Authorization
+            await AddAuthorizationHeaderAsync();
+
+            var response = await sendRequest();
+
+            // اگر 401 برگشت و کمتر از 2 بار تلاش شده
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount < 2)
+            {
+                _logger.LogWarning($"⚠️ Received 401 (attempt {retryCount + 1}), trying to refresh token...");
+
+                // تلاش برای Refresh Token
+                var refreshed = await RefreshTokenAsync();
+
+                if (refreshed)
+                {
+                    // حذف هدر قبلی و اضافه کردن توکن جدید
+                    _httpClient.DefaultRequestHeaders.Authorization = null;
+                    await AddAuthorizationHeaderAsync();
+
+                    // ارسال مجدد درخواست (با یک بار تلاش بیشتر)
+                    return await SendWithAuthAsync(sendRequest, cancellationToken, retryCount + 1);
+                }
+                else
+                {
+                    // اگر Refresh موفق نبود، توکن‌ها رو پاک کن
+                    await _tokenService.ClearTokensAsync();
+                    _logger.LogWarning("⚠️ Token refresh failed, user logged out");
+
+                    // پرتاب Exception برای هدایت به صفحه لاگین
+                    throw new UnauthorizedAccessException("Session expired. Please login again.");
+                }
+            }
+
+            return response;
+        }
+
+        // ========== متدهای اصلی با تغییرات ==========
         public async Task<TResponse> PostAsync<TRequest, TResponse>(
             string endpoint,
             TRequest request,
@@ -35,7 +176,10 @@ namespace BeautySalonBooking.WebApp.Services.Common
                 var json = JsonSerializer.Serialize(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.PostAsync(fullUrl, content, cancellationToken);
+                var response = await SendWithAuthAsync(
+                    () => _httpClient.PostAsync(fullUrl, content, cancellationToken),
+                    cancellationToken);
+
                 var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
@@ -58,6 +202,11 @@ namespace BeautySalonBooking.WebApp.Services.Common
 
                 return result;
             }
+            catch (UnauthorizedAccessException)
+            {
+                // این Exception رو به بالا ارسال می‌کنیم تا در Component مدیریت شود
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in PostAsync for endpoint: {Endpoint}", endpoint);
@@ -72,7 +221,11 @@ namespace BeautySalonBooking.WebApp.Services.Common
             try
             {
                 var fullUrl = BuildUrl(endpoint);
-                var response = await _httpClient.GetAsync(fullUrl, cancellationToken);
+
+                var response = await SendWithAuthAsync(
+                    () => _httpClient.GetAsync(fullUrl, cancellationToken),
+                    cancellationToken);
+
                 var content = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
@@ -89,6 +242,10 @@ namespace BeautySalonBooking.WebApp.Services.Common
                 var result = JsonSerializer.Deserialize<TResponse>(content, options);
 
                 return result ?? throw new JsonException("پاسخ نامعتبر از سرور");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -108,7 +265,10 @@ namespace BeautySalonBooking.WebApp.Services.Common
                 var json = JsonSerializer.Serialize(request);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.PutAsync(fullUrl, content, cancellationToken);
+                var response = await SendWithAuthAsync(
+                    () => _httpClient.PutAsync(fullUrl, content, cancellationToken),
+                    cancellationToken);
+
                 var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
@@ -126,6 +286,10 @@ namespace BeautySalonBooking.WebApp.Services.Common
 
                 return result ?? throw new JsonException("پاسخ نامعتبر از سرور");
             }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in PutAsync for endpoint: {Endpoint}", endpoint);
@@ -140,7 +304,11 @@ namespace BeautySalonBooking.WebApp.Services.Common
             try
             {
                 var fullUrl = BuildUrl(endpoint);
-                var response = await _httpClient.DeleteAsync(fullUrl, cancellationToken);
+
+                var response = await SendWithAuthAsync(
+                    () => _httpClient.DeleteAsync(fullUrl, cancellationToken),
+                    cancellationToken);
+
                 var content = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
@@ -158,6 +326,10 @@ namespace BeautySalonBooking.WebApp.Services.Common
 
                 return result ?? throw new JsonException("پاسخ نامعتبر از سرور");
             }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in DeleteAsync for endpoint: {Endpoint}", endpoint);
@@ -167,7 +339,6 @@ namespace BeautySalonBooking.WebApp.Services.Common
 
         private string BuildUrl(string endpoint)
         {
-            // اگر endpoint با / شروع شده باشد، آن را حذف می‌کنیم
             var cleanEndpoint = endpoint.StartsWith("/") ? endpoint[1..] : endpoint;
             return cleanEndpoint;
         }

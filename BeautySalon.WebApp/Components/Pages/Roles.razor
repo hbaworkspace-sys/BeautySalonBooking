@@ -1,0 +1,533 @@
+﻿@page "/roles"
+@rendermode InteractiveServer
+@using BeautySalonBooking.WebApp.Interfaces.Roles
+@using MudBlazor
+@using BeautySalonBooking.Contracts.Authentication.Dtos
+@layout Layout.SalonLayout
+@inject NavigationManager Navigation
+@inject IRoleService RoleService
+@inject ISnackbar Snackbar
+@inject ILogger<Roles> Logger
+@inherits AuthGuard
+<PageTitle>مدیریت نقش‌ها | بیوتی سالن</PageTitle>
+
+<div class="page-title">
+    <div>
+        <p>مدیریت اطلاعات</p>
+        <h1>مدیریت نقش‌ها</h1>
+        <span>فهرست و مدیریت نقش‌های کاربران در سامانه بیوتی سالن</span>
+    </div>
+    <div class="page-actions">
+        <button type="button" class="btn-refresh" @onclick="RefreshData">
+            🔄
+        </button>
+        <button type="button" class="btn-add" @onclick="OpenAddModal">
+            + افزودن نقش جدید
+        </button>
+    </div>
+</div>
+
+<article class="data-card">
+    <div class="grid-tools">
+        <div class="search">
+            ⌕
+            <input placeholder="جست‌وجو در نقش‌ها..."
+                   @bind="SearchTerm"
+                   @bind:event="oninput"
+                   @onkeyup="OnSearchKeyUp" />
+            <button class="btn-search" @onclick="SearchRoles">
+                جستجو
+            </button>
+        </div>
+        <div class="grid-info">
+            <span>@(Items?.Count ?? 0) مورد</span>
+            <span class="page-info">صفحه @CurrentPage از @TotalPages</span>
+        </div>
+    </div>
+
+    @if (IsLoading)
+    {
+        <div class="loading-spinner">در حال بارگذاری...</div>
+    }
+    else if (Items == null || !Items.Any())
+    {
+        <div class="empty-state">هیچ نقشی یافت نشد.</div>
+    }
+    else
+    {
+        <div class="data-grid">
+            <div class="grid-head">
+                <span>عنوان نقش</span>
+                <span>کد نقش</span>
+                <span>توضیحات</span>
+                <span>وضعیت</span>
+                <span>عملیات</span>
+            </div>
+
+            @foreach (var item in Items)
+            {
+                <div class="grid-row" key="@item.Id">
+                    <strong>@item.Title</strong>
+                    <span>@item.Code</span>
+                    <span>@(string.IsNullOrEmpty(item.Description) ? "—" : item.Description)</span>
+                    <div class="status-wrapper">
+                        <span class="status-badge @(item.IsActive ? "active" : "inactive")">
+                            @(item.IsActive ? "فعال" : "غیرفعال")
+                        </span>
+                        <button class="btn-toggle-status" @onclick="() => ToggleStatus(item)">
+                            @(item.IsActive ? "غیرفعال‌سازی" : "فعال‌سازی")
+                        </button>
+                    </div>
+                    <div class="row-actions">
+                        <button class="btn-edit" @onclick="() => OpenEditModal(item)">
+                            ویرایش
+                        </button>
+                        <button class="btn-delete"
+                                disabled="@(IsSystemRole(item.Code))"
+                                @onclick="() => OpenDeleteModal(item)">
+                            حذف
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Pagination -->
+    @if (TotalPages > 1)
+    {
+        <div class="pagination">
+            <button class="btn-page" @onclick="() => ChangePage(CurrentPage - 1)" disabled="@(CurrentPage == 1)">
+                ‹ قبلی
+            </button>
+
+            @for (int i = 1; i <= TotalPages; i++)
+            {
+                <button class="btn-page @(i == CurrentPage ? "active" : "")" @onclick="() => ChangePage(i)">
+                    @i
+                </button>
+            }
+
+            <button class="btn-page" @onclick="() => ChangePage(CurrentPage + 1)" disabled="@(CurrentPage == TotalPages)">
+                بعدی ›
+            </button>
+        </div>
+    }
+</article>
+
+<!-- Modal Add/Edit -->
+@if (ShowModal)
+{
+    <div class="modal-overlay" @onclick="CloseModal">
+        <div class="modal-content" @onclick:stopPropagation>
+            <div class="modal-header">
+                <h2>@(IsEditing ? "ویرایش نقش" : "افزودن نقش جدید")</h2>
+                <button class="close-btn" @onclick="CloseModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>عنوان نقش <span class="required">*</span></label>
+                    <input @bind="CurrentRole.Title" placeholder="مثلاً: مدیر سیستم" />
+                    @if (string.IsNullOrWhiteSpace(CurrentRole.Title))
+                    {
+                        <span class="validation-error">عنوان نقش الزامی است</span>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label>کد نقش <span class="required">*</span></label>
+                    <input @bind="CurrentRole.Code"
+                           placeholder="مثلاً: Admin"
+                           disabled="@IsEditing" />
+                    @if (string.IsNullOrWhiteSpace(CurrentRole.Code))
+                    {
+                        <span class="validation-error">کد نقش الزامی است</span>
+                    }
+                    @if (IsEditing)
+                    {
+                        <small class="hint">کد نقش قابل تغییر نیست</small>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label>توضیحات</label>
+                    <textarea @bind="CurrentRole.Description" placeholder="توضیحات اختیاری..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>وضعیت</label>
+                    <div class="status-toggle">
+                        <label class="switch">
+                            <input type="checkbox" @bind="CurrentRole.IsActive" />
+                            <span class="slider round"></span>
+                        </label>
+                        <span>@(CurrentRole.IsActive ? "فعال" : "غیرفعال")</span>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(ModalError))
+                {
+                    <div class="error-message">@ModalError</div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" @onclick="CloseModal">لغو</button>
+                <button class="btn-primary"
+                        @onclick="SaveRole"
+                        disabled="@(!IsValidRole())">
+                    @(IsEditing ? "ذخیره تغییرات" : "افزودن نقش")
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal Delete -->
+@if (ShowDeleteModal)
+{
+    <div class="modal-overlay" @onclick="CloseDeleteModal">
+        <div class="modal-content delete-confirm" @onclick:stopPropagation>
+            <div class="modal-header">
+                <h2>حذف نقش</h2>
+                <button class="close-btn" @onclick="CloseDeleteModal">×</button>
+            </div>
+            <div class="modal-body">
+                <p>آیا از حذف نقش "<strong>@(SelectedRole?.Title)</strong>" اطمینان دارید؟</p>
+                <p class="warning-text">این عمل غیرقابل بازگشت است.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" @onclick="CloseDeleteModal">لغو</button>
+                <button class="btn-danger" @onclick="DeleteRole">حذف</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<RoleDto>? Items = new();
+    private string SearchTerm = string.Empty;
+    private int CurrentPage = 1;
+    private int PageSize = 10;
+    private int TotalCount = 0;
+    private int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+    private bool IsLoading = false;
+
+    // Modal properties
+    private bool ShowModal = false;
+    private bool IsEditing = false;
+    private RoleDto CurrentRole = new();
+    private string ModalError = string.Empty;
+
+    // Delete modal properties
+    private bool ShowDeleteModal = false;
+    private RoleDto? SelectedRole;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("===== PAGE INITIALIZED =====");
+        await LoadRoles();
+    }
+
+    private async Task LoadRoles()
+    {
+        try
+        {
+            Console.WriteLine($"LoadRoles called with SearchTerm: '{SearchTerm}', Page: {CurrentPage}");
+            IsLoading = true;
+            StateHasChanged();
+
+            var result = await RoleService.GetRolesAsync(SearchTerm, CurrentPage, PageSize);
+            Console.WriteLine($"LoadRoles result: {result?.Roles?.Count() ?? 0} items");
+
+            if (result != null && result.Roles != null)
+            {
+                Items = result.Roles.ToList();
+                TotalCount = result.TotalCount;
+                Console.WriteLine($"Loaded {Items.Count} roles, TotalCount: {TotalCount}");
+            }
+            else
+            {
+                Items = new List<RoleDto>();
+                TotalCount = 0;
+                Console.WriteLine("No roles found");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in LoadRoles: {ex.Message}");
+            Snackbar.Add("خطا در بارگذاری نقش‌ها: " + ex.Message, Severity.Error);
+            Items = new List<RoleDto>();
+            TotalCount = 0;
+        }
+        finally
+        {
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task RefreshData()
+    {
+        Console.WriteLine("===== RefreshData CALLED =====");
+        Snackbar.Add("در حال به‌روزرسانی...", Severity.Info);
+        await LoadRoles();
+        Snackbar.Add("داده‌ها به‌روزرسانی شدند.", Severity.Success);
+    }
+
+    private async Task SearchRoles()
+    {
+        Console.WriteLine($"SearchRoles called with term: '{SearchTerm}'");
+        CurrentPage = 1;
+        await LoadRoles();
+    }
+
+    private async Task OnSearchKeyUp(KeyboardEventArgs e)
+    {
+        Console.WriteLine($"OnSearchKeyUp: Key = {e.Key}");
+        if (e.Key == "Enter")
+        {
+            await SearchRoles();
+        }
+    }
+
+    private async Task ChangePage(int page)
+    {
+        Console.WriteLine($"ChangePage called: {page}");
+        if (page < 1 || page > TotalPages) return;
+        CurrentPage = page;
+        await LoadRoles();
+    }
+
+    private bool IsSystemRole(string code)
+    {
+        return code == "Admin" || code == "Customer" || code == "SuperAdmin";
+    }
+
+    private async Task ToggleStatus(RoleDto role)
+    {
+        try
+        {
+            Console.WriteLine($"===== ToggleStatus CALLED for: {role?.Title} =====");
+            if (role == null) return;
+
+            // تغییر وضعیت
+            role.IsActive = !role.IsActive;
+
+            // ارسال به API برای ذخیره تغییرات
+            var updateRequest = new UpdateRoleRequest
+                {
+                    Id = role.Id,
+                    Title = role.Title,
+                    Code = role.Code,
+                    Description = role.Description,
+                    IsActive = role.IsActive
+                };
+
+            var result = await RoleService.UpdateRoleAsync(updateRequest);
+
+            if (result != null)
+            {
+                var statusText = role.IsActive ? "فعال" : "غیرفعال";
+                Snackbar.Add($"نقش '{role.Title}' با موفقیت {statusText} شد.", Severity.Success);
+                await LoadRoles(); // رفرش لیست
+            }
+            else
+            {
+                // برگرداندن وضعیت در صورت خطا
+                role.IsActive = !role.IsActive;
+                Snackbar.Add("خطا در تغییر وضعیت نقش.", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in ToggleStatus: {ex.Message}");
+            // برگرداندن وضعیت در صورت خطا
+            role.IsActive = !role.IsActive;
+            Snackbar.Add("خطا در تغییر وضعیت نقش: " + ex.Message, Severity.Error);
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private void OpenAddModal()
+    {
+        Console.WriteLine("===== OpenAddModal CALLED =====");
+        IsEditing = false;
+        CurrentRole = new RoleDto
+            {
+                Id = 0,
+                Title = "",
+                Code = "",
+                Description = "",
+                IsActive = true
+            };
+        ModalError = string.Empty;
+        ShowModal = true;
+        Console.WriteLine($"ShowModal set to: {ShowModal}");
+        StateHasChanged();
+    }
+
+    private void OpenEditModal(RoleDto role)
+    {
+        Console.WriteLine($"===== OpenEditModal CALLED for role: {role?.Title} =====");
+        if (role == null) return;
+
+        IsEditing = true;
+        CurrentRole = new RoleDto
+            {
+                Id = role.Id,
+                Title = role.Title,
+                Code = role.Code,
+                Description = role.Description,
+                IsActive = role.IsActive
+            };
+        ModalError = string.Empty;
+        ShowModal = true;
+        Console.WriteLine($"ShowModal set to: {ShowModal}");
+        StateHasChanged();
+    }
+
+    private void OpenDeleteModal(RoleDto role)
+    {
+        Console.WriteLine($"===== OpenDeleteModal CALLED for role: {role?.Title} =====");
+        if (role == null) return;
+        SelectedRole = role;
+        ShowDeleteModal = true;
+        Console.WriteLine($"ShowDeleteModal set to: {ShowDeleteModal}");
+        StateHasChanged();
+    }
+
+    private void CloseModal()
+    {
+        Console.WriteLine("===== CloseModal CALLED =====");
+        ShowModal = false;
+        IsEditing = false;
+        CurrentRole = new RoleDto();
+        ModalError = string.Empty;
+        StateHasChanged();
+    }
+
+    private void CloseDeleteModal()
+    {
+        Console.WriteLine("===== CloseDeleteModal CALLED =====");
+        ShowDeleteModal = false;
+        SelectedRole = null;
+        StateHasChanged();
+    }
+
+    private bool IsValidRole()
+    {
+        return !string.IsNullOrWhiteSpace(CurrentRole.Title) &&
+               !string.IsNullOrWhiteSpace(CurrentRole.Code);
+    }
+
+    private async Task SaveRole()
+    {
+        Console.WriteLine($"===== SaveRole CALLED, IsEditing: {IsEditing} =====");
+        try
+        {
+            ModalError = string.Empty;
+
+            if (!IsValidRole())
+            {
+                ModalError = "لطفاً تمام فیلدهای الزامی را پر کنید.";
+                StateHasChanged();
+                return;
+            }
+
+            if (IsEditing)
+            {
+                var updateRequest = new UpdateRoleRequest
+                    {
+                        Id = CurrentRole.Id,
+                        Title = CurrentRole.Title,
+                        Code = CurrentRole.Code,
+                        Description = CurrentRole.Description,
+                        IsActive = CurrentRole.IsActive
+                    };
+
+                Console.WriteLine($"Updating role: {CurrentRole.Id}");
+                var result = await RoleService.UpdateRoleAsync(updateRequest);
+
+                if (result != null)
+                {
+                    Snackbar.Add("نقش با موفقیت ویرایش شد.", Severity.Success);
+                    CloseModal();
+                    await LoadRoles();
+                }
+                else
+                {
+                    ModalError = "خطا در ویرایش نقش";
+                }
+            }
+            else
+            {
+                var createRequest = new CreateRoleRequest
+                    {
+                        Title = CurrentRole.Title,
+                        Code = CurrentRole.Code,
+                        Description = CurrentRole.Description,
+                        IsActive = CurrentRole.IsActive
+                    };
+
+                Console.WriteLine($"Creating new role: {CurrentRole.Title}");
+                var result = await RoleService.CreateRoleAsync(createRequest);
+
+                if (result != null)
+                {
+                    Snackbar.Add("نقش جدید با موفقیت ایجاد شد.", Severity.Success);
+                    CloseModal();
+                    await LoadRoles();
+                }
+                else
+                {
+                    ModalError = "خطا در ایجاد نقش جدید";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in SaveRole: {ex.Message}");
+            ModalError = ex.Message;
+            Snackbar.Add("خطا: " + ex.Message, Severity.Error);
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async Task DeleteRole()
+    {
+        Console.WriteLine($"===== DeleteRole CALLED for: {SelectedRole?.Title} =====");
+        try
+        {
+            if (SelectedRole == null) return;
+
+            var success = await RoleService.DeleteRoleAsync(SelectedRole.Id);
+            Console.WriteLine($"Delete result: {success}");
+
+            if (success)
+            {
+                Snackbar.Add($"نقش '{SelectedRole.Title}' با موفقیت حذف شد.", Severity.Success);
+                CloseDeleteModal();
+                await LoadRoles();
+            }
+            else
+            {
+                Snackbar.Add($"خطا در حذف نقش '{SelectedRole.Title}'.", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in DeleteRole: {ex.Message}");
+            Snackbar.Add("خطا در حذف نقش: " + ex.Message, Severity.Error);
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+}

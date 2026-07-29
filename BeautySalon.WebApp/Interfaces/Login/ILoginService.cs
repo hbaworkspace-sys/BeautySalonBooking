@@ -8,5 +8,6 @@ namespace BeautySalonBooking.WebApp.Interfaces.Login
     {
         Task<ApiResponse_New<AuthResult>> RequestLoginOtpAsync(LoginInitiateRequest request);
         Task<ApiResponse_New<AuthResult>> VerifyLoginOtpAsync(VerifyOtpRequest request);
+        Task<bool> Logout();
     }
 }

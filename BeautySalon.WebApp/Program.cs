@@ -1,10 +1,13 @@
 ﻿using BeautySalonBooking.WebApp.Components;
 using BeautySalonBooking.WebApp.Interfaces.Common;
 using BeautySalonBooking.WebApp.Interfaces.Login;
+using BeautySalonBooking.WebApp.Interfaces.Roles;
 using BeautySalonBooking.WebApp.Services.Common;
 using BeautySalonBooking.WebApp.Services.Login;
+using BeautySalonBooking.WebApp.Services.Roles;
 using BeautySalonBooking.WebApp.Settings;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor.Services; // اضافه کردن این using
 
 namespace BeautySalonBooking.WebApp
 {
@@ -18,6 +21,8 @@ namespace BeautySalonBooking.WebApp
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
             builder.Services.AddMemoryCache();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<ISessionManager, SessionManager>();
             // 1️⃣ ثبت تنظیمات
             builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 
@@ -28,7 +33,9 @@ namespace BeautySalonBooking.WebApp
                     new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 client.Timeout = TimeSpan.FromSeconds(30);
             });
+            builder.Services.AddMudServices(); // به جای AddMudBlazorServices()          
             builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             // تنظیم HttpClient Factory

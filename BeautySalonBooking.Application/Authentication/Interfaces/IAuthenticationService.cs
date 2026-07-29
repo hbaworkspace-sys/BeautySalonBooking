@@ -22,4 +22,8 @@ public interface IAuthenticationService
     Task<ApiResponse_New<AuthResult>> VerifyLoginOtpAsync(
         VerifyOtpRequest request,
         CancellationToken cancellationToken);
+    // ========== متد جدید برای Refresh Token ==========
+    Task<ApiResponse_New<AuthResult>> RefreshTokenAsync(string accessToken, string refreshToken, CancellationToken cancellationToken);
+
+    Task<bool> LogoutAsync(long userId); // متد جدید
 }
