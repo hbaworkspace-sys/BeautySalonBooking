@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Icon = BeautySalonBooking.Resources;
+using Icon = BeautySalonBooking.Maui.Resources;
 
 namespace BeautySalonBooking.Maui.UserControls;
 

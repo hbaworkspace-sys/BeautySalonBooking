@@ -1,6 +1,5 @@
 ﻿using BeautySalonBooking.Maui.Features.Auth;
 using BeautySalonBooking.Maui.Features.Region;
-using BeautySalonBooking.Maui.Features.Salons;
 using BeautySalonBooking.Maui.Features.UserRoles;
 
 namespace BeautySalonBooking.Maui.Common.DependencyInjection
@@ -23,7 +22,6 @@ namespace BeautySalonBooking.Maui.Common.DependencyInjection
             services.AddHttpClient<AuthApiService>(Configure);
             services.AddHttpClient<UserRoleApiService>(Configure);
             services.AddHttpClient<RegionApiService>(Configure);
-            services.AddHttpClient<SalonVerificationApiService>(Configure);
 
             return services;
         }

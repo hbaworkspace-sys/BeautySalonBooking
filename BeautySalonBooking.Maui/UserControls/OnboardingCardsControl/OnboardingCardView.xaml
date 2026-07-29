@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.UserControls.OnboardingCard.OnboardingCardView"
+             xmlns:ucImg="clr-namespace:BeautySalonBooking.Maui.UserControls.Images"
+             xmlns:ucInd="clr-namespace:BeautySalonBooking.Maui.UserControls.Indicator"
+             BackgroundColor="{x:StaticResource White}">
+
+    <Grid
+        RowDefinitions="380,*,70">
+
+        <Image
+            x:Name="imgMainBox"
+            Grid.Row="0"
+            Aspect="Fill"/>
+
+        <ucImg:CircularImageView
+            x:Name="imgCircularIcon"
+            Grid.Row="0"
+            Size="Medium"
+            Margin="0,0,0,-250"/>
+
+        <Grid
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            RowSpacing="20"
+            RowDefinitions="*,*">
+
+            <Label
+                x:Name="lblTitle"
+                Grid.Row="0"
+                FontAttributes="Bold"
+                FontSize="28"
+                HorizontalTextAlignment="Center"
+                VerticalOptions="End"
+                TextColor="#1F1F1F"/>
+
+            <Label
+                x:Name="lblDescription"
+                Grid.Row="1"
+                VerticalOptions="Start"
+                HorizontalTextAlignment="Center"
+                LineHeight="1"
+                TextColor="#808080"/>
+        </Grid>
+
+        <Grid
+            Grid.Row="2"
+            ColumnDefinitions="70,*,70">
+
+            <Button
+                x:Name="btnBack"
+                Grid.Column="2"
+                BackgroundColor="Transparent"
+                Text="Back"
+                TextColor="#777777"
+                Clicked="btnBack_Clicked"/>
+
+            <HorizontalStackLayout
+                Grid.Column="1"
+                Spacing="8"
+                FlowDirection="LeftToRight"
+                HorizontalOptions="Center">
+                <BoxView
+                    x:Name="Indicator_1"
+                    WidthRequest="10"
+                    HeightRequest="10"
+                    Color="PaleVioletRed"
+                    CornerRadius="5"/>
+                <BoxView
+                    x:Name="Indicator_2"
+                    WidthRequest="10"
+                    HeightRequest="10"
+                    Color="LightGray"
+                    CornerRadius="5"/>
+                <BoxView
+                    x:Name="Indicator_3"
+                    WidthRequest="10"
+                    HeightRequest="10"
+                    Color="LightGrey"
+                    CornerRadius="5"/>
+            </HorizontalStackLayout>
+
+            <Button
+                x:Name="btnNext"
+                BackgroundColor="Transparent"
+                Grid.Column="0"
+                Text="Next"
+                TextColor="#777777"
+                Clicked="btnNext_Clicked"/>
+        </Grid>
+    </Grid>
+</ContentView>
