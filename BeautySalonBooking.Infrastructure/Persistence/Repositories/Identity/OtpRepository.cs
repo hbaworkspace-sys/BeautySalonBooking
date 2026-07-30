@@ -15,9 +15,9 @@ public class OtpRepository : Repository<OtpCode, long>, IOtpRepository
     public async Task<OtpCode?> GetLatestAsync(string mobileNumber, CancellationToken cancellationToken)
     {
         return await _context.OtpCodes.Where(x =>
-        x.MobileNumber == mobileNumber && x.ExpiresAt >= DateTime.UtcNow)
-            .OrderByDescending(x => x.CreatedAt)
-            .FirstOrDefaultAsync(cancellationToken);
+           x.MobileNumber == mobileNumber && x.ExpiresAt >= DateTime.UtcNow)
+               .OrderByDescending(x => x.CreatedAt)
+               .FirstOrDefaultAsync(cancellationToken);
     }
     public async Task AddAsync(OtpCode otp, CancellationToken cancellationToken)
     {
