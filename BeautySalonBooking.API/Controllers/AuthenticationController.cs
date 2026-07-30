@@ -1,6 +1,8 @@
 ﻿using BeautySalonBooking.Application.Authentication.Interfaces;
 using BeautySalonBooking.Contracts.Authentication.Requests;
-using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+
+//using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySalonBooking.API.Controllers;
@@ -11,12 +13,12 @@ namespace BeautySalonBooking.API.Controllers;
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;
-    private readonly IValidator<LoginInitiateRequest> _validator;
+    //private readonly IValidator<LoginInitiateRequest> _validator;
 
-    public AuthenticationController(IAuthenticationService authenticationService, IValidator<LoginInitiateRequest> validator)
+    public AuthenticationController(IAuthenticationService authenticationService/*, IValidator<LoginInitiateRequest> validator*/)
     {
         _authenticationService = authenticationService;
-        _validator = validator;
+        //  _validator = validator;
     }
 
     [HttpPost("register/request-otp")]

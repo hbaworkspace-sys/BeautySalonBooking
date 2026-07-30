@@ -1,8 +1,8 @@
 ﻿using BeautySalonBooking.Application;
-using BeautySalonBooking.Contracts.Authentication.Requests.RequestsValidations;
+//using BeautySalonBooking.Contracts.Authentication.Requests.RequestsValidations;
 using BeautySalonBooking.Infrastructure;
-using FluentValidation;
-using FluentValidation.AspNetCore;
+//using FluentValidation;
+//using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -34,8 +34,8 @@ builder.Services.AddDbContext<BeautyDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddInfrastructure();
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<LoginInitiateRequestValidation>();
+//builder.Services.AddFluentValidationAutoValidation();
+//builder.Services.AddValidatorsFromAssemblyContaining<LoginInitiateRequestValidation>();
 builder.Services.AddApplication();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthentication(options =>
