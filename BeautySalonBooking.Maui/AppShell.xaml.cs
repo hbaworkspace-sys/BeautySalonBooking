@@ -1,39 +1,21 @@
-﻿using BeautySalonBooking.Maui.Features;
-using BeautySalonBooking.Maui.Features.AccountSetup;
-using BeautySalonBooking.Maui.Features.AdminDashboard;
-using BeautySalonBooking.Maui.Features.AdminDashboard.Views;
+﻿using BeautySalonBooking.Maui.Common.Navigation;
 using BeautySalonBooking.Maui.Features.Auth;
-using BeautySalonBooking.Maui.Features.Home;
 using BeautySalonBooking.Maui.Features.Splash.Views;
 
-namespace BeautySalonBooking.Maui
+namespace BeautySalonBooking.Maui;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            //SPLASH
-            Routing.RegisterRoute(nameof(OnboardingPage), typeof(OnboardingPage));
+        //SPLASH
+        Routing.RegisterRoute(AppRoutes.Onboarding, typeof(OnboardingPage));
 
-            //AUTH
-            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-            Routing.RegisterRoute(nameof(OtpPage), typeof(OtpPage));
-            Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
-
-            //ACCOUNT SETUP
-            Routing.RegisterRoute(nameof(ChooseAccountTypePage), typeof(ChooseAccountTypePage));
-            Routing.RegisterRoute(nameof(SalonIntroductionPage), typeof(SalonIntroductionPage));
-            Routing.RegisterRoute(nameof(StylistIntroductionPage), typeof(StylistIntroductionPage));
-
-            //ADMIN DASHBOARD
-            Routing.RegisterRoute(nameof(AdminDashboardPage), typeof(AdminDashboardPage));
-            Routing.RegisterRoute(nameof(SalonRequestsPage), typeof(SalonRequestsPage));
-
-            //HOME
-            Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
-            Routing.RegisterRoute(nameof(test), typeof(test));
-        }
+        //AUTH
+        Routing.RegisterRoute(AppRoutes.Login, typeof(LoginPage));
+        Routing.RegisterRoute(AppRoutes.Register, typeof(RegisterPage));
+        Routing.RegisterRoute(AppRoutes.Otp, typeof(OtpPage));
     }
 }

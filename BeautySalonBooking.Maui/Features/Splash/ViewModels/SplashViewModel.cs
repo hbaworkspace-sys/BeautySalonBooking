@@ -1,22 +1,19 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using BeautySalonBooking.Maui.Common.Interfaces;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace BeautySalonBooking.Maui.Features.Splash
+namespace BeautySalonBooking.Maui.Features.Splash;
+
+public partial class SplashViewModel : ObservableObject
 {
-    public partial class SplashViewModel : ObservableObject
+    private readonly INavigationService _navigationService;
+
+    public SplashViewModel(INavigationService navigationService)
     {
-        public bool IsLoggedIn { get; } = false;
-        public SplashViewModel()
-        {
-            CheckLoginStatusAsync();
-        }
+        _navigationService = navigationService;
+    }
 
-        public async Task CheckLoginStatusAsync()
-        {
-            //var token = await AuthStorage.GetTokenAsync();
-
-            //if (!string.IsNullOrEmpty(token))
-            //    await Shell.Current.GoToAsync(nameof(AdminDashboardPage));
-            //else
-        }
+    public async Task CheckLoginStatusAsync()
+    {
+        await _navigationService.GoToOnboardingAsync();
     }
 }

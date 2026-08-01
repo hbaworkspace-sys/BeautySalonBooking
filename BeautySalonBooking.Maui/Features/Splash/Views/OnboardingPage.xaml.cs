@@ -1,15 +1,19 @@
+using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Features.Auth;
 
 namespace BeautySalonBooking.Maui.Features.Splash.Views;
 
 public partial class OnboardingPage : ContentPage
 {
-    public OnboardingPage()
+    private readonly INavigationService _navigationService;
+    public OnboardingPage(INavigationService navigationService)
     {
         InitializeComponent();
+
+        _navigationService = navigationService;
     }
     private async void OnboardingCardView_OnboardingCompleted(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(LoginPage));
+        await _navigationService.GoToLoginAsync();
     }
 }

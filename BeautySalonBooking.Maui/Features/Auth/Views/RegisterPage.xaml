@@ -11,13 +11,13 @@
              xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources">
 
     <Grid
-        RowDefinitions="auto,auto,*,auto,auto"
+        RowDefinitions="35,auto,*,auto,auto"
         RowSpacing="20"
         Padding="15,10,15,10">
 
         <ucBtn:NextAndBackButtonView
             Grid.Row="0"
-            IsBackVisible="True"/>
+            IsBackVisible="False"/>
 
         <uc:TitleSubtitleView
             Grid.Row="1"
@@ -50,8 +50,7 @@
 
             <uc:TextEntry
                 PlaceHolder="جنسیت"
-                Glyph="{x:Static icon:IconSymbols.IdCard}"
-                />
+                Glyph="{x:Static icon:IconSymbols.IdCard}"/>
 
         </VerticalStackLayout>
 

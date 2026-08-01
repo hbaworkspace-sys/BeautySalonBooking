@@ -14,12 +14,14 @@
         <Setter Property="HorizontalTextAlignment" Value="Center"/>
     </Style>
 
+    <!--"#808080"-->
     <Style TargetType="Label" x:Key="PageSubtitleStyle">
         <Setter Property="FontFamily" Value="Sans"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="TextColor" Value="#a9a9a9"/>
         <Setter Property="HorizontalOptions" Value="Center"/>
         <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="LineHeight" Value="1"/>
     </Style>
 
     <Style TargetType="Label" x:Key="GlyphLable">

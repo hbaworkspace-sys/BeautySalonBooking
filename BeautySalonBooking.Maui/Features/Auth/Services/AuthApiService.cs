@@ -1,47 +1,52 @@
-﻿using BeautySalonBooking.Contracts.Auth.Requests;
-using BeautySalonBooking.Contracts.Auth.Responses;
+﻿using BeautySalonBooking.Contracts.Authentication.Requests;
+using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
 using BeautySalonBooking.Maui.Common.Services;
 using BeautySalonBooking.Maui.Features.Auth.Constants;
+using BeautySalonBooking.Maui.Features.Auth.Services;
+using Microsoft.Extensions.Logging;
 
-namespace BeautySalonBooking.Maui.Features.Auth
+namespace BeautySalonBooking.Maui.Features.Auth;
+
+public class AuthApiService : BaseApiService, IAuthApiService
 {
-    public class AuthApiService : BaseApiService
+    public AuthApiService(HttpClient httpClient, ILogger<AuthApiService> logger)
+        : base(httpClient, logger)
     {
-        public AuthApiService(HttpClient httpClient)
-                : base(httpClient)
-        {
-        }
-        public Task<ApiResponse<AuthResult>> RequestOtpForRegisterAsync(RegisterInitiateRequest request)
-        {
-            return SendAsync<RegisterInitiateRequest, AuthResult>(
-                HttpMethod.Post,
-                AuthRoutes.RegisterInitiate,
-                request);
-        }
-
-        public Task<ApiResponse<AuthResult>> ConfirmRegistrationAsync(VerifyOtpRequest request)
-        {
-            return SendAsync<VerifyOtpRequest, AuthResult>(
-                HttpMethod.Post,
-                AuthRoutes.RegisterVerifyOtp,
-                request);
-        }
-
-        public Task<ApiResponse<AuthResult>> RequestOtpForLoginAsync(LoginInitiateRequest request)
-        {
-            return SendAsync<LoginInitiateRequest, AuthResult>(
-                HttpMethod.Post,
-                AuthRoutes.LoginInitiate,
-                request);
-        }
-
-        public Task<ApiResponse<AuthResult>> ConfirmLoginAsync(VerifyOtpRequest request)
-        {
-            return SendAsync<VerifyOtpRequest, AuthResult>(
-                HttpMethod.Post,
-                AuthRoutes.LoginVerifyOtp,
-                request);
-        }
     }
+
+    public Task<ApiResponse_New<AuthResult>> RequestOtpForRegisterAsync(
+        RegisterInitiateRequest request,
+        CancellationToken cancellationToken = default)
+        => PostAsync<RegisterInitiateRequest, AuthResult>(
+            AuthRoutes.RegisterInitiate,
+            request,
+            cancellationToken);
+
+    public Task<ApiResponse_New<AuthResult>> ConfirmRegistrationAsync(
+        VerifyOtpRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var xx = PostAsync<VerifyOtpRequest, AuthResult>(
+            AuthRoutes.RegisterVerifyOtp,
+            request,
+            cancellationToken);
+        return xx;
+    }
+
+    public Task<ApiResponse_New<AuthResult>> RequestOtpForLoginAsync(
+        LoginInitiateRequest request,
+        CancellationToken cancellationToken = default)
+        => PostAsync<LoginInitiateRequest, AuthResult>(
+            AuthRoutes.LoginInitiate,
+            request,
+            cancellationToken);
+
+    public Task<ApiResponse_New<AuthResult>> ConfirmLoginAsync(
+        VerifyOtpRequest request,
+        CancellationToken cancellationToken = default)
+        => PostAsync<VerifyOtpRequest, AuthResult>(
+            AuthRoutes.LoginVerifyOtp,
+            request,
+            cancellationToken);
 }
