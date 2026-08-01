@@ -120,11 +120,11 @@ public class ApiResponse_New<T>
 }
 
 
-public class ApiResponse<T> : ApiResponse
-{
-    public T? Data { get; init; }
-    public List<T> ListData { get; init; }
-}
+//public class ApiResponse<T> : ApiResponse
+//{
+//    public T? Data { get; init; }
+//    public List<T> ListData { get; init; }
+//}
 
 // برای مواقعی که Payload نداریم
 public class ApiResponse

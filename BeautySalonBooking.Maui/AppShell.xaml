@@ -4,10 +4,14 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view_splash="clr-namespace:BeautySalonBooking.Maui.Features.Splash"
+    xmlns:view="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
     Shell.NavBarIsVisible="False"
     FlowDirection="RightToLeft">
 
     <ShellContent
         Route="Splash"
         ContentTemplate="{DataTemplate view_splash:SplashPage}" />
+
+    <!--<ShellContent
+    ContentTemplate="{DataTemplate view:OtpPage}" />-->
 </Shell>

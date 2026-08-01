@@ -129,8 +129,6 @@ public class AuthenticationService : IAuthenticationService
             apiResponse_New.IsSuccess = false;
             apiResponse_New.Code = 401;
             apiResponse_New.Message = "کاربری با این شماره ثبت نشده است";
-
-
             return apiResponse_New;
         }
 
@@ -141,10 +139,7 @@ public class AuthenticationService : IAuthenticationService
             apiResponse_New.IsSuccess = false;
             apiResponse_New.Code = 401;
             apiResponse_New.Message = "کد معتبر قبلاً برای شما ارسال شده است";
-
-
             return apiResponse_New;
-
         }
         await SendOtpAsync(
             request.MobileNumber,
@@ -156,11 +151,7 @@ public class AuthenticationService : IAuthenticationService
         apiResponse_New.IsSuccess = true;
         apiResponse_New.Code = 200;
         apiResponse_New.Message = "کد تأیید ارسال شد";
-
-
         return apiResponse_New;
-
-
     }
 
     public async Task<ApiResponse_New<AuthResult>> VerifyLoginOtpAsync(
@@ -208,9 +199,7 @@ public class AuthenticationService : IAuthenticationService
                         NationalCode = user.Person.NationalCode,
                         PhoneNumber = user.PhoneNumbers.FirstOrDefault().Number,
                         UserName = user.UserName,
-
                     };
-
 
                     var tk = await _tokenService.GenerateTokensAsync(uditem, cancellationToken);
                     await _userSessionService.ActivateUserSessionAsync(uditem.Id);
@@ -220,17 +209,13 @@ public class AuthenticationService : IAuthenticationService
                         ExpiresAt = tk.ExpiresAt,
                         RefreshToken = tk.RefreshToken,
                         TokenType = tk.TokenType,
-
                     };
 
-
                     apiResponse.ListPayload.Add(AuthResult.Success(tkr, uditem, null));
-
                 }
 
                 apiResponse.IsSuccess = true;
                 apiResponse.Code = 200;
-
                 return apiResponse;
             }
 
@@ -310,21 +295,8 @@ public class AuthenticationService : IAuthenticationService
             userId);
 
 
-        await _unitOfWork.BeginTransactionAsync(cancellationToken);
-        try
-        {
-            await _unitOfWork.OtpRepository.AddAsync(otp, cancellationToken);
-
-            await _unitOfWork.CommitAsync(cancellationToken);
-        }
-        catch
-        {
-            await _unitOfWork.RollbackAsync(cancellationToken);
-            throw;
-        }
-
-
-
+        await _unitOfWork.OtpRepository.AddAsync(otp, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 
         SendSms(mobileNumber, code);

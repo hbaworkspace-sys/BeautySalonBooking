@@ -4,7 +4,7 @@
              x:Class="BeautySalonBooking.Maui.Features.Splash.SplashPage"
              NavigationPage.HasNavigationBar="False"
              Background="#fee0f5"
-             xmlns:ucInd="clr-namespace:BeautySalonBooking.Maui.UserControls.Indicator"
+             xmlns:ucInd="clr-namespace:BeautySalonBooking.Maui.UserControls.IndicatorsControl"
              xmlns:ucImg="clr-namespace:BeautySalonBooking.Maui.UserControls.Images"
              xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Splash"
              x:DataType="vm:SplashViewModel">
@@ -124,36 +124,9 @@
                 HorizontalOptions="Center"
                 Text="تجربه ای متفاوت در مدیریت و رزرو خدمات زیبایی"/>
 
-            <Grid
-                Grid.Row="2"
-                WidthRequest="150"
-                HeightRequest="6"
-                ColumnDefinitions="*,*,*"
-                ColumnSpacing="3">
-                <Border
-                    x:Name="Indicator_Border1"
-                    StrokeThickness="0"
-                    Background="LightGray"
-                    Grid.Column="0"
-                    StrokeShape="RoundRectangle 50">
-                </Border>
-                <Border
-                    x:Name="Indicator_Border2"
-                    StrokeThickness="0"
-                    Background="LightGray"
-                    Grid.Column="1"
-                    StrokeShape="RoundRectangle 50">
-                </Border>
-                <Border
-                    x:Name="Indicator_Border3"
-                    StrokeThickness="0"
-                    Background="LightGray"
-                    Grid.Column="2"
-                    StrokeShape="RoundRectangle 50">
-                </Border>
-            </Grid>
+            <ucInd:SimpleIndicator
+                x:Name="Indicator"
+                Grid.Row="2"/>
         </Grid>
-
     </Grid>
-
 </ContentPage>

@@ -1,11 +1,7 @@
 ﻿using BeautySalonBooking.Domain.Base.Enums;
-using BeautySalonBooking.Domain.ContactAggregate.Entities;
-using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Repositories;
-using BeautySalonBooking.Domain.PersonAggregate.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace BeautySalonBooking.Infrastructure.Persistence.Repositories;
 
@@ -48,12 +44,13 @@ public sealed class UserRepository : Repository<User, long>, IUserRepository
     }
     public async Task<bool> ExistsByMobileNumberAsync(string mobileNumber, CancellationToken cancellationToken)
     {
-        return await _context.Users
-         .AnyAsync(
-         x => x.PhoneNumbers.Any(p =>
-         p.Number == mobileNumber &&
-         p.Type == PhoneNumberType.Mobile),
-         cancellationToken);
+        var xx = await _context.Users
+                    .AnyAsync(
+                    x => x.PhoneNumbers.Any(p =>
+                    p.Number == mobileNumber &&
+                    p.Type == PhoneNumberType.Mobile),
+                    cancellationToken);
+        return xx;
     }
 
     public async Task<List<User>> GetListUserAsync(string mobileNumber, CancellationToken cancellationToken)

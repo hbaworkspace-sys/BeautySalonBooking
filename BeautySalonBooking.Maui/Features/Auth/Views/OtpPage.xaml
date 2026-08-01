@@ -24,7 +24,6 @@
             Title="ورود به حساب کاربری"
             Subtitle="لطفا شماره موبایل خود را وارد کنید"/>
 
-
         <Label
             Grid.Row="0"
             Style="{x:StaticResource BeautyTitleLable}"/>
@@ -36,7 +35,6 @@
             Margin="0,0,0,35"
             Aspect="AspectFit"/>
 
-
         <uc:OtpCodeEntry
             x:Name="txtOtp"
             Grid.Row="2"
@@ -46,6 +44,5 @@
             Grid.Row="3"
             HCommand="{Binding VerifyOtpCommand}"
             Title="تایید"/>
-
     </Grid>
 </ContentPage>

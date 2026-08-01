@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BeautySalonBooking.Maui.UserControls.OnboardingCard.OnboardingCardView"
              xmlns:ucImg="clr-namespace:BeautySalonBooking.Maui.UserControls.Images"
-             xmlns:ucInd="clr-namespace:BeautySalonBooking.Maui.UserControls.Indicator"
+             xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
              BackgroundColor="{x:StaticResource White}">
 
     <Grid
@@ -20,29 +20,10 @@
             Size="Medium"
             Margin="0,0,0,-250"/>
 
-        <Grid
+        <uc:TitleSubtitleView
             Grid.Row="1"
-            HorizontalOptions="Center"
-            RowSpacing="20"
-            RowDefinitions="*,*">
-
-            <Label
-                x:Name="lblTitle"
-                Grid.Row="0"
-                FontAttributes="Bold"
-                FontSize="28"
-                HorizontalTextAlignment="Center"
-                VerticalOptions="End"
-                TextColor="#1F1F1F"/>
-
-            <Label
-                x:Name="lblDescription"
-                Grid.Row="1"
-                VerticalOptions="Start"
-                HorizontalTextAlignment="Center"
-                LineHeight="1"
-                TextColor="#808080"/>
-        </Grid>
+            VerticalOptions="Center"
+            x:Name="textContent"/>
 
         <Grid
             Grid.Row="2"
