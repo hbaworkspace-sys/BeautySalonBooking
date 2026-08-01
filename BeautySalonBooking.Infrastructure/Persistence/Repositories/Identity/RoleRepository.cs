@@ -1,15 +1,17 @@
-﻿using BeautySalonBooking.Domain.Identity.RoleAggregate.Entities;
+﻿using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Entities;
+using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Repositories;
+using BeautySalonBooking.Domain.Identity.RoleAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.RoleAggregate.Enums;
 using BeautySalonBooking.Domain.Identity.RoleAggregate.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeautySalonBooking.Infrastructure.Persistence.Repositories;
 
-public class RoleRepository : IRoleRepository
+public class RoleRepository : Repository<Role, int>, IRoleRepository
 {
     private readonly BeautyDbContext _context;
 
-    public RoleRepository(BeautyDbContext context)
+    public RoleRepository(BeautyDbContext context) : base(context)
     {
         _context = context;
     }
@@ -26,8 +28,8 @@ public class RoleRepository : IRoleRepository
             .FirstOrDefaultAsync(x => x.Code == roleCode, cancellationToken);
     }
 
-    public async Task AddAsync(Role role, CancellationToken cancellationToken)
-    {
-        await _context.Roles.AddAsync(role, cancellationToken);
-    }
+    //public async Task AddAsync(Role role, CancellationToken cancellationToken)
+    //{
+    //    await _context.Roles.AddAsync(role, cancellationToken);
+    //}
 }

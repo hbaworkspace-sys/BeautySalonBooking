@@ -202,7 +202,7 @@ public class AuthenticationService : IAuthenticationService
                     };
 
                     var tk = await _tokenService.GenerateTokensAsync(uditem, cancellationToken);
-
+                    await _userSessionService.ActivateUserSessionAsync(uditem.Id);
                     TokenResponse tkr = new TokenResponse
                     {
                         AccessToken = tk.AccessToken,
@@ -237,6 +237,8 @@ public class AuthenticationService : IAuthenticationService
 
 
             var token = await _tokenService.GenerateTokensAsync(ud, cancellationToken);
+
+            await _userSessionService.ActivateUserSessionAsync(ud.Id);
 
             TokenResponse tokenResponse = new TokenResponse
             {
@@ -332,5 +334,145 @@ public class AuthenticationService : IAuthenticationService
             };
         }
         return null; // کد معتبر است
+    }
+
+
+    // ========== متدهای موجود (RequestRegisterOtpAsync, VerifyRegisterOtpAsync, و غیره) ==========
+    // ... (کدهای قبلی شما اینجا قرار میگیرند)
+
+    // ========== پیاده‌سازی متد RefreshTokenAsync ==========
+    public async Task<ApiResponse_New<AuthResult>> RefreshTokenAsync(
+        string accessToken,
+        string refreshToken,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            // 1. اعتبارسنجی Refresh Token در دیتابیس
+            var storedToken = await _unitOfWork.RefreshTokenRepository.GetValidTokenAsync(refreshToken);
+
+            if (storedToken == null)
+            {
+                return new ApiResponse_New<AuthResult>
+                {
+                    IsSuccess = false,
+                    Code = 401,
+                    Message = "Refresh token نامعتبر است"
+                };
+            }
+
+            if (storedToken.ExpiresAt < DateTime.UtcNow)
+            {
+                return new ApiResponse_New<AuthResult>
+                {
+                    IsSuccess = false,
+                    Code = 401,
+                    Message = "Refresh token منقضی شده است"
+                };
+            }
+
+            // 2. دریافت اطلاعات کاربر
+            var user = await _unitOfWork.UserRepository.GetByIdAsync(storedToken.UserId);
+            if (user == null)
+            {
+                return new ApiResponse_New<AuthResult>
+                {
+                    IsSuccess = false,
+                    Code = 401,
+                    Message = "کاربر یافت نشد"
+                };
+            }
+
+            // 3. بررسی فعال بودن Session کاربر
+            var isSessionActive = await _userSessionService.IsUserSessionActiveAsync(user.Id);
+            if (!isSessionActive)
+            {
+                return new ApiResponse_New<AuthResult>
+                {
+                    IsSuccess = false,
+                    Code = 401,
+                    Message = "سشن کاربر منقضی شده است"
+                };
+            }
+
+            // 4. تمدید Session
+            await _userSessionService.ExtendUserSessionAsync(user.Id);
+
+            // 5. ساخت UserDto
+            var userDto = new UserDto
+            {
+                Id = (long)user.Id,
+                AuthenticationType = (int)user.UserRole.Role.Code,
+                CreatedAt = user.CreatedAt,
+                Email = "",
+                FirstName = user.Person.FirstName,
+                IsActive = user.Person.IsActive,
+                LastName = user.Person.LastName,
+                NationalCode = user.Person.NationalCode,
+                PhoneNumber = user.PhoneNumbers.FirstOrDefault()?.Number ?? "",
+                UserName = user.UserName
+            };
+
+            // 6. غیرفعال کردن Refresh Token قبلی (یکبار مصرف)
+            storedToken.SetRevokedToActive(); // یا SetInactive()
+            _unitOfWork.RefreshTokenRepository.Update(storedToken);
+            await _unitOfWork.CommitAsync(cancellationToken);
+
+            // 7. تولید توکن‌های جدید
+            var newTokens = await _tokenService.GenerateTokensAsync(userDto, cancellationToken);
+
+            var tokenResponse = new TokenResponse
+            {
+                AccessToken = newTokens.AccessToken,
+                RefreshToken = newTokens.RefreshToken,
+                ExpiresAt = newTokens.ExpiresAt,
+                TokenType = "Bearer"
+            };
+
+            // 8. برگشت نتیجه
+            return new ApiResponse_New<AuthResult>
+            {
+                IsSuccess = true,
+                Code = 200,
+                Message = "توکن با موفقیت به‌روزرسانی شد",
+                Payload = AuthResult.Success(tokenResponse, userDto, null)
+            };
+        }
+        catch (Exception ex)
+        {
+            //_logger?.LogError(ex, "Error in RefreshTokenAsync");
+            return new ApiResponse_New<AuthResult>
+            {
+                IsSuccess = false,
+                Code = 500,
+                Message = "خطا در به‌روزرسانی توکن"
+            };
+        }
+    }
+
+
+    public async Task<bool> LogoutAsync(long userId)
+    {
+        try
+        {
+            // غیرفعال کردن Session
+            await _userSessionService.DeactivateUserSessionAsync(userId);
+
+            // غیرفعال کردن تمام Refresh Token‌های کاربر
+            var refreshTokens = await _unitOfWork.RefreshTokenRepository.GetAllByUserIdAsync(userId);
+            foreach (var token in refreshTokens)
+            {
+                token.SetRevokedToActive(); // یا SetInactive()
+                _unitOfWork.RefreshTokenRepository.Update(token);
+            }
+            await _unitOfWork.CommitAsync(CancellationToken.None);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            //_logger?.LogError(ex, "Error in LogoutAsync for user {UserId}", userId);
+            return false;
+        }
     }
 }

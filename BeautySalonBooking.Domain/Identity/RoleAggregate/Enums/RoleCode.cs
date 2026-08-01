@@ -7,5 +7,6 @@ public enum RoleCode
     ServiceProvider = 3,
     Receptionist = 4,
     SystemAdmin = 90,
-    Developer = 99
+    Developer = 99,
+    Other = 100,
 }

@@ -6,12 +6,16 @@
 @using BeautySalonBooking.Contracts.Authentication.Dtos
 @using BeautySalonBooking.Contracts.Authentication.Requests
 @using BeautySalonBooking.Contracts.Authentication.Responses
+@using BeautySalonBooking.Contracts.Common
 @using BeautySalonBooking.WebApp.Interfaces
+@using BeautySalonBooking.WebApp.Interfaces.Common
 @using BeautySalonBooking.WebApp.Interfaces.Login
 @using BeautySalonBooking.WebApp.Models
 @using BeautySalonBooking.WebApp.Services
 @using Microsoft.Extensions.Caching.Memory
 @inject IMemoryCache MemoryCache
+@using BeautySalonBooking.WebApp.Helpers
+@inject ITokenService TokenService
 
 <PageTitle>تایید کد | بیوتی سالن</PageTitle>
 
@@ -66,7 +70,8 @@
                            @onkeydown="(e) => OnOtpKeyDown(index, e)"
                            @onfocus="() => OnOtpFocus(index)"
                            @onclick="() => OnOtpClick(index)"
-                           autofocus="@(index == 0)" />
+                           autofocus="@(index == 0)"
+                           disabled="@_showUserSelection" />  <!-- ✅ اضافه کن -->
                 }
             </div>
 
@@ -82,7 +87,7 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 12px; max-width: 300px; margin: 0 auto;">
-                <button class="submit-button" type="button" @onclick="HandleVerifyOtp" disabled="@(!_isOtpComplete || _isVerifying)">
+                <button class="submit-button" type="button" @onclick="HandleVerifyOtp" disabled="@(!_isOtpComplete || _isVerifying || _showUserSelection)">
                     @if (_isVerifying)
                     {
                         <span>در حال تایید...</span>
@@ -98,7 +103,7 @@
                         ← بازگشت
                     </button>
                     <span style="color: #ab939a; font-size: 12px;">|</span>
-                    <button type="button" @onclick="ResendOtp" disabled="@_isResendDisabled" style="background: none; border: none; color: #d26b7d; font-size: 13px; cursor: pointer; @(_isResendDisabled ? "opacity: 0.5;" : "")">
+                    <button type="button" @onclick="ResendOtp" disabled="@_isResendDisabled || _showUserSelection" style="background: none; border: none; color: #d26b7d; font-size: 13px; cursor: pointer; @(_isResendDisabled ? "opacity: 0.5;" : "")">
                         @if (_isResendDisabled)
                         {
                             <span>ارسال مجدد (@_resendTimer ثانیه)</span>
@@ -115,7 +120,107 @@
         </div>
     </section>
 </main>
+<!-- ========== مودال انتخاب کاربر ========== -->
+@if (_showUserSelection && _allUsers.Any())
+{
+    <div class="modal-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(4px);">
+        <div class="modal-content" style="background: white; border-radius: 20px; padding: 40px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: slideUp 0.3s ease-out;">
 
+            <!-- هدر مودال -->
+            <div style="text-align: center; margin-bottom: 25px;">
+                <div style="width: 60px; height: 60px; background: #f8f0f2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                    <span style="font-size: 30px;">👤</span>
+                </div>
+                <h3 style="color: #2d1b20; font-size: 20px; margin: 0;">انتخاب نقش کاربری</h3>
+                <p style="color: #ad8992; font-size: 14px; margin-top: 8px;">
+                    چندین نقش با این شماره یافت شد. لطفاً یکی را انتخاب کنید:
+                </p>
+            </div>
+
+            <!-- لیست کاربران -->
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                @foreach (var user in _allUsers)
+                {
+                    var roleName = RoleHelper.GetRoleName(user.AuthenticationType);
+                    var roleColor = RoleHelper.GetRoleColor(user.AuthenticationType);
+                    var roleIcon = RoleHelper.GetRoleIcon(user.AuthenticationType);
+                    var roleDesc = RoleHelper.GetRoleDescription(user.AuthenticationType);
+
+                    <button class="user-select-btn"
+                            @onclick="() => SelectUser(user)"
+                            disabled="@_isSelectingUser"
+                            style="display: flex; align-items: center; gap: 15px; padding: 15px 20px; border: 2px solid #e8dce0; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s; width: 100%; text-align: right; @( _isSelectingUser ? "opacity: 0.6; cursor: not-allowed;" : "" )"
+                            onmouseover="this.style.borderColor='#d26b7d'; this.style.backgroundColor='#fcf6f8';"
+                            onmouseout="this.style.borderColor='#e8dce0'; this.style.backgroundColor='white';">
+
+                        <!-- آواتار کاربر -->
+                        <div style="width: 44px; height: 44px; border-radius: 50%; background: @(roleColor + "20"); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span style="font-size: 20px; color: @roleColor;">
+                                @roleIcon
+                            </span>
+                        </div>
+
+                        <!-- اطلاعات کاربر -->
+                        <div style="flex: 1; text-align: right;">
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <strong style="color: #2d1b20; font-size: 16px;">
+                                    @(!string.IsNullOrEmpty(user.FirstName) ? $"{user.FirstName} {user.LastName}" : user.UserName)
+                                </strong>
+                                <span class="badge" style="background: @roleColor; color: white; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;">
+                                    @roleName
+                                </span>
+                            </div>
+                            <div style="color: #ad8992; font-size: 12px; margin-top: 4px;">
+                                @roleDesc
+                            </div>
+                            <div style="color: #ad8992; font-size: 11px; margin-top: 2px;">
+                                @(!string.IsNullOrEmpty(user.PhoneNumber) ? FormatPhoneNumber(user.PhoneNumber) : "شماره نامشخص")
+                            </div>
+                        </div>
+
+                        <!-- آیکون فلش -->
+                        <div style="color: #d26b7d; font-size: 18px; flex-shrink: 0;">
+                            ←
+                        </div>
+                    </button>
+                }
+            </div>
+
+            <!-- دکمه انصراف -->
+            <div style="text-align: center; margin-top: 20px;">
+                <button @onclick="CancelUserSelection"
+                        style="background: none; border: none; color: #ab939a; font-size: 13px; cursor: pointer; text-decoration: underline;">
+                    انصراف و بازگشت
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- استایل‌های انیمیشن -->
+<style>
+    @@keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .user-select-btn:hover {
+        transform: translateX(-3px);
+        box-shadow: 0 4px 15px rgba(210, 107, 125, 0.15);
+    }
+
+    .otp-input:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+</style>
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
@@ -135,6 +240,12 @@
     private System.Timers.Timer? _timer;
     private string _phoneNumber = string.Empty;
     private string? _mobileForApi;
+
+    // ========== متغیرهای چند کاربر ==========
+    private List<UserDto> _allUsers = new();
+    private bool _showUserSelection = false;
+    private bool _isSelectingUser = false;
+    private ApiResponse_New<AuthResult>? _loginResponse;
 
     protected override void OnInitialized()
     {
@@ -156,7 +267,7 @@
             {
                 Console.WriteLine($"❌ Session or Mobile not found");
                 _otpError = "اطلاعات ورودی نامعتبر است";
-                Navigation.NavigateTo("/");
+                Navigation.NavigateTo("/login");
                 return;
             }
 
@@ -325,38 +436,62 @@
 
             var response = await AuthService.VerifyLoginOtpAsync(request);
 
-            if (response.IsSuccess && response.Payload?.Tokens != null)
+            if (response.IsSuccess)
             {
-                _isOtpVerified = true;
-                Console.WriteLine("✅ OTP verified successfully!");
-
-                // ذخیره توکن در localStorage
-                await SaveAuthTokens(response.Payload.Tokens, response.Payload.User);
-
-                // پاک کردن Session از کش
-                if (!string.IsNullOrEmpty(SessionId))
+                // ========== حالت 1: یک کاربر ==========
+                if (response.Payload?.Tokens != null)
                 {
-                    MemoryCache.Remove(SessionId);
-                }
+                    _isOtpVerified = true;
+                    Console.WriteLine("✅ Single user login successful");
 
-                // رفتن به داشبورد
-                Navigation.NavigateTo("/dashboard", true);
-            }
-            else if (response.ListPayload != null && response.ListPayload.Any())
-            {
-                _otpError = "چندین کاربر با این شماره یافت شد. لطفاً با پشتیبانی تماس بگیرید.";
-                Console.WriteLine($"⚠️ Multiple users found: {response.ListPayload.Count}");
+                    // پاک کردن Session
+                    if (!string.IsNullOrEmpty(SessionId))
+                    {
+                        MemoryCache.Remove(SessionId);
+                    }
+
+                    // رفتن به داشبورد
+                    Navigation.NavigateTo("/dashboard", true);
+                }
+                // ========== حالت 2: چند کاربر ==========
+                else if (response.ListPayload != null && response.ListPayload.Any())
+                {
+                    _loginResponse = response;
+                    _allUsers = response.ListPayload.Select(x => x.User).ToList();
+
+                    // اگر فقط یک کاربر در لیست هست
+                    if (_allUsers.Count == 1)
+                    {
+                        var singleUser = response.ListPayload.First();
+                        await TokenService.SetTokensAsync(singleUser.Tokens, singleUser.User);
+
+                        if (!string.IsNullOrEmpty(SessionId))
+                        {
+                            MemoryCache.Remove(SessionId);
+                        }
+
+                        Navigation.NavigateTo("/dashboard", true);
+                    }
+                    else
+                    {
+                        // نمایش مودال انتخاب کاربر
+                        _showUserSelection = true;
+                        _isOtpVerified = false;
+                        Console.WriteLine($"⚠️ Multiple users found: {_allUsers.Count}");
+                        StateHasChanged();
+                    }
+                }
+                else
+                {
+                    _otpError = "پاسخ نامعتبر از سرور";
+                    _isOtpVerified = false;
+                }
             }
             else
             {
                 _otpError = response.Message ?? "کد وارد شده نادرست است. مجدداً تلاش کنید.";
                 _isOtpVerified = false;
-
-                _otpDigits = new string[6];
-                _isOtpComplete = false;
-                StateHasChanged();
-
-                await JSRuntime.InvokeVoidAsync("eval", "document.getElementById('otp-0').focus();");
+                ResetOtpFields();
             }
         }
         catch (Exception ex)
@@ -370,11 +505,146 @@
             StateHasChanged();
         }
     }
+    // private async Task HandleVerifyOtp()
+    // {
+    //     if (!_isOtpComplete) return;
 
+    //     _isVerifying = true;
+    //     _otpError = null;
+    //     StateHasChanged();
+
+    //     try
+    //     {
+    //         var enteredOtp = string.Join("", _otpDigits);
+    //         Console.WriteLine($"🔍 Verifying OTP: {enteredOtp} for mobile: {_mobileForApi}");
+
+    //         var request = new VerifyOtpRequest
+    //             {
+    //                 MobileNumber = _mobileForApi ?? "",
+    //                 OtpCode = enteredOtp
+    //             };
+
+    //         var response = await AuthService.VerifyLoginOtpAsync(request);
+
+    //         if (response.IsSuccess && response.Payload?.Tokens != null)
+    //         {
+    //             _isOtpVerified = true;
+    //             Console.WriteLine("✅ OTP verified successfully!");
+
+    //             // ذخیره توکن در localStorage
+    //             await SaveAuthTokens(response.Payload.Tokens, response.Payload.User);
+
+    //             // پاک کردن Session از کش
+    //             if (!string.IsNullOrEmpty(SessionId))
+    //             {
+    //                 MemoryCache.Remove(SessionId);
+    //             }
+
+    //             // رفتن به داشبورد
+    //             Navigation.NavigateTo("/dashboard", true);
+    //         }
+    //         else if (response.ListPayload != null && response.ListPayload.Any())
+    //         {
+    //             _otpError = "چندین کاربر با این شماره یافت شد. لطفاً با پشتیبانی تماس بگیرید.";
+    //             Console.WriteLine($"⚠️ Multiple users found: {response.ListPayload.Count}");
+    //         }
+    //         else
+    //         {
+    //             _otpError = response.Message ?? "کد وارد شده نادرست است. مجدداً تلاش کنید.";
+    //             _isOtpVerified = false;
+
+    //             _otpDigits = new string[6];
+    //             _isOtpComplete = false;
+    //             StateHasChanged();
+
+    //             await JSRuntime.InvokeVoidAsync("eval", "document.getElementById('otp-0').focus();");
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         _otpError = "خطا در تایید کد. لطفاً مجدداً تلاش کنید.";
+    //         Console.WriteLine($"❌ Error in HandleVerifyOtp: {ex.Message}");
+    //     }
+    //     finally
+    //     {
+    //         _isVerifying = false;
+    //         StateHasChanged();
+    //     }
+    // }
+    private async Task SelectUser(UserDto selectedUser)
+    {
+        if (_isSelectingUser) return;
+
+        _isSelectingUser = true;
+        _otpError = null;
+        StateHasChanged();
+
+        try
+        {
+            Console.WriteLine($"👤 Selecting user: {selectedUser.FirstName} (ID: {selectedUser.Id})");
+
+            // پیدا کردن توکن مربوط به کاربر انتخاب شده
+            var authResult = _loginResponse?.ListPayload?.FirstOrDefault(x => x.User?.Id == selectedUser.Id);
+
+            if (authResult?.Tokens != null)
+            {
+                // ذخیره توکن کاربر انتخاب شده
+                await TokenService.SetTokensAsync(authResult.Tokens, authResult.User);
+
+                _showUserSelection = false;
+                _isOtpVerified = true;
+
+                Console.WriteLine($"✅ User selected: {selectedUser.FirstName} (Role: {RoleHelper.GetRoleName(selectedUser.AuthenticationType)})");
+
+                // پاک کردن Session
+                if (!string.IsNullOrEmpty(SessionId))
+                {
+                    MemoryCache.Remove(SessionId);
+                }
+
+                // رفتن به داشبورد
+                Navigation.NavigateTo("/dashboard", true);
+            }
+            else
+            {
+                _otpError = "خطا در دریافت توکن کاربر. مجدداً تلاش کنید.";
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            _otpError = "خطا در انتخاب کاربر";
+            Console.WriteLine($"❌ Error selecting user: {ex.Message}");
+            StateHasChanged();
+        }
+        finally
+        {
+            _isSelectingUser = false;
+        }
+    }
+    private void CancelUserSelection()
+    {
+        _showUserSelection = false;
+        _allUsers.Clear();
+        _loginResponse = null;
+        ResetOtpFields();
+        StateHasChanged();
+    }
+    private void ResetOtpFields()
+    {
+        _otpDigits = new string[6];
+        _isOtpComplete = false;
+        StateHasChanged();
+
+        // فوکوس روی اولین فیلد
+        _ = JSRuntime.InvokeVoidAsync("eval", "document.getElementById('otp-0').focus();");
+    }
     private async Task SaveAuthTokens(TokenResponse token, UserDto? user)
     {
         try
         {
+            // ذخیره توکن‌ها با متد جدید
+
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "accessToken", token.AccessToken);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "refreshToken", token.RefreshToken);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "tokenExpiry", token.ExpiresAt.ToString("O"));
@@ -394,7 +664,7 @@
 
     private void GoBack()
     {
-        Navigation.NavigateTo("/");
+        Navigation.NavigateTo("/login");
     }
 
     private async Task ResendOtp()

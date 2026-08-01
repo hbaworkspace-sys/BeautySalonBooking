@@ -1,11 +1,15 @@
 @inherits LayoutComponentBase
 @inject NavigationManager Navigation
+@using BeautySalonBooking.WebApp.Interfaces.Common
+@using BeautySalonBooking.WebApp.Interfaces.Login
+@using BeautySalonBooking.WebApp.Services;
+@inject ISessionManager SessionManager ;
+@rendermode InteractiveServer
 
-<!-- تعریف تابع JavaScript در همین صفحه -->
 <script>
-    let activeMenu = null;
+        let activeMenu = null;
 
-    function toggleMenu(element) {
+    function toggleMenu(element, event) {
         // جلوگیری از انتشار رویداد به لینک‌های فرزند
         event.stopPropagation();
 
@@ -51,7 +55,6 @@
         }
     }
 </script>
-
 <div class="panel">
     <aside class="sidebar">
         <!-- برند -->
@@ -68,73 +71,74 @@
             <!-- داشبورد -->
             <a href="/dashboard"
                class="menu-link @(IsActive("/dashboard") ? "active" : "")"
-               onclick="setActiveMenu(this)">
+               onclick="setActiveMenu(this,event)">
                 داشبورد
             </a>
 
             <!-- اطلاعات پایه -->
             <div class="menu-group">
                 <div class="menu-header @(IsActive("/services") || IsActive("/categories") || IsActive("/specialties") ? "active" : "")"
-                     onclick="toggleMenu(this)">
+                     onclick="toggleMenu(this,event)">
                     <span class="arrow @(IsActive("/services") || IsActive("/categories") || IsActive("/specialties") ? "open" : "")">▾</span>
                     <span>اطلاعات پایه</span>
                 </div>
                 <div class="menu-children @(IsActive("/services") || IsActive("/categories") || IsActive("/specialties") ? "open" : "")">
                     <a href="/services"
                        class="menu-link child @(IsActive("/services") ? "active" : "")"
-                       onclick="setActiveMenu(this)">خدمات</a>
+                       onclick="setActiveMenu(this,event)">خدمات</a>
                     <a href="/categories"
                        class="menu-link child @(IsActive("/categories") ? "active" : "")"
-                       onclick="setActiveMenu(this)">دسته‌بندی</a>
+                       onclick="setActiveMenu(this,event)">دسته‌بندی</a>
                     <a href="/specialties"
                        class="menu-link child @(IsActive("/specialties") ? "active" : "")"
-                       onclick="setActiveMenu(this)">تخصص‌ها</a>
+                       onclick="setActiveMenu(this,event)">تخصص‌ها</a>
                 </div>
             </div>
 
             <!-- مدیریت کاربران -->
             <div class="menu-group">
                 <div class="menu-header @(IsActive("/users") || IsActive("/systems") || IsActive("/roles") || IsActive("/menus") ? "active" : "")"
-                     onclick="toggleMenu(this)">
+                     onclick="toggleMenu(this,event)">
                     <span class="arrow @(IsActive("/users") || IsActive("/systems") || IsActive("/roles") || IsActive("/menus") ? "open" : "")">▾</span>
                     <span>مدیریت کاربران</span>
                 </div>
                 <div class="menu-children @(IsActive("/users") || IsActive("/systems") || IsActive("/roles") || IsActive("/menus") ? "open" : "")">
                     <a href="/users"
                        class="menu-link child @(IsActive("/users") ? "active" : "")"
-                       onclick="setActiveMenu(this)">مدیریت کاربران</a>
+                       onclick="setActiveMenu(this,event)">مدیریت کاربران</a>
                     <a href="/systems"
                        class="menu-link child @(IsActive("/systems") ? "active" : "")"
-                       onclick="setActiveMenu(this)">مدیریت سیستم‌ها</a>
+                       onclick="setActiveMenu(this,event)">مدیریت سیستم‌ها</a>
                     <a href="/roles"
                        class="menu-link child @(IsActive("/roles") ? "active" : "")"
-                       onclick="setActiveMenu(this)">نقش‌ها</a>
+                       onclick="setActiveMenu(this,event)">نقش‌ها</a>
                     <a href="/menus"
                        class="menu-link child @(IsActive("/menus") ? "active" : "")"
-                       onclick="setActiveMenu(this)">منوها</a>
+                       onclick="setActiveMenu(this,event)">منوها</a>
                 </div>
             </div>
 
             <!-- تنظیمات -->
             <div class="menu-group">
                 <div class="menu-header @(IsActive("/profile") || IsActive("/change-password") ? "active" : "")"
-                     onclick="toggleMenu(this)">
+                     onclick="toggleMenu(this,event)">
                     <span class="arrow @(IsActive("/profile") || IsActive("/change-password") ? "open" : "")">▾</span>
                     <span>تنظیمات</span>
                 </div>
                 <div class="menu-children @(IsActive("/profile") || IsActive("/change-password") ? "open" : "")">
                     <a href="/profile"
                        class="menu-link child @(IsActive("/profile") ? "active" : "")"
-                       onclick="setActiveMenu(this)">پروفایل</a>
+                       onclick="setActiveMenu(this,event)">پروفایل</a>
                     <a href="/change-password"
                        class="menu-link child @(IsActive("/change-password") ? "active" : "")"
-                       onclick="setActiveMenu(this)">تغییر رمز عبور</a>
+                       onclick="setActiveMenu(this,event)">تغییر رمز عبور</a>
                 </div>
             </div>
         </nav>
 
-        <!-- خروج -->
-        <a href="/logout" class="logout-link">خروج از حساب</a>
+
+        <button @onclick="() => HandleLogout()" class="logout-link">خروج از حساب</button>
+        @*  <a href="#" @onclick="HandleLogout" class="logout-link">خروج از حساب</a> *@
     </aside>
 
     <main class="main">
@@ -161,6 +165,27 @@
 </div>
 
 @code {
+    private async Task HandleLogout()
+    {
+        try
+        {
+            Console.WriteLine("🚀 Logging out...");
+
+
+            await SessionManager.LogoutAsync();
+
+            Console.WriteLine("✅ Logout successful");
+
+
+            Navigation.NavigateTo("/login", true);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error during logout: {ex.Message}");
+
+            Navigation.NavigateTo("/login", true);
+        }
+    }
     private bool IsActive(string path)
     {
         var uri = Navigation.Uri;

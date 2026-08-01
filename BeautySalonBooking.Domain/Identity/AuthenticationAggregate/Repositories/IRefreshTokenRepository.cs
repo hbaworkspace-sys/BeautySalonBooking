@@ -7,4 +7,7 @@ public interface IRefreshTokenRepository
     Task AddAsync(RefreshToken refreshToken);
     void Update(RefreshToken refreshToken);
 
+    // ========== متد جدید ==========
+    Task<IEnumerable<RefreshToken>> GetAllByUserIdAsync(long userId);
+
 }
