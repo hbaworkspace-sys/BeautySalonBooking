@@ -1,46 +1,70 @@
-﻿using BeautySalonBooking.Domain.Base.Enums;
+
+﻿using BeautySalonBooking.Domain.Base.Entities;
+using BeautySalonBooking.Domain.Base.Enums;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Repositories;
+using BeautySalonBooking.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeautySalonBooking.Infrastructure.Persistence.Repositories;
 
-public sealed class UserRepository : Repository<User, long>, IUserRepository
+
+public class UserRepository
+    : Repository<User, long>, IUserRepository
 {
+
+
     private readonly BeautyDbContext _context;
 
-    public UserRepository(BeautyDbContext context) : base(context)
+
+
+    public UserRepository(
+        BeautyDbContext context)
+        : base(context)
     {
         _context = context;
     }
 
-    public async Task<List<User>> GetByPersonIdAsync(long personId, CancellationToken cancellationToken)
+
+    // متدهای کمکی و اختصاصی برای User
+    public async Task<User?> GetUserWithFullDetailsAsync(long userId, CancellationToken cancellationToken = default)
     {
-        return await _context.Users
-            .Include(u => u.UserRole)
-            .Where(u => u.PersonId == personId)
-            .ToListAsync(cancellationToken);
-    }
-    public async Task<User?> GetByIdAsync(long id, CancellationToken cancellationToken)
-    {
-        return await _context.Users
-           .Include(u => u.UserRole)
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return await _dbSet
+            .Include(u => u.Person)
+            .Include(u => u.PhoneNumbers)
+            .Include(u => u.OrganizationOwners)
+                .ThenInclude(oo => oo.Organization)
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
     }
 
-    public async Task AddAsync(User user, CancellationToken cancellationToken)
+    public async Task<User?> GetUserWithPhoneNumbersAsync(long userId, CancellationToken cancellationToken = default)
     {
-        await _context.Users.AddAsync(user, cancellationToken);
+        return await _dbSet
+            .Include(u => u.PhoneNumbers)
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
     }
 
-    public async Task UpdateAsync(User user, CancellationToken cancellationToken)
+    public async Task<User?> GetUserWithOrganizationsAsync(long userId, CancellationToken cancellationToken = default)
     {
-        _context.Users.Update(user);
+        return await _dbSet
+            .Include(u => u.OrganizationOwners)
+                .ThenInclude(oo => oo.Organization)
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
     }
-    public async Task<User?> GetByUserName(string username)
+
+    public async Task<User?> GetByUserNameAsync(string userName, CancellationToken cancellationToken = default)
     {
-        return await _context.Users
-            .FirstOrDefaultAsync(u => u.UserName == username && u.IsActive == true && u.IsDeleted == false);
+        throw new NotImplementedException();
+    }
+
+    public async Task<User?> GetUserWithRolesAsync(long userId, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> UserNameExistsAsync(string userName, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
     public async Task<bool> ExistsByMobileNumberAsync(string mobileNumber, CancellationToken cancellationToken)
     {
@@ -73,4 +97,42 @@ public sealed class UserRepository : Repository<User, long>, IUserRepository
         return allUsers;
 
     }
+
+    public async Task<User?> GetByPersonIdAsync(long personId, CancellationToken cancellationToken = default)
+    {
+
+        return await _context.Users
+            .FirstOrDefaultAsync(
+                x => x.PersonId == personId,
+                cancellationToken);
+
+    }
+
+
+
+
+    public async Task<User?> GetByUserName(
+        string userName)
+    {
+
+        return await _context.Users
+            .FirstOrDefaultAsync(
+                x => x.UserName == userName);
+
+    }
+
+
+
+
+    public async Task<User> UpdateAsync(
+        User user,
+        CancellationToken cancellationToken = default)
+    {
+
+        Update(user);
+
+        return user;
+
+    }
+
 }

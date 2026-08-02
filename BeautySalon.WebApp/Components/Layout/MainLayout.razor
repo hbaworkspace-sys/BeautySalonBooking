@@ -7,34 +7,8 @@
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
-<button @onclick="TestClick">تست</button>
-
 <div id="blazor-error-ui">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
-@code {
-    private void TestClick()
-    {
-        Console.WriteLine("TEST CLICK");
-    }
-    protected override async Task OnInitializedAsync()
-    {
-        // دریافت مسیر فعلی
-        var currentPath = "/" + NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-
-        var publicPaths = new[]
-        {
-    "/",
-    "/login",
-    "/verify-otp"
-};
-
-        if (!publicPaths.Contains(currentPath, StringComparer.OrdinalIgnoreCase))
-        {
-            NavigationManager.NavigateTo("/login");
-        }
-    }
-}
-

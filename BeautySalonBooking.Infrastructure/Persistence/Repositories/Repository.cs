@@ -28,6 +28,21 @@ public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
         return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
     }
 
+    // متد اصلی برای دریافت با Include
+    public virtual async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includes)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        if (includes?.Length > 0)
+        {
+            query = includes.Aggregate(query,
+                (current, include) => current.Include(include));
+        }
+
+        return await query.FirstOrDefaultAsync(
+            x => x.Id!.Equals(id),
+            cancellationToken);
+    }
     public virtual async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);

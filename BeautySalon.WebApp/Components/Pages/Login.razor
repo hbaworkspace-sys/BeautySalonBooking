@@ -88,18 +88,16 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (!firstRender)
+            return;
+
+
+        var valid = await TokenService.IsSessionValidAsync();
+
+
+        if (valid)
         {
-            _isInitialized = true;
-
-            // بررسی اینکه کاربر لاگین هست یا نه
-            var token = await TokenService.GetAccessTokenAsync();
-            if (!string.IsNullOrEmpty(token))
-            {
-                Navigation.NavigateTo("/dashboard", true);
-            }
-
-            StateHasChanged();
+            Navigation.NavigateTo("/dashboard");
         }
     }
     private readonly PhoneModel phoneModel = new();

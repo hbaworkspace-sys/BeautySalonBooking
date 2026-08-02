@@ -1,164 +1,268 @@
 ﻿using BeautySalonBooking.Application.Authentication.Interfaces;
 using BeautySalonBooking.Contracts.Authentication.Dtos;
-using BeautySalonBooking.Contracts.Authentication.Responses;
-using BeautySalonBooking.Domain.Base.UnitOfWork;
-using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Entities;
-using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Repositories;
-using BeautySalonBooking.Domain.Identity.UserAggregate.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
-namespace BeautySalonBooking.Application.Authentication.Services
+
+namespace BeautySalonBooking.Application.Authentication.Services;
+
+
+public class TokenService : ITokenService
 {
-    public class TokenService : ITokenService
+
+    private readonly IConfiguration _configuration;
+
+
+    public TokenService(
+        IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
+        _configuration = configuration;
+    }
 
-        private readonly IUnitOfWork _unitOfWork;
 
-        public TokenService(IConfiguration configuration, IUnitOfWork unitOfWork, IRefreshTokenRepository refreshTokenRepository)
+
+
+    public string GenerateAccessToken(UserDto user)
+    {
+        var key = Encoding.UTF8.GetBytes(
+            _configuration["Jwt:Secret"]!);
+
+        var claims = new List<Claim>
+{
+    new(JwtRegisteredClaimNames.Sub,user.Id.ToString()),
+
+    new(ClaimTypes.NameIdentifier,user.Id.ToString()),
+
+    new(ClaimTypes.Name,$"{user.FirstName} {user.LastName}"),
+
+    new(ClaimTypes.Email,user.Email ?? ""),
+
+    new("UserName",user.UserName ?? ""),
+
+    new("AuthenticationType",user.AuthenticationType.ToString()),
+
+    new(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+};
+
+        //-----------------------------------
+        // Permissions
+        //-----------------------------------
+
+        //foreach (var permission in user.Permissions.Distinct())
+        //{
+        //    claims.Add(new Claim("Permission", permission));
+        //}
+
+        //-----------------------------------
+        // Menus
+        //-----------------------------------
+
+        //foreach (var menu in user.Menus.Distinct())
+        //{
+        //    claims.Add(new Claim("Menu", menu));
+        //}
+
+        //-----------------------------------
+        // Actions
+        //-----------------------------------
+
+        //-----------------------------------
+        // APIs
+        //-----------------------------------
+
+
+
+        //-----------------------------------
+        // Reports
+        //-----------------------------------
+
+
+
+        var token = new JwtSecurityToken(
+            issuer: _configuration["Jwt:Issuer"],
+            audience: _configuration["Jwt:Audience"],
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(30),
+            signingCredentials:
+                new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256));
+
+        return new JwtSecurityTokenHandler()
+            .WriteToken(token);
+    }
+
+
+
+
+    public ClaimsPrincipal?
+        ValidateToken(
+            string token)
+    {
+
+
+        var handler =
+            new JwtSecurityTokenHandler();
+
+
+
+        var key =
+            Encoding.UTF8.GetBytes(
+                _configuration["Jwt:Secret"]!);
+
+
+
+        try
         {
-            _configuration = configuration;
 
-            _unitOfWork = unitOfWork;
-        }
+            return handler.ValidateToken(
+                token,
 
-        public async Task<TokenResponse> GenerateTokensAsync(UserDto user, CancellationToken cancellationToken)
-        {
-            var accessToken = GenerateAccessToken(user, cancellationToken);
-            var refreshToken = GenerateRefreshToken(cancellationToken);
-
-            var refreshTokenEntity = RefreshToken.Create(refreshToken, user.Id, DateTime.UtcNow.AddDays(7));
-            // ذخیره Refresh Token در دیتابیس
-            await _unitOfWork.BeginTransactionAsync(cancellationToken);
-            try
-            {
-                await _unitOfWork.RefreshTokenRepository.AddAsync(refreshTokenEntity);
-                await _unitOfWork.CommitAsync(cancellationToken);
-
-                return new TokenResponse
+                new TokenValidationParameters
                 {
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken,
-                    ExpiresAt = DateTime.UtcNow.AddMinutes(30),
-                    TokenType = "Bearer"
-                };
-            }
-            catch (Exception ex)
-            {
-                await _unitOfWork.RollbackAsync(cancellationToken);
-                throw;
-            }
 
-        }
-
-        public async Task<TokenResponse> RefreshTokensAsync(string accessToken, string refreshToken, CancellationToken cancellationToken)
-        {
-            var storedToken = await _unitOfWork.RefreshTokenRepository.GetValidTokenAsync(refreshToken);
-            if (storedToken == null || storedToken.ExpiresAt < DateTime.UtcNow)
-                throw new SecurityTokenException("Invalid or expired refresh token");
-
-            var existingUser = await _unitOfWork.UserRepository.GetByIdAsync(storedToken.UserId);
-
-            if (existingUser == null)
-                throw new SecurityTokenException("User not found");
-            UserDto currentUser = new UserDto();
-
-            storedToken.SetRevokedToActive();
-            _unitOfWork.RefreshTokenRepository.Update(storedToken);
-            await _unitOfWork.CommitAsync(cancellationToken);
-            return await GenerateTokensAsync(currentUser, cancellationToken);
-        }
-
-        public ClaimsPrincipal? ValidateToken(string token, CancellationToken cancellationToken)
-        {
-            try
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]!);
-
-                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = _configuration["Jwt:Issuer"],
-                    ValidAudience = _configuration["Jwt:Audience"],
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
-                }, out _);
 
-                return principal;
-            }
-            catch
+
+                    IssuerSigningKey =
+                    new SymmetricSecurityKey(key),
+
+
+                    ValidateIssuer = true,
+
+
+                    ValidIssuer =
+                    _configuration["Jwt:Issuer"],
+
+
+
+                    ValidateAudience = true,
+
+
+                    ValidAudience =
+                    _configuration["Jwt:Audience"],
+
+
+
+                    ValidateLifetime = true,
+
+
+                    ClockSkew =
+                    TimeSpan.Zero
+
+                },
+
+                out _);
+
+        }
+        catch
+        {
+            return null;
+        }
+
+    }
+
+
+    public ClaimsPrincipal? GetPrincipalFromExpiredToken(
+    string token)
+    {
+        var tokenHandler =
+            new JwtSecurityTokenHandler();
+
+
+        var key =
+            Encoding.UTF8.GetBytes(
+                _configuration["Jwt:Secret"]!);
+
+
+        var parameters =
+            new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+
+                IssuerSigningKey =
+                    new SymmetricSecurityKey(key),
+
+
+                ValidateIssuer = true,
+
+                ValidIssuer =
+                    _configuration["Jwt:Issuer"],
+
+
+                ValidateAudience = true,
+
+                ValidAudience =
+                    _configuration["Jwt:Audience"],
+
+
+                // مهم:
+                // چون Token منقضی شده است
+                // فقط Lifetime را خاموش می‌کنیم
+
+                ValidateLifetime = false,
+
+
+                ClockSkew =
+                    TimeSpan.Zero
+            };
+
+
+        try
+        {
+            var principal =
+                tokenHandler.ValidateToken(
+                    token,
+                    parameters,
+                    out SecurityToken securityToken);
+
+
+
+            if (securityToken is not JwtSecurityToken jwt)
+                return null;
+
+
+
+            if (!jwt.Header.Alg.Equals(
+                    SecurityAlgorithms.HmacSha256,
+                    StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
+
+
+
+            return principal;
         }
-
-        public bool IsTokenExpired(string token, CancellationToken cancellationToken)
+        catch
         {
-            try
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var jwtToken = tokenHandler.ReadJwtToken(token);
-                return jwtToken.ValidTo < DateTime.UtcNow;
-            }
-            catch
-            {
-                return true;
-            }
+            return null;
         }
+    }
 
-        public async Task<bool> RevokeTokenAsync(string refreshToken, CancellationToken cancellationToken)
+    public bool IsTokenExpired(
+    string token)
+    {
+        try
         {
-            var storedToken = await _unitOfWork.RefreshTokenRepository.GetValidTokenAsync(refreshToken);
-            if (storedToken == null) return false;
+            var handler =
+                new JwtSecurityTokenHandler();
 
-            storedToken.SetRevokedToActive();
-            _unitOfWork.RefreshTokenRepository.Update(storedToken);
-            await _unitOfWork.CommitAsync(cancellationToken);
 
+            var jwt =
+                handler.ReadJwtToken(token);
+
+
+            return jwt.ValidTo <= DateTime.UtcNow;
+
+        }
+        catch
+        {
             return true;
-        }
-
-        private string GenerateAccessToken(UserDto user, CancellationToken cancellationToken)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]!);
-
-            var claims = new[]
-            {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Email),
-            new Claim(ClaimTypes.GivenName, $"{user.FirstName} {user.LastName}"),
-            new Claim("AuthenticationType", user.AuthenticationType.ToString())
-        };
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(5),
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"],
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
-
-        private static string GenerateRefreshToken(CancellationToken cancellationToken)
-        {
-            var randomNumber = new byte[64];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
         }
     }
 }

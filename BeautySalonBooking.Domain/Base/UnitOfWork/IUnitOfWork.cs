@@ -1,7 +1,9 @@
 ﻿using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Repositories;
+using BeautySalonBooking.Domain.Identity.PermissionAggregate.Repositories;
 using BeautySalonBooking.Domain.Identity.RoleAggregate.Repositories;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Repositories;
 using BeautySalonBooking.Domain.PersonAggregate.Repositories;
+using BeautySalonBooking.Domain.Repositories;
 
 namespace BeautySalonBooking.Domain.Base.UnitOfWork;
 
@@ -13,6 +15,7 @@ public interface IUnitOfWork
     IUserRepository UserRepository { get; }
     IUserRoleRepository UserRoleRepository { get; }
     IRefreshTokenRepository RefreshTokenRepository { get; }
+    IPermissionRepository PermissionRepository { get; }
 
     Task<int> SaveChangesAsync(
        CancellationToken cancellationToken);

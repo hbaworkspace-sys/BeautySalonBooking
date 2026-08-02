@@ -2,6 +2,7 @@
 using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
+using BeautySalonBooking.WebApp.Authentication;
 using BeautySalonBooking.WebApp.Interfaces.Common;
 using BeautySalonBooking.WebApp.Interfaces.Login;
 using BeautySalonBooking.WebApp.Settings;
@@ -18,19 +19,23 @@ namespace BeautySalonBooking.WebApp.Services.Login
         private readonly ApiSettings _settings;
         private readonly ITokenService _tokenService;
         private readonly NavigationManager _navigationManager;
-
+        private readonly CustomAuthenticationStateProvider _authProvider;
         public LoginService(
             IApiClient apiClient,
             IOptions<ApiSettings> settings,
             NavigationManager navigationManager,
+
+            CustomAuthenticationStateProvider authProvider,
             ITokenService tokenService,
             ILogger<LoginService> logger)
         {
+            _authProvider = authProvider;
             _apiClient = apiClient;
             _settings = settings.Value;
             _logger = logger;
             _tokenService = tokenService;
             _navigationManager = navigationManager;
+            _authProvider = authProvider;
         }
 
         public async Task<ApiResponse_New<AuthResult>> RequestLoginOtpAsync(LoginInitiateRequest request)
@@ -91,6 +96,7 @@ namespace BeautySalonBooking.WebApp.Services.Login
                     if (result.Payload?.Tokens != null)
                     {
                         await _tokenService.SetTokensAsync(result.Payload.Tokens, result.Payload.User);
+                        _authProvider.NotifyUserAuthentication(result.Payload.Tokens.AccessToken);
 
                         // ذخیره کاربر در لیست کاربران
                         var userList = new List<UserDto> { result.Payload.User };
@@ -112,8 +118,15 @@ namespace BeautySalonBooking.WebApp.Services.Login
 
                         // به صورت پیش‌فرض، اولین کاربر را انتخاب می‌کنیم
                         var firstUser = result.ListPayload.First();
-                        await _tokenService.SetTokensAsync(firstUser.Tokens, firstUser.User);
 
+
+                        await _tokenService.SetTokensAsync(
+                            firstUser.Tokens,
+                            firstUser.User);
+
+
+                        _authProvider.NotifyUserAuthentication(
+                            firstUser.Tokens.AccessToken);
                         _logger.LogInformation("✅ Multiple users saved. Default user: {UserId}", firstUser.User?.Id);
                     }
                 }
@@ -138,6 +151,9 @@ namespace BeautySalonBooking.WebApp.Services.Login
             try
             {
                 await _tokenService.ClearTokensAsync();
+
+                _authProvider.NotifyUserLogout();
+
                 _navigationManager.NavigateTo("/login", true);
                 _logger.LogInformation("User logged out");
                 return true;

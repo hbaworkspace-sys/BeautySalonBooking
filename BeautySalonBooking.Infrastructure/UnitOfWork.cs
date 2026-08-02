@@ -1,8 +1,11 @@
 ﻿using BeautySalonBooking.Domain.Base.UnitOfWork;
 using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Repositories;
+using BeautySalonBooking.Domain.Identity.PermissionAggregate.Repositories;
 using BeautySalonBooking.Domain.Identity.RoleAggregate.Repositories;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Repositories;
 using BeautySalonBooking.Domain.PersonAggregate.Repositories;
+using BeautySalonBooking.Domain.Repositories;
+using BeautySalonBooking.Infrastructure.Persistence.Repositories.Identity;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BeautySalonBooking.Infrastructure
@@ -18,9 +21,12 @@ namespace BeautySalonBooking.Infrastructure
         public IUserRepository UserRepository { get; }
         public IUserRoleRepository UserRoleRepository { get; }
         public IRefreshTokenRepository RefreshTokenRepository { get; }
+        public IPermissionRepository PermissionRepository { get; }
+
 
         public UnitOfWork(BeautyDbContext _context,
                 IOtpRepository _otpRepository,
+                IPermissionRepository _permissionRepository,
                 IRefreshTokenRepository _refreshTokenRepository,
                 IPersonRepository _personRepository,
                 IRoleRepository _roleRepository,
@@ -32,6 +38,7 @@ namespace BeautySalonBooking.Infrastructure
             PersonRepository = _personRepository;
             RoleRepository = _roleRepository;
             UserRepository = _userRepository;
+            PermissionRepository = _permissionRepository;
             UserRoleRepository = _userRoleRepository;
             RefreshTokenRepository = _refreshTokenRepository;
         }

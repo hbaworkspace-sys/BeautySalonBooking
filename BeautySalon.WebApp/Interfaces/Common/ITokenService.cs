@@ -1,5 +1,6 @@
 ﻿using BeautySalonBooking.Contracts.Authentication.Dtos;
 using BeautySalonBooking.Contracts.Authentication.Responses;
+using BeautySalonBooking.WebApp.Models;
 
 namespace BeautySalonBooking.WebApp.Interfaces.Common
 {
@@ -19,7 +20,8 @@ namespace BeautySalonBooking.WebApp.Interfaces.Common
         Task<List<UserDto>> GetAllUsersAsync();
         Task SetAllUsersAsync(List<UserDto> users);
         Task SetMultipleTokensAsync(List<AuthResult> authResults);
-        Task<TokenResponse> GetUserTokensAsync(long userId);
+
+        Task<UserSessionToken> GetUserSessionAsync(long userId);
         Task<bool> SwitchUserAsync(long userId);
     }
 }

@@ -12,13 +12,29 @@ namespace BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Entities;
 
 public class RefreshToken : AuditableEntity<long>
 {
+    public string TokenHash { get; private set; } = string.Empty;
 
-    public string Token { get; private set; } = string.Empty;
     public long UserId { get; private set; }
+
     public DateTime ExpiresAt { get; private set; }
+
     public bool IsRevoked { get; private set; }
 
-    // Navigation Property
+    public DateTime? RevokedAt { get; private set; }
+
+    public string? ReplacedByTokenHash { get; private set; }
+
+
+    public Guid DeviceId { get; private set; }
+
+    public string DeviceName { get; private set; } = string.Empty;
+
+    public string IpAddress { get; private set; } = string.Empty;
+
+    public DateTime CreatedAtUtc { get; private set; }
+
+    public DateTime? RevokedAtUtc { get; private set; }
+
     public User User { get; private set; } = null!;
 
     private RefreshToken()
@@ -26,31 +42,56 @@ public class RefreshToken : AuditableEntity<long>
     }
 
     public static RefreshToken Create(
-        string token,
-        long userId,
-        DateTime expiresAt)
+
+    string tokenHash,
+
+    long userId,
+
+    DateTime expiresAt,
+
+    Guid deviceId,
+
+    string deviceName,
+
+    string ipAddress)
+
     {
-
-
         return new RefreshToken
         {
-            IsRevoked = false,
+            TokenHash = tokenHash,
+
             UserId = userId,
+
             ExpiresAt = expiresAt,
-            Token = token,
+
+            DeviceId = deviceId,
+
+            DeviceName = deviceName,
+
+            IpAddress = ipAddress,
+
+            CreatedAtUtc = DateTime.UtcNow,
+
+            IsRevoked = false
         };
     }
 
-    public void SetRevokedToActive()
+    //public void Revoke()
+    //{
+    //    if (IsRevoked)
+    //        return;
+
+    //    IsRevoked = true;
+
+    //    RevokedAtUtc = DateTime.UtcNow;
+    //}
+    public void Revoke(string? replacedByTokenHash = null)
     {
-        if (IsRevoked) { return; }
+        if (IsRevoked)
+            return;
 
         IsRevoked = true;
-    }
-    public void SetRevokedToDeActive()
-    {
-        if (IsRevoked == false) return;
-
-        IsRevoked = false;
+        RevokedAt = DateTime.UtcNow;
+        ReplacedByTokenHash = replacedByTokenHash;
     }
 }

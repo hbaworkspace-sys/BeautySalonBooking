@@ -1,0 +1,86 @@
+﻿@using BeautySalonBooking.Contracts.Authentication.Dtos
+
+
+<div style="margin-right:@(Level * 20)px">
+
+
+    <div class="tree-row"
+         @onclick="SelectNode">
+
+
+        @*   @if (Item.Children.Any())
+        {
+            <button @onclick="Toggle"
+                    @onclick:stopPropagation="true">
+
+                @(Expanded ? "-" : "+")
+
+            </button>
+        }
+        else
+        {
+            <span style="width:25px"></span>
+        } *@
+
+
+        <span>
+            @Item.Title
+        </span>
+
+
+        <small style="margin-right:10px;color:#888">
+            (@Item.Code)
+        </small>
+
+
+    </div>
+
+
+
+    @*   @if (Expanded)
+    {
+        foreach (var child in Item.Children)
+        {
+            <TreeNode Item="child"
+                      Level="@(Level+1)"
+                      OnSelected="OnSelected" />
+        }
+    } *@
+
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public PermissionTreeDto Item { get; set; }
+        = null!;
+
+
+    [Parameter]
+    public int Level { get; set; }
+
+
+    [Parameter]
+    public EventCallback<PermissionTreeDto> OnSelected { get; set; }
+
+
+
+    private bool Expanded { get; set; }
+
+
+
+    private void Toggle()
+    {
+        Expanded = !Expanded;
+    }
+
+
+
+    private async Task SelectNode()
+    {
+        await OnSelected.InvokeAsync(Item);
+    }
+
+}

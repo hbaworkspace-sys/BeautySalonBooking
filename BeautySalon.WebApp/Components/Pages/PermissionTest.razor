@@ -1,0 +1,38 @@
+﻿@page "/permission-test"
+@using BeautySalonBooking.Contracts.Authentication.Dtos
+@using BeautySalonBooking.WebApp.Interfaces.Permissions
+
+@inject IPermissionApiService PermissionService
+
+
+<h3>Permission Tree</h3>
+
+
+@if (_permissions == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    foreach (var item in _permissions)
+    {
+        <p>
+            @item.Title
+        </p>
+    }
+}
+
+
+
+@code {
+
+    private List<PermissionTreeDto>? _permissions;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _permissions =
+            await PermissionService.GetTreeAsync();
+    }
+
+}

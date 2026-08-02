@@ -1,4 +1,5 @@
-﻿using BeautySalonBooking.WebApp.Components;
+﻿using BeautySalonBooking.WebApp.Authentication;
+using BeautySalonBooking.WebApp.Components;
 using BeautySalonBooking.WebApp.Interfaces.Common;
 using BeautySalonBooking.WebApp.Interfaces.Login;
 using BeautySalonBooking.WebApp.Interfaces.Roles;
@@ -6,8 +7,10 @@ using BeautySalonBooking.WebApp.Services.Common;
 using BeautySalonBooking.WebApp.Services.Login;
 using BeautySalonBooking.WebApp.Services.Roles;
 using BeautySalonBooking.WebApp.Settings;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
-using MudBlazor.Services; // اضافه کردن این using
+using MudBlazor.Services;
+
 
 namespace BeautySalonBooking.WebApp
 {
@@ -17,55 +20,118 @@ namespace BeautySalonBooking.WebApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddRazorComponents()
-                .AddInteractiveServerComponents();
-            builder.Services.AddMemoryCache();
-            builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<ISessionManager, SessionManager>();
-            // 1️⃣ ثبت تنظیمات
-            builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 
-            // 2️⃣ ثبت HttpClient
+            builder.Services
+                .AddRazorComponents()
+                .AddInteractiveServerComponents();
+
+
+            builder.Services.AddMemoryCache();
+
+
+            builder.Services.Configure<ApiSettings>(
+                builder.Configuration.GetSection("ApiSettings"));
+
+
+
             builder.Services.AddHttpClient<IApiClient, ApiClient>(client =>
             {
+                client.Timeout = TimeSpan.FromSeconds(30);
                 client.DefaultRequestHeaders.Accept.Add(
                     new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                client.Timeout = TimeSpan.FromSeconds(30);
             });
-            builder.Services.AddMudServices(); // به جای AddMudBlazorServices()          
+
+
+
+            builder.Services.AddMudServices();
+
+
+
+            builder.Services.AddScoped<ITokenService, TokenService>();
+
+            builder.Services.AddScoped<ISessionManager, SessionManager>();
+
             builder.Services.AddScoped<ILoginService, LoginService>();
+
             builder.Services.AddScoped<IRoleService, RoleService>();
+
+
+            // ==========================
+            // Server Authentication
+            // ==========================
+
+            builder.Services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme =
+                        CookieAuthenticationDefaults.AuthenticationScheme;
+
+                    options.DefaultChallengeScheme =
+                        CookieAuthenticationDefaults.AuthenticationScheme;
+                })
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/login";
+                });
+
+
+
+            builder.Services.AddAuthorization();
+
+
+
+            // ==========================
+            // Blazor Authentication
+            // ==========================
+
             builder.Services.AddAuthorizationCore();
-            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-            // تنظیم HttpClient Factory
-            builder.Services.AddHttpClient("BeautySalonAPI", client =>
-            {
-                var apiUrl = builder.Configuration["ApiBaseUrl"] ?? "https://localhost:7036/";
-                client.BaseAddress = new Uri(apiUrl);
-                client.Timeout = TimeSpan.FromSeconds(30);
-                client.DefaultRequestHeaders.Add("Accept", "application/json");
-                client.DefaultRequestHeaders.Add("User-Agent", "BeautySalonBooking");
-            });
+
+
+            builder.Services.AddCascadingAuthenticationState();
+
+
+            builder.Services.AddScoped<CustomAuthenticationStateProvider>();
+
+
+            builder.Services.AddScoped<AuthenticationStateProvider>(
+                sp =>
+                sp.GetRequiredService<CustomAuthenticationStateProvider>());
+
+
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
+
             app.UseHttpsRedirection();
 
+
             app.UseStaticFiles();
+
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
+
             app.UseAntiforgery();
+
+
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
 
+
+
             app.Run();
+
         }
     }
 }

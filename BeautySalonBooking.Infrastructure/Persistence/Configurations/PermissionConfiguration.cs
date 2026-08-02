@@ -9,29 +9,23 @@ public sealed class PermissionConfiguration : IEntityTypeConfiguration<Permissio
 {
     public void Configure(EntityTypeBuilder<Permission> builder)
     {
-        builder.ToTable("PERMISSIONS", "GT");
+        builder.HasKey(x => x.Id);
 
-        builder.ConfigureAuditableSoftDeleteEntity<Permission, int>();
+
+        builder.HasOne(x => x.Parent)
+            .WithMany(x => x.Children)
+            .HasForeignKey(x => x.ParentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
 
         builder.Property(x => x.Title)
-            .IsRequired()
-            .HasMaxLength(50);
-
-        builder.Property(x => x.Code)
-            .IsRequired()
-            .HasMaxLength(50);
-
-        builder.Property(x => x.Type)
+            .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(x => x.Description)
-            .HasMaxLength(200);
 
-        builder.HasIndex(x => x.Code)
-            .IsUnique();
-
-        builder.Metadata
-            .FindNavigation(nameof(Permission.RolePermissions))!
-            .SetPropertyAccessMode(PropertyAccessMode.Field);
+        builder.Property(x => x.Code)
+            .HasMaxLength(100)
+            .IsRequired();
     }
 }

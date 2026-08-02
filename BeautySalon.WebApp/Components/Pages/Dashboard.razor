@@ -1,4 +1,6 @@
 @page "/dashboard"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 @layout Layout.SalonLayout
 
 <PageTitle>داشبورد | بیوتی سالن</PageTitle>
@@ -210,3 +212,4 @@
         </div>
     </div>
 </article>
+
