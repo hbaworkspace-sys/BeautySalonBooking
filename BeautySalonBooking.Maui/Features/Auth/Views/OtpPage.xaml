@@ -9,9 +9,8 @@
              xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
              x:DataType="vm:OtpViewModel"
              xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources">
-
     <Grid
-        RowDefinitions="auto,auto,*,auto,auto,auto,auto"
+        RowDefinitions="auto,auto,*,0.5*"
         RowSpacing="20"
         Padding="15,10,15,10">
 
@@ -21,31 +20,30 @@
 
         <uc:TitleSubtitleView
             Grid.Row="1"
-            Title="ورود به حساب کاربری"
-            Subtitle="لطفا شماره موبایل خود را وارد کنید"/>
+            Title="کد تایید"
+            Subtitle="کد 4 رقمی ارسال شده را وارد کنید"/>
 
-
-        <Label
-            Grid.Row="0"
-            Style="{x:StaticResource BeautyTitleLable}"/>
-
-        <Image
-            Grid.Row="1"
-            Source="girl_logo.png"
-            HeightRequest="220"
-            Margin="0,0,0,35"
-            Aspect="AspectFit"/>
-
-
-        <uc:OtpCodeEntry
-            x:Name="txtOtp"
+        <VerticalStackLayout
             Grid.Row="2"
-            OtpCode="{Binding OtpCode, Mode=OneWayToSource}" />
+            Spacing="30"
+            VerticalOptions="Center">
 
-        <uc:DefaultButton
-            Grid.Row="3"
-            HCommand="{Binding VerifyOtpCommand}"
-            Title="تایید"/>
+            <uc:OtpCodeEntry
+                x:Name="txtOtp"
+                OtpCode="{Binding OtpCode, Mode=OneWayToSource}"/>
 
+            <uc:CountdownView
+                Grid.Row="3"
+                Title="ارسال مجدد تا"
+                ActionText="ارسال مجدد کد"
+                Duration="{Binding CountdownSeconds, Mode=TwoWay}"
+                IsRunning="{Binding IsCountdownRunning, Mode=TwoWay}"
+                ActionCommand="{Binding ResendOtpCommand}" />
+
+            <uc:DefaultButton
+                Grid.Row="3"
+                HCommand="{Binding VerifyOtpCommand}"
+                Title="ورود"/>
+        </VerticalStackLayout>
     </Grid>
 </ContentPage>

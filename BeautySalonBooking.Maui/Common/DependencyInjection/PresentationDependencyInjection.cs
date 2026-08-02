@@ -1,9 +1,10 @@
-﻿using BeautySalonBooking.Maui.Features.AccountSetup;
-using BeautySalonBooking.Maui.Features.AdminDashboard;
-using BeautySalonBooking.Maui.Features.AdminDashboard.ViewModels;
-using BeautySalonBooking.Maui.Features.AdminDashboard.Views;
+﻿using BeautySalonBooking.Maui.Common.Interfaces;
+using BeautySalonBooking.Maui.Common.Services;
 using BeautySalonBooking.Maui.Features.Auth;
-using BeautySalonBooking.Maui.Features.Home;
+using BeautySalonBooking.Maui.Features.Auth.ViewModels;
+using BeautySalonBooking.Maui.Features.Auth.Views;
+using BeautySalonBooking.Maui.Features.Dashboard.ViewModels;
+using BeautySalonBooking.Maui.Features.Dashboard.Views;
 using BeautySalonBooking.Maui.Features.Splash;
 using BeautySalonBooking.Maui.Features.Splash.Views;
 
@@ -18,9 +19,6 @@ namespace BeautySalonBooking.Maui.Common.DependencyInjection
 
             services.AddTransient<OnboardingPage>();
 
-            services.AddTransient<HomePage>();
-            services.AddTransient<HomeViewModel>();
-
             services.AddTransient<LoginPage>();
             services.AddTransient<LoginViewModel>();
 
@@ -30,21 +28,14 @@ namespace BeautySalonBooking.Maui.Common.DependencyInjection
             services.AddTransient<RegisterPage>();
             services.AddTransient<RegisterViewModel>();
 
-            services.AddTransient<ChooseAccountTypePage>();
-            services.AddTransient<ChooseAccountTypeViewModel>();
+            services.AddTransient<DashboardPage>();
+            services.AddTransient<DashboardViewModel>();
 
-            services.AddTransient<SalonIntroductionPage>();
-            services.AddTransient<SalonIntroductionViewModel>();
+            services.AddTransient<RegistrationSuccessPage>();
+            services.AddTransient<RegistrationSuccessViewModel>();
 
-            services.AddTransient<StylistIntroductionPage>();
-            services.AddTransient<StylistIntroductionViewModel>();
-
-            services.AddTransient<AdminDashboardPage>();
-            services.AddTransient<AdminDashboardViewModel>();
-
-            services.AddTransient<SalonRequestsPage>();
-            services.AddTransient<SalonRequestsViewModel>();
-
+            services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<IDialogService, DialogService>();
             return services;
         }
     }

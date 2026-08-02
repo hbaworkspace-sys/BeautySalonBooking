@@ -305,6 +305,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (!exists)
         {
+
             return new ApiResponse_New<AuthResult>
             {
                 IsSuccess = false,
@@ -314,7 +315,9 @@ public class AuthenticationService : IAuthenticationService
                 Message =
                 "کاربری با این شماره ثبت نشده است"
             };
+
         }
+
 
 
 
@@ -340,6 +343,7 @@ public class AuthenticationService : IAuthenticationService
                 Message =
                 "کد تایید قبلی هنوز فعال است"
             };
+
         }
 
 
@@ -395,6 +399,7 @@ public class AuthenticationService : IAuthenticationService
 
 
 
+
         if (validation != null)
             return validation;
 
@@ -410,6 +415,7 @@ public class AuthenticationService : IAuthenticationService
             .UpdateAsync(
                 otp,
                 cancellationToken);
+
 
 
 
@@ -448,6 +454,7 @@ public class AuthenticationService : IAuthenticationService
 
 
 
+
         /*
           اگر یک موبایل چند حساب داشته باشد
           همه حساب ها برگردانده می‌شوند
@@ -460,6 +467,7 @@ public class AuthenticationService : IAuthenticationService
 
             var result =
                 new List<AuthResult>();
+
 
 
 

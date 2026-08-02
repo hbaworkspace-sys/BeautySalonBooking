@@ -26,7 +26,7 @@ public partial class NextAndBackButtonView : ContentView
         set => SetValue(IsNextVisibleProperty, value);
     }
     public static readonly BindableProperty IsNextVisibleProperty =
-            BindableProperty.Create(nameof(IsNextVisible), typeof(bool), typeof(NextAndBackButtonView), default(bool));
+            BindableProperty.Create(nameof(IsNextVisible), typeof(bool), typeof(NextAndBackButtonView), false);
 
     public ICommand BackCommand
     {

@@ -1,10 +1,10 @@
+
 ﻿using BeautySalonBooking.Domain.Base.Entities;
 using BeautySalonBooking.Domain.Base.Enums;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Repositories;
 using BeautySalonBooking.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
-
 
 namespace BeautySalonBooking.Infrastructure.Persistence.Repositories;
 
@@ -68,12 +68,13 @@ public class UserRepository
     }
     public async Task<bool> ExistsByMobileNumberAsync(string mobileNumber, CancellationToken cancellationToken)
     {
-        return await _context.Users
-         .AnyAsync(
-         x => x.PhoneNumbers.Any(p =>
-         p.Number == mobileNumber &&
-         p.Type == PhoneNumberType.Mobile),
-         cancellationToken);
+        var xx = await _context.Users
+                    .AnyAsync(
+                    x => x.PhoneNumbers.Any(p =>
+                    p.Number == mobileNumber &&
+                    p.Type == PhoneNumberType.Mobile),
+                    cancellationToken);
+        return xx;
     }
 
     public async Task<List<User>> GetListUserAsync(string mobileNumber, CancellationToken cancellationToken)
@@ -87,11 +88,11 @@ public class UserRepository
         var personId = users.First().PersonId;
 
         var allUsers = await _context.Users
-    .Include(u => u.Person)
-    .Include(u => u.UserRole)
-    .ThenInclude(u => u.Role)
-    .Where(u => u.PersonId == personId)
-    .ToListAsync(cancellationToken);
+                .Include(u => u.Person)
+                .Include(u => u.UserRole)
+                .ThenInclude(u => u.Role)
+                .Where(u => u.PersonId == personId)
+                .ToListAsync(cancellationToken);
 
         return allUsers;
 

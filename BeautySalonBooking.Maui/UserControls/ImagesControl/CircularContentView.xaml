@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.UserControls.Images.CircularContentView"
+             x:Name="self"
+             HeightRequest="{Binding MainBorderSize ,Source={x:Reference self}}"
+             WidthRequest="{Binding MainBorderSize ,Source={x:Reference self}}">
+
+    <Grid
+        HeightRequest="{Binding MainBorderSize ,Source={x:Reference self}}"
+        WidthRequest="{Binding MainBorderSize ,Source={x:Reference self}}"
+        RowDefinitions="*">
+
+        <Border
+            Grid.Row="0"
+            x:Name="GlowBorder"
+            StrokeThickness="0"
+            HeightRequest="{Binding MainBorderSize ,Source={x:Reference self}}"
+            WidthRequest="{Binding MainBorderSize ,Source={x:Reference self}}"
+            BackgroundColor="#44FFFFFF"
+            Margin="0,0,0,0">
+            <Border.StrokeShape>
+                <RoundRectangle
+                    CornerRadius="100"/>
+            </Border.StrokeShape>
+        </Border>
+
+        <Border
+            Grid.Row="0"
+            x:Name="ContainerBorder"
+            StrokeThickness="3"
+            Stroke="{x:StaticResource White}"
+            HeightRequest="{Binding ImageBorderSize ,Source={x:Reference self}}"
+            WidthRequest="{Binding ImageBorderSize ,Source={x:Reference self}}">
+            <Border.Shadow>
+                <Shadow
+                    Brush="#f1e6ee"
+                    Offset="0,10"/>
+            </Border.Shadow>
+            <Border.StrokeShape>
+                <RoundRectangle
+                    CornerRadius="100"/>
+            </Border.StrokeShape>
+            <Border.Background>
+                <LinearGradientBrush
+                    StartPoint="0,0"
+                    EndPoint="0,1">
+                    <GradientStop
+                        Color="#eefabaac"
+                        Offset="0.0" />
+                    <GradientStop
+                        Color="#eef99bd3"
+                        Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid>
+                <Image
+                    x:Name="ImageBox"
+                    IsVisible="True"
+                    Margin="{Binding InternalMargin , Source={x:Reference self}}"
+                    Source="{Binding ImageSource ,Source={x:Reference self}}"/>
+                <Label
+                    x:Name="LblGlyph"
+                    IsVisible="False"
+                    FontSize="{Binding FontSize, Source={x:Reference self}}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    Style="{x:StaticResource GlyphLable}"
+                    Text="{Binding Glyph, Source={x:Reference self}}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</ContentView>

@@ -10,7 +10,7 @@
              x:DataType="vm:LoginViewModel">
 
     <Grid
-        RowDefinitions="auto,auto,*,auto,auto,auto,auto"
+        RowDefinitions="35,auto,*,auto,auto,auto,auto"
         RowSpacing="20"
         Padding="15,10,15,10">
 
@@ -26,7 +26,8 @@
         <uc:PhoneNumberEntry
             Grid.Row="2"
             Text="{Binding PhoneNumber, Mode=OneWayToSource}"
-            PhoneType="Mobile"/>
+            PhoneType="Mobile"
+            ReturnTypeValue="Done"/>
 
         <uc:DefaultButton
             Grid.Row="3"

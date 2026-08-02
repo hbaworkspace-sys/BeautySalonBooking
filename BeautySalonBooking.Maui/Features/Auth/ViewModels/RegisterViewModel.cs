@@ -1,5 +1,9 @@
-﻿using BeautySalonBooking.Contracts.Auth.Requests;
+﻿using BeautySalonBooking.Contracts.Authentication.Enums;
+using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Maui.Common.Enums;
+using BeautySalonBooking.Maui.Common.Interfaces;
+using BeautySalonBooking.Maui.Features.Auth.Models;
+using BeautySalonBooking.Maui.Features.Auth.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -7,10 +11,15 @@ namespace BeautySalonBooking.Maui.Features.Auth
 {
     public partial class RegisterViewModel : ObservableObject
     {
-        private readonly AuthApiService _authApiService;
-        public RegisterViewModel(AuthApiService authApi)
+        private readonly IAuthApiService _authApiService;
+        private readonly INavigationService _navigationService;
+        private readonly IDialogService _dialogService;
+
+        public RegisterViewModel(IAuthApiService authApiService, INavigationService navigationService, IDialogService dialogService)
         {
-            _authApiService = authApi;
+            _authApiService = authApiService;
+            _navigationService = navigationService;
+            _dialogService = dialogService;
         }
 
         [ObservableProperty]
@@ -46,25 +55,29 @@ namespace BeautySalonBooking.Maui.Features.Auth
                     {
                         FirstName = FirstName,
                         LastName = LastName,
-                        MobileNumber = PhoneNumber
+                        MobileNumber = PhoneNumber,
+                        NationalCode = NationalCode,
+                        Gender = Gender.Female
                     });
-
                 if (result.IsSuccess)
                 {
-                    await Shell.Current.GoToAsync(nameof(OtpPage), new Dictionary<string, object>
-                    {
-                        ["PhoneNumber"] = PhoneNumber,
-                        ["OtpPurposeType"] = OtpPurpose.Register
-                    });
+                    await _navigationService.GoToOtpAsync(
+                         new OtpNavigationModel
+                         {
+                             FirstName = FirstName,
+                             LastName = LastName,
+                             MobileNumber = PhoneNumber,
+                             Purpose = OtpPurpose.Register,
+                         });
                 }
                 else
                 {
-                    await Shell.Current.DisplayAlert("خطا", result.Message, "باشه");
+                    await _dialogService.ShowErrorAsync(result.Message);
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("خطا", ex.Message, "باشه");
+                await _dialogService.ShowErrorAsync(ex.Message);
             }
             finally
             {
@@ -73,48 +86,58 @@ namespace BeautySalonBooking.Maui.Features.Auth
         }
 
         [RelayCommand]
-        private async Task GoToLoginAsync()
+        private Task GoToLoginAsync()
         {
-            await Shell.Current.GoToAsync(nameof(LoginPage));
+            return _navigationService.GoToLoginAsync();
         }
         private async Task<bool> ValidateInputAsync()
         {
-            if (string.IsNullOrWhiteSpace(PhoneNumber))
-            {
-                await Shell.Current.DisplayAlert("خطا", "شماره موبایل را وارد کنید.", "باشه");
-                return false;
-            }
-
-            if (PhoneNumber.Length != 10)
-            {
-                await Shell.Current.DisplayAlert("خطا", "شماره موبایل باید ۱۰ رقم باشد.", "باشه");
-                return false;
-            }
-
             if (string.IsNullOrWhiteSpace(FirstName))
             {
-                await Shell.Current.DisplayAlert("خطا", "نام را وارد کنید.", "باشه");
+                await _dialogService.ShowErrorAsync("نام را وارد کنید.");
                 return false;
             }
 
             if (FirstName.Length > 50)
             {
-                await Shell.Current.DisplayAlert("خطا", "نام نباید بیشتر از 50 کاراکتر باشد.", "باشه");
+                await _dialogService.ShowErrorAsync("نام نباید بیشتر از 50 کاراکتر باشد.");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(LastName))
             {
-                await Shell.Current.DisplayAlert("خطا", "نام خانوادگی را وارد کنید.", "باشه");
+                await _dialogService.ShowErrorAsync("نام خانوادگی را وارد کنید.");
                 return false;
             }
 
             if (LastName.Length > 50)
             {
-                await Shell.Current.DisplayAlert("خطا", "نام خانوادگی نباید بیشتر از 50 کاراکتر باشد.", "باشه");
+                await _dialogService.ShowErrorAsync("نام خانوادگی نباید بیشتر از 50 کاراکتر باشد.");
                 return false;
             }
 
+            if (string.IsNullOrWhiteSpace(PhoneNumber))
+            {
+                await _dialogService.ShowErrorAsync("شماره موبایل را وارد کنید.");
+                return false;
+            }
+
+            if (PhoneNumber.Length != 10)
+            {
+                await _dialogService.ShowErrorAsync("شماره موبایل باید ۱۰ رقم باشد.");
+                return false;
+            }
+
+            if (NationalCode.Length != 10)
+            {
+                await _dialogService.ShowErrorAsync("کد ملی باید ۱۰ رقم باشد.");
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(NationalCode))
+            {
+                await _dialogService.ShowErrorAsync("کد ملی را وارد کنید.");
+                return false;
+            }
             return true;
         }
     }

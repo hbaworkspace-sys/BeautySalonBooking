@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BeautySalonBooking.Maui.Features.Auth.Views.RegistrationSuccessPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="{StaticResource White}"
+             xmlns:ucImg="clr-namespace:BeautySalonBooking.Maui.UserControls.Images"
+             xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
+             xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth.ViewModels"
+             x:DataType="vm:RegistrationSuccessViewModel">
+
+    <Grid
+        RowDefinitions="*,1.5*,*,*">
+
+        <ucImg:CircularContentView
+            Grid.Row="1"
+            VerticalOptions="Start"
+            Size="Large"
+            IsGolwEffectVisible="True"
+            ContentType="Glyph"
+            Glyph="check"/>
+
+        <uc:TitleSubtitleView
+            Grid.Row="2"
+            Title="تبریک می گوییم !"
+            Subtitle="حساب کاربری شما با موفقیت ایجاد شد&#10;حالا می توانید از امکانات آپ استفاده کنید"/>
+
+        <uc:DefaultButton
+            Grid.Row="3"
+            Title="شروع کنید"
+            HCommand="{Binding GoToDashbordPageCommand}"/>
+    </Grid>
+</ContentPage>
