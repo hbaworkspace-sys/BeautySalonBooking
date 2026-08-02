@@ -12,6 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="A1\Enums\" />
 		<Folder Include="Permission\Requests\" />
 		<Folder Include="Permission\Responses\" />
 		<Folder Include="A1\Dtos\" />

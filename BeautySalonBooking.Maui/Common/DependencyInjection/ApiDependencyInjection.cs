@@ -48,7 +48,7 @@ public static class ApiDependencyInjection
 
     private static void Configure(HttpClient client)
     {
-        client.BaseAddress = new Uri("https://192.168.1.100:7036/");
+        client.BaseAddress = new Uri("https://192.168.1.103:7036/");
         client.Timeout = TimeSpan.FromSeconds(30);
     }
 

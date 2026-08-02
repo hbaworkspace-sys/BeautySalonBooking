@@ -4,7 +4,7 @@ using BeautySalonBooking.Contracts.Authentication.Requests;
 
 using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
-using FluentValidation;
+//using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

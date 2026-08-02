@@ -1,4 +1,4 @@
-namespace BeautySalonBooking.Maui.UserControls.IndicatorsControl;
+namespace BeautySalonBooking.Maui.UserControls.Indicators;
 
 public partial class SimpleIndicator : ContentView
 {

@@ -1,4 +1,5 @@
 ﻿using BeautySalonBooking.Maui.Common.Enums;
+using BeautySalonBooking.Maui.Features.Auth.Models;
 
 namespace BeautySalonBooking.Maui.Common.Interfaces;
 
@@ -8,6 +9,7 @@ public interface INavigationService
     Task GoToOnboardingAsync();
     Task GoToLoginAsync();
     Task GoToRegisterAsync();
-    Task GoToOtpAsync(string phoneNumber, OtpPurpose purpose);
-
+    Task GoToOtpAsync(OtpNavigationModel model);
+    Task GoToRegistrationSuccessAsync();
+    Task GoToDashboardAsync();
 }

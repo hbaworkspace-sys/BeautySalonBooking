@@ -17,7 +17,7 @@
 
         <ucBtn:NextAndBackButtonView
             Grid.Row="0"
-            IsBackVisible="False"/>
+            IsBackVisible="True"/>
 
         <uc:TitleSubtitleView
             Grid.Row="1"
@@ -50,7 +50,8 @@
 
             <uc:TextEntry
                 PlaceHolder="جنسیت"
-                Glyph="{x:Static icon:IconSymbols.IdCard}"/>
+                Glyph="{x:Static icon:IconSymbols.IdCard}"
+                ReturnTypeValue="Done"/>
 
         </VerticalStackLayout>
 
