@@ -3,7 +3,6 @@
 public enum PermissionType : byte
 {
     Menu = 1,
-    Action = 2,
-    Api = 3,
-    Report = 4
+    Permission = 2,
+
 }

@@ -1,4 +1,5 @@
 ﻿using BeautySalonBooking.Contracts.Authentication.Dtos;
+using BeautySalonBooking.WebApp.Authentication;
 using BeautySalonBooking.WebApp.Interfaces.Common;
 using Microsoft.AspNetCore.Components;
 
@@ -9,15 +10,18 @@ namespace BeautySalonBooking.WebApp.Services.Common
         private readonly ITokenService _tokenService;
         private readonly NavigationManager _navigationManager;
         private readonly ILogger<SessionManager> _logger;
+        private readonly CustomAuthenticationStateProvider _authProvider;
 
         public SessionManager(
             ITokenService tokenService,
             NavigationManager navigationManager,
-            ILogger<SessionManager> logger)
+            ILogger<SessionManager> logger,
+            CustomAuthenticationStateProvider authProvider)
         {
             _tokenService = tokenService;
             _navigationManager = navigationManager;
             _logger = logger;
+            _authProvider = authProvider;
         }
 
         public async Task<bool> ValidateCurrentSessionAsync()
@@ -79,10 +83,16 @@ namespace BeautySalonBooking.WebApp.Services.Common
         public async Task LogoutAsync()
         {
             await _tokenService.ClearTokensAsync();
+
+
+            _authProvider.NotifyUserLogout();
+
+
             _navigationManager.NavigateTo("/login", true);
+
+
             _logger.LogInformation("User logged out");
         }
-
         public async Task<UserDto> GetCurrentUserAsync()
         {
             return await _tokenService.GetCurrentUserAsync();

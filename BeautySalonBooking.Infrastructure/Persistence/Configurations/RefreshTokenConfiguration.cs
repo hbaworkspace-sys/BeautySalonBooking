@@ -14,7 +14,7 @@ public sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refresh
 
         builder.ConfigureAuditableEntity<RefreshToken, long>();
 
-        builder.Property(x => x.Token)
+        builder.Property(x => x.TokenHash)
             .IsRequired()
             .HasMaxLength(500);
 
@@ -28,6 +28,6 @@ public sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<Refresh
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-     
+
     }
 }

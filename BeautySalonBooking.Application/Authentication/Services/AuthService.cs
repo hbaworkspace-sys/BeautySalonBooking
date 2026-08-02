@@ -12,295 +12,295 @@ using System.Security.Claims;
 
 namespace BeautySalonBooking.Application.Authentication.Services;
 
-public class AuthService : IAuthService
-{
-    private readonly ITokenService _tokenService;
-    private readonly IUserRepository _userRepository;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ILogger<AuthService> _logger;
-    private readonly IUserSessionService _userSessionService;
+//public class AuthService : IAuthService
+//{
+//    private readonly ITokenService _tokenService;
+//    private readonly IUserRepository _userRepository;
+//    private readonly IHttpContextAccessor _httpContextAccessor;
+//    private readonly ILogger<AuthService> _logger;
+//    private readonly IUserSessionService _userSessionService;
 
-    public AuthService(
-        ITokenService tokenService,
-        IUserRepository userRepository,
-        IHttpContextAccessor httpContextAccessor,
-        ILogger<AuthService> logger,
-        IUserSessionService userSessionService)
-    {
-        _tokenService = tokenService;
-        _userRepository = userRepository;
-        _httpContextAccessor = httpContextAccessor;
-        _logger = logger;
-        _userSessionService = userSessionService;
-    }
+//    public AuthService(
+//        ITokenService tokenService,
+//        IUserRepository userRepository,
+//        IHttpContextAccessor httpContextAccessor,
+//        ILogger<AuthService> logger,
+//        IUserSessionService userSessionService)
+//    {
+//        _tokenService = tokenService;
+//        _userRepository = userRepository;
+//        _httpContextAccessor = httpContextAccessor;
+//        _logger = logger;
+//        _userSessionService = userSessionService;
+//    }
 
-    public async Task<AuthResult> AuthenticateAsync(string username, string password, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var existingUser = await _userRepository.GetByUserName(username);
+//    public async Task<AuthResult> AuthenticateAsync(string username, string password, CancellationToken cancellationToken)
+//    {
+//        try
+//        {
+//            var existingUser = await _userRepository.GetByUserName(username);
 
-            if (existingUser == null || !VerifyPassword(password, existingUser.PasswordHash))
-            {
-                _logger.LogWarning("Authentication failed for username: {Username}", username);
-                return AuthResult.Failure("Invalid credentials");
-            }
+//            if (existingUser == null || !VerifyPassword(password, existingUser.PasswordHash))
+//            {
+//                _logger.LogWarning("Authentication failed for username: {Username}", username);
+//                return AuthResult.Failure("Invalid credentials");
+//            }
 
-            // فعال کردن session کاربر
-            await _userSessionService.ActivateUserSessionAsync(existingUser.Id);
+//            // فعال کردن session کاربر
+//            await _userSessionService.ActivateUserSessionAsync(existingUser.Id);
 
-            var currentUser = MapToUserDto(existingUser);
-            var tokens = await _tokenService.GenerateTokensAsync(currentUser, cancellationToken);
-            // ✅ دریافت منوهای کاربر
-            //var menuService = _httpContextAccessor.HttpContext.RequestServices
-            //    .GetRequiredService<IMenuService>();
-            //var userMenus = await menuService.GetUserMenusAsync(existingUser.Id);
+//            var currentUser = MapToUserDto(existingUser);
+//            var tokens = await _tokenService.GenerateTokensAsync(currentUser, cancellationToken);
+//            // ✅ دریافت منوهای کاربر
+//            //var menuService = _httpContextAccessor.HttpContext.RequestServices
+//            //    .GetRequiredService<IMenuService>();
+//            //var userMenus = await menuService.GetUserMenusAsync(existingUser.Id);
 
 
-            _logger.LogInformation("User {Username} authenticated successfully. UserId: {UserId}",
-                username, existingUser.Id);
+//            _logger.LogInformation("User {Username} authenticated successfully. UserId: {UserId}",
+//                username, existingUser.Id);
 
-            return AuthResult.Success(tokens, currentUser);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Authentication failed for username: {Username}", username);
-            return AuthResult.Failure("Authentication failed");
-        }
-    }
+//            return AuthResult.Success(tokens, currentUser);
+//        }
+//        catch (Exception ex)
+//        {
+//            _logger.LogError(ex, "Authentication failed for username: {Username}", username);
+//            return AuthResult.Failure("Authentication failed");
+//        }
+//    }
 
-    public async Task<AuthResult> RefreshTokenAsync(string accessToken, string refreshToken, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var tokens = await _tokenService.RefreshTokensAsync(accessToken, refreshToken, cancellationToken);
+//    public async Task<AuthResult> RefreshTokenAsync(string accessToken, string refreshToken, CancellationToken cancellationToken)
+//    {
+//        try
+//        {
+//            var tokens = await _tokenService.RefreshTokensAsync(accessToken, refreshToken, cancellationToken);
 
-            var principal = _tokenService.ValidateToken(tokens.AccessToken, cancellationToken);
-            var userId = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+//            var principal = _tokenService.ValidateToken(tokens.AccessToken, cancellationToken);
+//            var userId = principal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int id))
-                return AuthResult.Failure("Invalid token");
+//            if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int id))
+//                return AuthResult.Failure("Invalid token");
 
-            // بررسی فعال بودن session
-            var isSessionActive = await _userSessionService.IsUserSessionActiveAsync(id);
-            if (!isSessionActive)
-            {
-                _logger.LogWarning("Session is not active for user {UserId} during token refresh", id);
-                return AuthResult.Failure("Session expired");
-            }
+//            // بررسی فعال بودن session
+//            var isSessionActive = await _userSessionService.IsUserSessionActiveAsync(id);
+//            if (!isSessionActive)
+//            {
+//                _logger.LogWarning("Session is not active for user {UserId} during token refresh", id);
+//                return AuthResult.Failure("Session expired");
+//            }
 
-            // تمدید session
-            await _userSessionService.ExtendUserSessionAsync(id);
+//            // تمدید session
+//            await _userSessionService.ExtendUserSessionAsync(id);
 
-            var existingUser = await _userRepository.GetByIdAsync(id);
-            if (existingUser == null)
-                return AuthResult.Failure("User not found");
+//            var existingUser = await _userRepository.GetByIdAsync(id);
+//            if (existingUser == null)
+//                return AuthResult.Failure("User not found");
 
-            var currentUser = MapToUserDto(existingUser);
+//            var currentUser = MapToUserDto(existingUser);
 
-            _logger.LogInformation("Token refreshed for user {UserId}", userId);
-            return AuthResult.Success(tokens, currentUser);
-        }
-        catch (SecurityTokenException ex)
-        {
-            _logger.LogWarning("Token refresh failed: {Message}", ex.Message);
-            return AuthResult.Failure(ex.Message);
-        }
-    }
+//            _logger.LogInformation("Token refreshed for user {UserId}", userId);
+//            return AuthResult.Success(tokens, currentUser);
+//        }
+//        catch (SecurityTokenException ex)
+//        {
+//            _logger.LogWarning("Token refresh failed: {Message}", ex.Message);
+//            return AuthResult.Failure(ex.Message);
+//        }
+//    }
 
-    public async Task<bool> ValidateTokenAsync(string token, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var principal = _tokenService.ValidateToken(token, cancellationToken);
-            if (principal == null) return false;
+//    public async Task<bool> ValidateTokenAsync(string token, CancellationToken cancellationToken)
+//    {
+//        try
+//        {
+//            var principal = _tokenService.ValidateToken(token, cancellationToken);
+//            if (principal == null) return false;
 
-            var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int id))
-                return false;
+//            var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+//            if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int id))
+//                return false;
 
-            // بررسی وجود کاربر در دیتابیس
-            var user = await _userRepository.GetByIdAsync(id);
-            if (user == null)
-                return false;
+//            // بررسی وجود کاربر در دیتابیس
+//            var user = await _userRepository.GetByIdAsync(id);
+//            if (user == null)
+//                return false;
 
-            // بررسی فعال بودن session
-            var isSessionActive = await _userSessionService.IsUserSessionActiveAsync(id);
-            return isSessionActive;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Token validation failed");
-            return false;
-        }
-    }
+//            // بررسی فعال بودن session
+//            var isSessionActive = await _userSessionService.IsUserSessionActiveAsync(id);
+//            return isSessionActive;
+//        }
+//        catch (Exception ex)
+//        {
+//            _logger.LogError(ex, "Token validation failed");
+//            return false;
+//        }
+//    }
 
-    public async Task<User?> GetCurrentUserAsync()
-    {
-        try
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext?.User?.Identity?.IsAuthenticated != true)
-                return null;
+//    public async Task<User?> GetCurrentUserAsync()
+//    {
+//        try
+//        {
+//            var httpContext = _httpContextAccessor.HttpContext;
+//            if (httpContext?.User?.Identity?.IsAuthenticated != true)
+//                return null;
 
-            var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int id))
-                return null;
+//            var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+//            if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int id))
+//                return null;
 
-            // بررسی فعال بودن session
-            var isSessionActive = await _userSessionService.IsUserSessionActiveAsync(id);
-            if (!isSessionActive)
-            {
-                _logger.LogDebug("Session not active for user {UserId}", id);
-                return null;
-            }
+//            // بررسی فعال بودن session
+//            var isSessionActive = await _userSessionService.IsUserSessionActiveAsync(id);
+//            if (!isSessionActive)
+//            {
+//                _logger.LogDebug("Session not active for user {UserId}", id);
+//                return null;
+//            }
 
-            // تمدید session با هر بار دسترسی
-            await _userSessionService.ExtendUserSessionAsync(id);
+//            // تمدید session با هر بار دسترسی
+//            await _userSessionService.ExtendUserSessionAsync(id);
 
-            return await _userRepository.GetByIdAsync(id);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error getting current user");
-            return null;
-        }
-    }
+//            return await _userRepository.GetByIdAsync(id);
+//        }
+//        catch (Exception ex)
+//        {
+//            _logger.LogError(ex, "Error getting current user");
+//            return null;
+//        }
+//    }
 
-    public async Task<bool> HasPermissionAsync(string permission)
-    {
-        var user = await GetCurrentUserAsync();
-        return true;// user?.AuthenticationType >= GetRequiredPermissionLevel(permission);
-    }
+//    public async Task<bool> HasPermissionAsync(string permission)
+//    {
+//        var user = await GetCurrentUserAsync();
+//        return true;// user?.AuthenticationType >= GetRequiredPermissionLevel(permission);
+//    }
 
-    // ✅ متد جدید برای بررسی سریع session
-    public async Task<SessionCheckResult> QuickSessionCheckAsync(int userId)
-    {
-        try
-        {
-            var isActive = await _userSessionService.IsUserSessionActiveAsync(userId);
-            var sessionInfo = await _userSessionService.GetSessionInfoAsync(userId);
+//    // ✅ متد جدید برای بررسی سریع session
+//    public async Task<SessionCheckResult> QuickSessionCheckAsync(int userId)
+//    {
+//        try
+//        {
+//            var isActive = await _userSessionService.IsUserSessionActiveAsync(userId);
+//            var sessionInfo = await _userSessionService.GetSessionInfoAsync(userId);
 
-            if (!isActive)
-            {
-                _logger.LogDebug("Session check failed for user {UserId}", userId);
-            }
+//            if (!isActive)
+//            {
+//                _logger.LogDebug("Session check failed for user {UserId}", userId);
+//            }
 
-            return new SessionCheckResult
-            {
-                IsValid = isActive,
-                RequiresLogin = !isActive,
-                Message = isActive ? "Session is active" : "Session expired or not found",
-                SessionInfo = sessionInfo
-            };
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error during quick session check for user {UserId}", userId);
-            return new SessionCheckResult
-            {
-                IsValid = false,
-                RequiresLogin = true,
-                Message = "Error checking session"
-            };
-        }
-    }
+//            return new SessionCheckResult
+//            {
+//                IsValid = isActive,
+//                RequiresLogin = !isActive,
+//                Message = isActive ? "Session is active" : "Session expired or not found",
+//                SessionInfo = sessionInfo
+//            };
+//        }
+//        catch (Exception ex)
+//        {
+//            _logger.LogError(ex, "Error during quick session check for user {UserId}", userId);
+//            return new SessionCheckResult
+//            {
+//                IsValid = false,
+//                RequiresLogin = true,
+//                Message = "Error checking session"
+//            };
+//        }
+//    }
 
-    // ✅ متد برای لاگ‌اوت
-    public async Task<bool> LogoutAsync(long userId)
-    {
-        try
-        {
-            await _userSessionService.DeactivateUserSessionAsync(userId);
-            _logger.LogInformation("User {UserId} logged out successfully", userId);
-            return true;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error logging out user {UserId}", userId);
-            return false;
-        }
-    }
+//    // ✅ متد برای لاگ‌اوت
+//    public async Task<bool> LogoutAsync(long userId)
+//    {
+//        try
+//        {
+//            await _userSessionService.DeactivateUserSessionAsync(userId);
+//            _logger.LogInformation("User {UserId} logged out successfully", userId);
+//            return true;
+//        }
+//        catch (Exception ex)
+//        {
+//            _logger.LogError(ex, "Error logging out user {UserId}", userId);
+//            return false;
+//        }
+//    }
 
-    // ✅ متد برای لاگ‌اوت کاربر جاری
-    public async Task<bool> LogoutCurrentUserAsync()
-    {
-        try
-        {
-            var user = await GetCurrentUserAsync();
-            if (user != null)
-            {
-                return await LogoutAsync(user.Id);
-            }
-            return false;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error logging out current user");
-            return false;
-        }
-    }
+//    // ✅ متد برای لاگ‌اوت کاربر جاری
+//    public async Task<bool> LogoutCurrentUserAsync()
+//    {
+//        try
+//        {
+//            var user = await GetCurrentUserAsync();
+//            if (user != null)
+//            {
+//                return await LogoutAsync(user.Id);
+//            }
+//            return false;
+//        }
+//        catch (Exception ex)
+//        {
+//            _logger.LogError(ex, "Error logging out current user");
+//            return false;
+//        }
+//    }
 
-    private static bool VerifyPassword(string password, string storedPassword)
-    {
-        // در واقعیت از BCrypt یا similar استفاده کنید
-        // این فقط برای demo است
-        return password == storedPassword;
-    }
+//    private static bool VerifyPassword(string password, string storedPassword)
+//    {
+//        // در واقعیت از BCrypt یا similar استفاده کنید
+//        // این فقط برای demo است
+//        return password == storedPassword;
+//    }
 
-    private static int GetRequiredPermissionLevel(string permission) => permission switch
-    {
-        "read" => 1,
-        "write" => 2,
-        "admin" => 3,
-        _ => 0
-    };
-    public async Task<User?> GetCurrentUserSafeAsync()
-    {
-        try
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext?.User?.Identity?.IsAuthenticated != true)
-                return null;
+//    private static int GetRequiredPermissionLevel(string permission) => permission switch
+//    {
+//        "read" => 1,
+//        "write" => 2,
+//        "admin" => 3,
+//        _ => 0
+//    };
+//    public async Task<User?> GetCurrentUserSafeAsync()
+//    {
+//        try
+//        {
+//            var httpContext = _httpContextAccessor.HttpContext;
+//            if (httpContext?.User?.Identity?.IsAuthenticated != true)
+//                return null;
 
-            var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int id))
-                return null;
+//            var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+//            if (string.IsNullOrEmpty(userId) || !int.TryParse(userId, out int id))
+//                return null;
 
-            // بررسی session
-            var isSessionActive = await _userSessionService.IsUserSessionActiveAsync(id);
-            if (!isSessionActive)
-            {
-                _logger.LogWarning("Session not active for user {UserId}", id);
-                return null;
-            }
+//            // بررسی session
+//            var isSessionActive = await _userSessionService.IsUserSessionActiveAsync(id);
+//            if (!isSessionActive)
+//            {
+//                _logger.LogWarning("Session not active for user {UserId}", id);
+//                return null;
+//            }
 
-            // تمدید session
-            await _userSessionService.ExtendUserSessionAsync(id);
+//            // تمدید session
+//            await _userSessionService.ExtendUserSessionAsync(id);
 
-            return await _userRepository.GetByIdAsync(id);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error in GetCurrentUserSafeAsync");
-            return null;
-        }
-    }
-    private static UserDto MapToUserDto(User user)
-    {
-        return new UserDto
-        {
-            //Id = user.Id,
-            //PhoneNumber = user.PhoneNumber,
-            //FirstName = user.FirstName,
-            //LastName = user.LastName,
-            //Email = user.Email,
-            //AuthenticationType = user.AuthenticationType,
-            //NationalCode = user.NationalCode,
-            UserName = user.UserName
-        };
-    }
-}
+//            return await _userRepository.GetByIdAsync(id);
+//        }
+//        catch (Exception ex)
+//        {
+//            _logger.LogError(ex, "Error in GetCurrentUserSafeAsync");
+//            return null;
+//        }
+//    }
+//    private static UserDto MapToUserDto(User user)
+//    {
+//        return new UserDto
+//        {
+//            //Id = user.Id,
+//            //PhoneNumber = user.PhoneNumber,
+//            //FirstName = user.FirstName,
+//            //LastName = user.LastName,
+//            //Email = user.Email,
+//            //AuthenticationType = user.AuthenticationType,
+//            //NationalCode = user.NationalCode,
+//            UserName = user.UserName
+//        };
+//    }
+//}
 
 
 

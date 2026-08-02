@@ -16,7 +16,8 @@
 @inject IMemoryCache MemoryCache
 @using BeautySalonBooking.WebApp.Helpers
 @inject ITokenService TokenService
-
+@using BeautySalonBooking.WebApp.Authentication
+@inject CustomAuthenticationStateProvider _authProvider
 <PageTitle>تایید کد | بیوتی سالن</PageTitle>
 
 <main class="login-page beauty-login" dir="rtl">
@@ -167,13 +168,13 @@
                                     @(!string.IsNullOrEmpty(user.FirstName) ? $"{user.FirstName} {user.LastName}" : user.UserName)
                                 </strong>
                                 <span class="badge" style="background: @roleColor; color: white; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 500;">
-                                    @roleName
+                                    @user.Roles.FirstOrDefault()
                                 </span>
                             </div>
                             <div style="color: #ad8992; font-size: 12px; margin-top: 4px;">
                                 @roleDesc
                             </div>
-                            <div style="color: #ad8992; font-size: 11px; margin-top: 2px;">
+                            <div style="color: #ad8992; font-size: 11px; margin-top: 2px; direction:ltr">
                                 @(!string.IsNullOrEmpty(user.PhoneNumber) ? FormatPhoneNumber(user.PhoneNumber) : "شماره نامشخص")
                             </div>
                         </div>
@@ -463,7 +464,14 @@
                     if (_allUsers.Count == 1)
                     {
                         var singleUser = response.ListPayload.First();
-                        await TokenService.SetTokensAsync(singleUser.Tokens, singleUser.User);
+                        await TokenService.SetTokensAsync(
+     singleUser.Tokens,
+     singleUser.User);
+
+
+                        _authProvider.NotifyUserAuthentication(
+                            singleUser.Tokens.AccessToken);
+
 
                         if (!string.IsNullOrEmpty(SessionId))
                         {

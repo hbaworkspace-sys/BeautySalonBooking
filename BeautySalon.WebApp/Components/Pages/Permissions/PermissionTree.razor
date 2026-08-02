@@ -1,0 +1,26 @@
+﻿@using BeautySalonBooking.Contracts.Authentication.Dtos
+
+
+<div class="permission-tree">
+
+    @foreach (var item in Items)
+    {
+        <TreeNode Item="item"
+                  Level="0"
+                  OnSelected="OnSelected" />
+    }
+
+</div>
+
+
+@code {
+
+    [Parameter]
+    public List<PermissionTreeDto> Items { get; set; }
+        = new();
+
+
+    [Parameter]
+    public EventCallback<PermissionTreeDto> OnSelected { get; set; }
+
+}

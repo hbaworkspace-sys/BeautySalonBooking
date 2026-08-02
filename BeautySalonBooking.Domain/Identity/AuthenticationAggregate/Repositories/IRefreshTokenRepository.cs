@@ -3,8 +3,9 @@
 namespace BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Repositories;
 public interface IRefreshTokenRepository
 {
-    Task<RefreshToken?> GetValidTokenAsync(string token);
-    Task AddAsync(RefreshToken refreshToken);
+    Task<RefreshToken?> GetByHashAsync(string hash);
+    //Task<RefreshToken?> GetValidTokenAsync(string token);
+    Task AddAsync(RefreshToken refreshToken, CancellationToken cancellationToken);
     void Update(RefreshToken refreshToken);
 
     // ========== متد جدید ==========

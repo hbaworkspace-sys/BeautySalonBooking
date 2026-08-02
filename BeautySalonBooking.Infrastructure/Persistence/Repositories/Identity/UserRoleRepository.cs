@@ -1,27 +1,75 @@
-﻿using BeautySalonBooking.Domain.Identity.UserAggregate.Entities;
+﻿using BeautySalonBooking.Domain.Base.Entities;
+using BeautySalonBooking.Domain.Base.Enums;
+using BeautySalonBooking.Domain.Identity.UserAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Repositories;
-namespace BeautySalonBooking.Infrastructure.Persistence.Repositories.Identity;
+using BeautySalonBooking.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-public sealed class UserRoleRepository : IUserRoleRepository
+
+namespace BeautySalonBooking.Infrastructure.Persistence.Repositories;
+
+
+public class UserRoleRepository
+    : Repository<UserRole, long>, IUserRoleRepository
 {
-    private readonly BeautyDbContext _context;
 
-    public UserRoleRepository(BeautyDbContext context)
+
+    public UserRoleRepository(
+        BeautyDbContext context)
+        : base(context)
     {
-        _context = context;
-    }
-    public async Task AddAsync(UserRole userRole, CancellationToken cancellationToken)
-    {
-        await _context.UserRoles.AddAsync(userRole, cancellationToken);
+
     }
 
-    public Task<UserRole?> GetByIdAsync(long id, CancellationToken cancellationToken)
+
+    public async Task<bool> UserNameExistsAsync(
+    string userName,
+    CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+    public async Task<bool> ExistsAsync(
+    long userId,
+    int roleId,
+    CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
-    public async Task UpdateAsync(UserRole userRole, CancellationToken cancellationToken)
+    public async Task<IEnumerable<UserRole>> GetByRoleIdAsync(
+        int roleId,
+        CancellationToken cancellationToken = default)
     {
-        _context.UserRoles.Update(userRole);
+        throw new NotImplementedException();
     }
+
+    public async Task<IEnumerable<UserRole>> GetByUserIdAsync(
+        long userId,
+        CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<UserRole?> GetByIdAsync(
+        long id,
+        CancellationToken cancellationToken = default)
+    {
+        return await base.GetByIdAsync(
+            id,
+            cancellationToken);
+    }
+
+
+
+    public async Task<UserRole> UpdateAsync(
+        UserRole entity,
+        CancellationToken cancellationToken = default)
+    {
+
+        Update(entity);
+
+        return entity;
+
+    }
+
 }

@@ -12,12 +12,12 @@ public sealed class RoleService : IRoleService
 {
 
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IAuthService _authService;
-    public RoleService(IUnitOfWork unitOfWork, IAuthService authService)
-    {
 
+
+    public RoleService(
+        IUnitOfWork unitOfWork)
+    {
         _unitOfWork = unitOfWork;
-        _authService = authService;
     }
 
     public async Task<Role> GetDefaultCustomerRoleAsync(CancellationToken cancellationToken)
@@ -184,20 +184,20 @@ public sealed class RoleService : IRoleService
         if (role.Code == RoleCode.SystemAdmin || role.Code == RoleCode.Customer)
             throw new InvalidOperationException($"نقش '{role.Title}' یک نقش سیستمی است و قابل حذف نمی‌باشد.");
 
-        await _unitOfWork.BeginTransactionAsync(cancellationToken);
-        try
-        {
-            var user = await _authService.GetCurrentUserAsync();
-            role.Delete(user.Id);
-            //_unitOfWork.RoleRepository.Delete(role);
+        //await _unitOfWork.BeginTransactionAsync(cancellationToken);
+        //try
+        //{
+        //    var user = await _authService.GetCurrentUserAsync();
+        //    role.Delete(user.Id);
+        //    //_unitOfWork.RoleRepository.Delete(role);
 
-            await _unitOfWork.CommitAsync(cancellationToken);
-        }
-        catch (Exception)
-        {
+        //    await _unitOfWork.CommitAsync(cancellationToken);
+        //}
+        //catch (Exception)
+        //{
 
-            throw;
-        }
+        //    throw;
+        //}
 
     }
 }

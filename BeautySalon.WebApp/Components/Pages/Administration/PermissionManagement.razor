@@ -1,0 +1,102 @@
+﻿@page "/admin/permissions"
+
+
+@using BeautySalonBooking.Contracts.Authentication.Dtos
+@using BeautySalonBooking.WebApp.Interfaces.Permissions
+
+
+@inject IPermissionApiService PermissionService
+
+
+
+<h3>
+    مدیریت دسترسی ها
+</h3>
+
+
+@if (_loading)
+{
+    <p>در حال دریافت اطلاعات...</p>
+}
+else
+{
+
+    <PermissionTree Items="_permissions"
+                    OnSelected="PermissionSelected" />
+
+
+}
+
+
+
+@if (_selected != null)
+{
+    <hr />
+
+    <h4>
+        دسترسی انتخاب شده:
+    </h4>
+
+
+    <p>
+        @_selected.Title
+    </p>
+
+
+    <button class="btn btn-primary">
+        افزودن
+    </button>
+
+
+    <button class="btn btn-warning">
+        ویرایش
+    </button>
+
+
+    <button class="btn btn-danger">
+        حذف
+    </button>
+}
+
+
+
+@code {
+
+
+    private List<PermissionTreeDto> _permissions
+        = new();
+
+
+    private PermissionTreeDto? _selected;
+
+
+    private bool _loading;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        _loading = true;
+
+
+        _permissions =
+            await PermissionService
+            .GetTreeAsync();
+
+
+
+        _loading = false;
+
+    }
+
+
+
+    private void PermissionSelected(
+        PermissionTreeDto permission)
+    {
+        _selected = permission;
+    }
+
+
+}

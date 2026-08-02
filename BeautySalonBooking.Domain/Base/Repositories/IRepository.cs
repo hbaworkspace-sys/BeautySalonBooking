@@ -9,6 +9,7 @@ where TEntity : BaseEntity<TKey>
 where TKey : struct
 {
     // ========== عملیات پایه ==========
+    Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includes);
     Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
     Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
     Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);

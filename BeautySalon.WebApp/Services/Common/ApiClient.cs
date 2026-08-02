@@ -5,6 +5,7 @@ using BeautySalonBooking.WebApp.Settings;
 using BeautySalonBooking.WebApp.Interfaces.Common;
 using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Contracts.Authentication.Responses;
+using BeautySalonBooking.Contracts.Common;
 
 namespace BeautySalonBooking.WebApp.Services.Common
 {
@@ -46,15 +47,14 @@ namespace BeautySalonBooking.WebApp.Services.Common
         // ========== متد جدید برای Refresh Token ==========
         private async Task<bool> RefreshTokenAsync()
         {
-            // اگر در حال Refresh هستیم، صبر می‌کنیم
             if (_isRefreshing)
             {
                 await _refreshLock.WaitAsync();
+
                 try
                 {
-                    // بعد از اتمام Refresh، توکن جدید رو بررسی می‌کنیم
-                    var newToken = await _tokenService.GetAccessTokenAsync();
-                    return !string.IsNullOrEmpty(newToken);
+                    var existingToken = await _tokenService.GetAccessTokenAsync();
+                    return !string.IsNullOrEmpty(existingToken);
                 }
                 finally
                 {
@@ -62,57 +62,132 @@ namespace BeautySalonBooking.WebApp.Services.Common
                 }
             }
 
+
             await _refreshLock.WaitAsync();
+
             try
             {
                 _isRefreshing = true;
 
+
                 var refreshToken = await _tokenService.GetRefreshTokenAsync();
-                if (string.IsNullOrEmpty(refreshToken))
+
+                if (string.IsNullOrWhiteSpace(refreshToken))
                 {
-                    _logger.LogWarning("No refresh token available");
+                    _logger.LogWarning("Refresh token not found");
                     return false;
                 }
 
-                _logger.LogInformation("Attempting to refresh token...");
 
-                // درخواست Refresh Token به سرور
-                var refreshRequest = new RefreshTokenRequest
+                var request = new RefreshTokenRequest
                 {
                     RefreshToken = refreshToken
                 };
 
-                var json = JsonSerializer.Serialize(refreshRequest);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var endpoint = $"{_settings.BaseUrl}/api/auth/refresh-token"; // آدرس Endpoint Refresh Token
-                var response = await _httpClient.PostAsync(endpoint, content);
+                var json = JsonSerializer.Serialize(request);
 
-                if (response.IsSuccessStatusCode)
+                using var content = new StringContent(
+                    json,
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+
+                // خواندن Endpoint از appsettings.json
+                var endpoint = _settings.Endpoints.Authentication.RefreshToken;
+
+
+                _logger.LogInformation(
+                    "Sending refresh token request to {Endpoint}",
+                    endpoint
+                );
+
+
+                var response = await _httpClient.PostAsync(
+                    endpoint,
+                    content
+                );
+
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                    };
+                    var error =
+                        await response.Content.ReadAsStringAsync();
 
-                    var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent, options);
+                    _logger.LogWarning(
+                        "Refresh token failed. Status: {Status}, Response: {Response}",
+                        response.StatusCode,
+                        error
+                    );
 
-                    if (tokenResponse != null)
-                    {
-                        // ذخیره توکن جدید
-                        await _tokenService.UpdateTokensAsync(tokenResponse);
-                        _logger.LogInformation("Token refreshed successfully");
-                        return true;
-                    }
+                    return false;
                 }
 
-                _logger.LogWarning("Token refresh failed");
-                return false;
+
+                var responseContent =
+                    await response.Content.ReadAsStringAsync();
+
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+
+                /*
+                  اگر API شما این خروجی را دارد:
+
+                  {
+                     "isSuccess":true,
+                     "payload":{
+                         "accessToken":"",
+                         "refreshToken":"",
+                         "expiresAt":""
+                     }
+                  }
+
+                */
+
+                var result =
+                    JsonSerializer.Deserialize<ApiResponse_New<TokenResponse>>(
+                        responseContent,
+                        options
+                    );
+
+
+                if (result == null ||
+                    !result.IsSuccess ||
+                    result.Payload == null)
+                {
+                    _logger.LogWarning(
+                        "Invalid refresh token response"
+                    );
+
+                    return false;
+                }
+
+
+                await _tokenService.UpdateTokensAsync(
+                    result.Payload
+                );
+
+
+                _logger.LogInformation(
+                    "Token refreshed successfully"
+                );
+
+
+                return true;
+
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error refreshing token");
+                _logger.LogError(
+                    ex,
+                    "Error while refreshing token"
+                );
+
                 return false;
             }
             finally

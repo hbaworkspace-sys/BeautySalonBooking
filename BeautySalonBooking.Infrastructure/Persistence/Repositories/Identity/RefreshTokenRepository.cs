@@ -13,19 +13,19 @@ public class RefreshTokenRepository : IRefreshTokenRepository
         _context = context;
     }
 
-    public async Task<RefreshToken?> GetValidTokenAsync(string token)
+    public async Task<RefreshToken?> GetByHashAsync(string hash)
     {
         return await _context.RefreshTokens
             .Include(rt => rt.User)
             .FirstOrDefaultAsync(rt =>
-                rt.Token == token &&
+                rt.TokenHash == hash &&
                 !rt.IsRevoked &&
                 rt.ExpiresAt > DateTime.UtcNow);
     }
 
-    public async Task AddAsync(RefreshToken refreshToken)
+    public async Task AddAsync(RefreshToken refreshToken, CancellationToken cancellationToken)
     {
-        await _context.RefreshTokens.AddAsync(refreshToken);
+        await _context.RefreshTokens.AddAsync(refreshToken, cancellationToken);
     }
 
     public void Update(RefreshToken refreshToken)
