@@ -4,7 +4,7 @@
              x:Class="BeautySalonBooking.Maui.Features.Splash.SplashPage"
              NavigationPage.HasNavigationBar="False"
              Background="#fee0f5"
-             xmlns:ucInd="clr-namespace:BeautySalonBooking.Maui.UserControls.IndicatorsControl"
+             xmlns:ucInd="clr-namespace:BeautySalonBooking.Maui.UserControls.Indicators"
              xmlns:ucImg="clr-namespace:BeautySalonBooking.Maui.UserControls.Images"
              xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Splash"
              x:DataType="vm:SplashViewModel">
@@ -95,7 +95,7 @@
                 AbsoluteLayout.LayoutFlags="PositionProportional"/>
         </AbsoluteLayout>
 
-        <ucImg:CircularImageView
+        <ucImg:CircularContentView
             Grid.Row="1"
             VerticalOptions="Start"
             Size="Large"
@@ -129,4 +129,5 @@
                 Grid.Row="2"/>
         </Grid>
     </Grid>
+
 </ContentPage>

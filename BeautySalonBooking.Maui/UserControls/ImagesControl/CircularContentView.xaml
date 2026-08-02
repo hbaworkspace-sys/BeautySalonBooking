@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeautySalonBooking.Maui.UserControls.Images.CircularImageView"
+             x:Class="BeautySalonBooking.Maui.UserControls.Images.CircularContentView"
              x:Name="self"
              HeightRequest="{Binding MainBorderSize ,Source={x:Reference self}}"
              WidthRequest="{Binding MainBorderSize ,Source={x:Reference self}}">
@@ -53,10 +53,21 @@
                         Offset="1.0" />
                 </LinearGradientBrush>
             </Border.Background>
-            <Image
-                x:Name="ImageBox"
-                Margin="{Binding InternalMargin , Source={x:Reference self}}"
-                Source="{Binding ImageSource ,Source={x:Reference self}}"/>
+            <Grid>
+                <Image
+                    x:Name="ImageBox"
+                    IsVisible="True"
+                    Margin="{Binding InternalMargin , Source={x:Reference self}}"
+                    Source="{Binding ImageSource ,Source={x:Reference self}}"/>
+                <Label
+                    x:Name="LblGlyph"
+                    IsVisible="False"
+                    FontSize="{Binding FontSize, Source={x:Reference self}}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    Style="{x:StaticResource GlyphLable}"
+                    Text="{Binding Glyph, Source={x:Reference self}}"/>
+            </Grid>
         </Border>
     </Grid>
 </ContentView>

@@ -1,6 +1,8 @@
-﻿using BeautySalonBooking.Contracts.Authentication.Requests;
+﻿using BeautySalonBooking.Contracts.Authentication.Enums;
+using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Maui.Common.Enums;
 using BeautySalonBooking.Maui.Common.Interfaces;
+using BeautySalonBooking.Maui.Features.Auth.Models;
 using BeautySalonBooking.Maui.Features.Auth.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -53,12 +55,20 @@ namespace BeautySalonBooking.Maui.Features.Auth
                     {
                         FirstName = FirstName,
                         LastName = LastName,
-                        MobileNumber = PhoneNumber
+                        MobileNumber = PhoneNumber,
+                        NationalCode = NationalCode,
+                        Gender = Gender.Female
                     });
-
                 if (result.IsSuccess)
                 {
-                    await _navigationService.GoToOtpAsync(PhoneNumber, OtpPurpose.Register);
+                    await _navigationService.GoToOtpAsync(
+                         new OtpNavigationModel
+                         {
+                             FirstName = FirstName,
+                             LastName = LastName,
+                             MobileNumber = PhoneNumber,
+                             Purpose = OtpPurpose.Register,
+                         });
                 }
                 else
                 {
@@ -82,42 +92,52 @@ namespace BeautySalonBooking.Maui.Features.Auth
         }
         private async Task<bool> ValidateInputAsync()
         {
-            if (string.IsNullOrWhiteSpace(PhoneNumber))
-            {
-                await  _dialogService.ShowErrorAsync("شماره موبایل را وارد کنید.");
-                return false;
-            }
-
-            if (PhoneNumber.Length != 10)
-            {
-                await  _dialogService.ShowErrorAsync("شماره موبایل باید ۱۰ رقم باشد.");
-                return false;
-            }
-
             if (string.IsNullOrWhiteSpace(FirstName))
             {
-                await  _dialogService.ShowErrorAsync("نام را وارد کنید.");
+                await _dialogService.ShowErrorAsync("نام را وارد کنید.");
                 return false;
             }
 
             if (FirstName.Length > 50)
             {
-                await  _dialogService.ShowErrorAsync("نام نباید بیشتر از 50 کاراکتر باشد.");
+                await _dialogService.ShowErrorAsync("نام نباید بیشتر از 50 کاراکتر باشد.");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(LastName))
             {
-                await  _dialogService.ShowErrorAsync("نام خانوادگی را وارد کنید.");
+                await _dialogService.ShowErrorAsync("نام خانوادگی را وارد کنید.");
                 return false;
             }
 
             if (LastName.Length > 50)
             {
-                await  _dialogService.ShowErrorAsync("نام خانوادگی نباید بیشتر از 50 کاراکتر باشد.");
+                await _dialogService.ShowErrorAsync("نام خانوادگی نباید بیشتر از 50 کاراکتر باشد.");
                 return false;
             }
 
+            if (string.IsNullOrWhiteSpace(PhoneNumber))
+            {
+                await _dialogService.ShowErrorAsync("شماره موبایل را وارد کنید.");
+                return false;
+            }
+
+            if (PhoneNumber.Length != 10)
+            {
+                await _dialogService.ShowErrorAsync("شماره موبایل باید ۱۰ رقم باشد.");
+                return false;
+            }
+
+            if (NationalCode.Length != 10)
+            {
+                await _dialogService.ShowErrorAsync("کد ملی باید ۱۰ رقم باشد.");
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(NationalCode))
+            {
+                await _dialogService.ShowErrorAsync("کد ملی را وارد کنید.");
+                return false;
+            }
             return true;
         }
     }

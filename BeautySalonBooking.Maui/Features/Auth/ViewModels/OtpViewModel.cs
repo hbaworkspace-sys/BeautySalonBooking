@@ -2,6 +2,8 @@
 using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
 using BeautySalonBooking.Maui.Common.Enums;
+using BeautySalonBooking.Maui.Common.Interfaces;
+using BeautySalonBooking.Maui.Features.Auth.Models;
 using BeautySalonBooking.Maui.Features.Auth.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,25 +13,28 @@ namespace BeautySalonBooking.Maui.Features.Auth;
 public partial class OtpViewModel : ObservableObject, IQueryAttributable
 {
     private readonly IAuthApiService _authApiService;
-    public OtpViewModel(IAuthApiService authApi)
+    private readonly IDialogService _dialogService;
+    private readonly INavigationService _navigationService;
+    private OtpNavigationModel? _navigationModel;
+    const int timeSecond = 120;
+
+    public OtpViewModel(IAuthApiService authApiService, IDialogService dialogService, INavigationService navigationService)
     {
-        _authApiService = authApi;
+        _authApiService = authApiService;
+        _dialogService = dialogService;
+        _navigationService = navigationService;
     }
+    [ObservableProperty]
+    private string otpCode = string.Empty;
 
     [ObservableProperty]
-    private string countryCode;
+    private bool isBusy;
 
     [ObservableProperty]
-    private string phoneNumber;
+    private int countdownSeconds = timeSecond;
 
     [ObservableProperty]
-    private string otpCode;
-
-    [ObservableProperty]
-    private bool isBusy = false;
-
-    [ObservableProperty]
-    private OtpPurpose otpPurposeType;
+    private bool isCountdownRunning;
 
     [RelayCommand]
     private async Task VerifyOtpAsync()
@@ -37,84 +42,161 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
         if (IsBusy)
             return;
 
+        if (_navigationModel == null)
+        {
+            await _dialogService.ShowErrorAsync("اطلاعات درخواست نامعتبر است.");
+            return;
+        }
         if (!await ValidateInputAsync())
             return;
-
         try
         {
             IsBusy = true;
-            ApiResponse_New<AuthResult> response = null;
             var request = new VerifyOtpRequest
             {
-                MobileNumber = PhoneNumber,
+                MobileNumber = _navigationModel.MobileNumber,
                 OtpCode = OtpCode
             };
 
-            switch (OtpPurposeType)
+            ApiResponse_New<AuthResult>? response = null;
+
+            switch (_navigationModel.Purpose)
             {
                 case OtpPurpose.Register:
-                    response = await _authApiService.ConfirmRegistrationAsync(request);
+                    response =
+                        await _authApiService.ConfirmRegistrationAsync(request);
                     break;
                 case OtpPurpose.Login:
-                    response = await _authApiService.ConfirmLoginAsync(request);
+                    response =
+                        await _authApiService.ConfirmLoginAsync(request);
                     break;
             }
 
             if (response == null)
             {
-                await Shell.Current.DisplayAlert("خطا", "پاسخی از سرور دریافت نشد", "باشه");
+                await _dialogService.ShowErrorAsync("پاسخی از سرور دریافت نشد.");
                 return;
             }
 
             if (!response.IsSuccess)
             {
-                await Shell.Current.DisplayAlert("خطا", response.Message, "باشه");
+                await _dialogService.ShowErrorAsync(response.Message);
                 return;
             }
 
             var data = response.Payload;
-
             if (data != null)
             {
-                //if (!string.IsNullOrWhiteSpace(data.AccessToken))
-                //    await SecureStorage.SetAsync("access_token", data.AccessToken);
-
-                //if (!string.IsNullOrWhiteSpace(data.RefreshToken))
-                //    await SecureStorage.SetAsync("refresh_token", data.RefreshToken);
-
-                // await SecureStorage.SetAsync("user_id", data.personId.ToString());
+                // ذخیره Token ها در SecureStorage
+                // await SecureStorage.SetAsync(...)
             }
-            //await Shell.Current.GoToAsync(nameof(ChooseAccountTypePage));
+            switch (_navigationModel.Purpose)
+            {
+                case OtpPurpose.Register:
+                    await _navigationService.GoToRegistrationSuccessAsync();
+                    break;
+                case OtpPurpose.Login:
+                    await _navigationService.GoToDashboardAsync();
+                    break;
+            }
+           
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await Shell.Current.DisplayAlert("خطا", "مشکلی در ارتباط با سرور رخ داد", "باشه");
+            await _dialogService.ShowErrorAsync("مشکلی در ارتباط با سرور رخ داد.");
         }
         finally
         {
             IsBusy = false;
         }
     }
+
+    [RelayCommand]
+    private async Task ResendOtpAsync()
+    {
+        if (IsBusy)
+            return;
+
+        if (_navigationModel == null)
+        {
+            await _dialogService.ShowErrorAsync("اطلاعات درخواست نامعتبر است.");
+            return;
+        }
+
+        try
+        {
+            IsBusy = true;
+
+            bool isSuccess = false;
+
+            switch (_navigationModel.Purpose)
+            {
+                case OtpPurpose.Login:
+                    var loginResult =
+                        await _authApiService.RequestOtpForLoginAsync(
+                            new LoginInitiateRequest
+                            {
+                                MobileNumber = _navigationModel.MobileNumber
+                            });
+                    isSuccess = loginResult.IsSuccess;
+                    break;
+
+                case OtpPurpose.Register:
+                    var registerResult =
+                        await _authApiService.RequestOtpForRegisterAsync(
+                            new RegisterInitiateRequest
+                            {
+                                FirstName = _navigationModel.FirstName,
+                                LastName = _navigationModel.LastName,
+                                MobileNumber = _navigationModel.MobileNumber,
+                                NationalCode = _navigationModel.NationalCode
+                            });
+                    isSuccess = registerResult.IsSuccess;
+                    break;
+            }
+            if (isSuccess)
+            {
+                CountdownSeconds = timeSecond;
+                IsCountdownRunning = true;
+            }
+            else
+            {
+                await _dialogService.ShowErrorAsync("ارسال مجدد کد انجام نشد.");
+            }
+        }
+        catch (Exception)
+        {
+            await _dialogService.ShowErrorAsync("خطایی در ارسال مجدد کد رخ داد.");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
     private async Task<bool> ValidateInputAsync()
     {
         if (string.IsNullOrWhiteSpace(OtpCode))
         {
-            await Shell.Current.DisplayAlert("خطا", "کد تأیید را وارد کنید.", "باشه");
+            await _dialogService.ShowErrorAsync("کد تأیید را وارد کنید.");
             return false;
         }
-
         if (OtpCode.Length != 6)
         {
-            await Shell.Current.DisplayAlert("خطا", "کد تأیید باید ۶ رقم باشد.", "باشه");
+            await _dialogService.ShowErrorAsync("کد تأیید باید ۶ رقم باشد.");
             return false;
         }
-
         return true;
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        PhoneNumber = (string)query["PhoneNumber"];
-        OtpPurposeType = (OtpPurpose)query["OtpPurposeType"];
+        if (query.TryGetValue("OtpNavigation", out var value))
+        {
+            _navigationModel = value as OtpNavigationModel;
+        }
+
+        CountdownSeconds = timeSecond;
+        IsCountdownRunning = true;
     }
 }

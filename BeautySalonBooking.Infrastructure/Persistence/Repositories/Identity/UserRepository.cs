@@ -64,11 +64,11 @@ public sealed class UserRepository : Repository<User, long>, IUserRepository
         var personId = users.First().PersonId;
 
         var allUsers = await _context.Users
-    .Include(u => u.Person)
-    .Include(u => u.UserRole)
-    .ThenInclude(u => u.Role)
-    .Where(u => u.PersonId == personId)
-    .ToListAsync(cancellationToken);
+                .Include(u => u.Person)
+                .Include(u => u.UserRole)
+                .ThenInclude(u => u.Role)
+                .Where(u => u.PersonId == personId)
+                .ToListAsync(cancellationToken);
 
         return allUsers;
 

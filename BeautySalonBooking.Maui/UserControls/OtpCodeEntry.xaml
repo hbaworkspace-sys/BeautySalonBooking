@@ -3,78 +3,72 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BeautySalonBooking.Maui.UserControls.OtpCodeEntry"
              x:Name="self"
-             HeightRequest="42">
-    
+             HeightRequest="50">
+
     <ContentView.Resources>
         <Style TargetType="Border">
-            <Setter Property="BackgroundColor" Value="{StaticResource SecondaryBackground}" />
-            <Setter Property="StrokeThickness" Value="0" />
-            <Setter Property="HeightRequest" Value="40" />
-            <Setter Property="WidthRequest" Value="30"/>
+            <Setter Property="BackgroundColor" Value="{x:StaticResource White}" />
+            <Setter Property="StrokeThickness" Value="2" />
+            <Setter Property="Stroke" Value="{StaticResource StrokeColor}" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="WidthRequest" Value="40"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
             <Setter Property="StrokeShape">
                 <Setter.Value>
-                    <RoundRectangle CornerRadius="25" />
+                    <RoundRectangle CornerRadius="10"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow
+                        Brush="{StaticResource ShadowColor}"
+                        Offset="0,0.5"
+                        Radius="5"
+                        Opacity="0.3"/>
                 </Setter.Value>
             </Setter>
         </Style>
 
-
         <Style TargetType="Entry">
-            <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
             <Setter Property="Keyboard" Value="Numeric"/>
             <Setter Property="MaxLength" Value="1"/>
             <Setter Property="ReturnType" Value="Next"/>
             <Setter Property="BackgroundColor" Value="Transparent"/>
             <Setter Property="TextColor" Value="{x:StaticResource PrimaryText}"/>
-            <Setter Property="FontFamily" Value="BHoma"/>
+            <Setter Property="FontFamily" Value="Sans"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="FlowDirection" Value="LeftToRight"/>
         </Style>
     </ContentView.Resources>
-    
 
-    <Grid 
+    <Grid
         FlowDirection="LeftToRight"
         ColumnDefinitions="*,*,*,*,*,*">
-        <Border
-            Grid.Column="0">
-            <Entry
-                x:Name="txtDigit_1"
-                Text="{Binding Digit_1,Source={x:Reference self}}"
-                TextChanged="Entry_TextChanged"/>
+
+        <Border Grid.Column="0">
+            <Entry x:Name="txtDigit_1"/>
         </Border>
-        <Border
-            Grid.Column="1">
-            <Entry
-                x:Name="txtDigit_2"
-                Text="{Binding Digit_2,Source={x:Reference self}}"
-                TextChanged="Entry_TextChanged"/>
+
+        <Border Grid.Column="1">
+            <Entry x:Name="txtDigit_2"/>
         </Border>
-        <Border
-            Grid.Column="2">
-            <Entry
-                x:Name="txtDigit_3"
-                Text="{Binding Digit_3,Source={x:Reference self}}"
-                TextChanged="Entry_TextChanged"/>
+
+        <Border Grid.Column="2">
+            <Entry x:Name="txtDigit_3"/>
         </Border>
-        <Border
-            Grid.Column="3">
-            <Entry
-                x:Name="txtDigit_4"
-                Text="{Binding Digit_4,Source={x:Reference self}}"
-                TextChanged="Entry_TextChanged"/>
+
+        <Border Grid.Column="3">
+            <Entry x:Name="txtDigit_4"/>
         </Border>
-        <Border
-            Grid.Column="4">
-            <Entry
-                x:Name="txtDigit_5"
-                Text="{Binding Digit_5,Source={x:Reference self}}"
-                TextChanged="Entry_TextChanged"/>
+
+        <Border Grid.Column="4">
+            <Entry x:Name="txtDigit_5"/>
         </Border>
-        <Border
-            Grid.Column="5">
-            <Entry
-                x:Name="txtDigit_6"
-                Text="{Binding Digit_6,Source={x:Reference self}}"
-                TextChanged="Entry_TextChanged"/>
+
+        <Border Grid.Column="5">
+            <Entry x:Name="txtDigit_6"/>
         </Border>
     </Grid>
 </ContentView>

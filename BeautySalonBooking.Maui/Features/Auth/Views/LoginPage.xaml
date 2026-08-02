@@ -16,7 +16,7 @@
 
         <ucBtn:NextAndBackButtonView
             Grid.Row="0"
-            IsBackVisible="False"/>
+            IsBackVisible="True"/>
 
         <uc:TitleSubtitleView
             Grid.Row="1"
@@ -26,7 +26,8 @@
         <uc:PhoneNumberEntry
             Grid.Row="2"
             Text="{Binding PhoneNumber, Mode=OneWayToSource}"
-            PhoneType="Mobile"/>
+            PhoneType="Mobile"
+            ReturnTypeValue="Done"/>
 
         <uc:DefaultButton
             Grid.Row="3"

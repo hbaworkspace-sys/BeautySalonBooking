@@ -46,15 +46,18 @@ public partial class LoginViewModel : ObservableObject
                     MobileNumber = PhoneNumber
                 });
 
-            var result1 = result;
-
             if (!result.IsSuccess)
             {
                 await _dialogService.ShowErrorAsync(result.Message);
                 return;
             }
 
-            await _navigationService.GoToOtpAsync(PhoneNumber, OtpPurpose.Login);
+            await _navigationService.GoToOtpAsync(
+                new Models.OtpNavigationModel
+                {
+                    MobileNumber = PhoneNumber,
+                    Purpose = OtpPurpose.Login
+                });
         }
         catch (Exception ex)
         {
@@ -112,7 +115,6 @@ public partial class LoginViewModel : ObservableObject
             await _dialogService.ShowErrorAsync("پیش‌شماره موبایل معتبر نیست.");
             return false;
         }
-
         return true;
     }
 }

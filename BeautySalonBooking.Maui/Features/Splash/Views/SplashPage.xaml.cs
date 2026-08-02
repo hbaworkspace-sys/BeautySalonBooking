@@ -1,5 +1,3 @@
-using BeautySalonBooking.Maui.Features.Auth;
-
 namespace BeautySalonBooking.Maui.Features.Splash;
 
 public partial class SplashPage : ContentPage
