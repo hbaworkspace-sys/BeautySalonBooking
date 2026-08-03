@@ -52,6 +52,39 @@
         <Setter Property="Margin" Value="5,6,0,-9"/>
     </Style>
 
+    <Style TargetType="Border" x:Key="CardBorderStyle">
+        <Setter Property="BackgroundColor" Value="{x:StaticResource White}"/>
+        <Setter Property="StrokeThickness" Value="1.5"/>
+        <Setter Property="Stroke">
+            <Setter.Value>
+                <LinearGradientBrush
+                         StartPoint="0,0"
+                         EndPoint="0,1">
+                    <GradientStop
+                         Color="#aafabaac"
+                         Offset="0.0" />
+                    <GradientStop
+                         Color="#aaf99bd3"
+                         Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow
+                    Brush="#33f99bd3"
+                    Offset="0,0"
+                    Opacity="0.8"
+                    Radius="7"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="10"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 
     <!--<Style TargetType="ActivityIndicator">
     <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
