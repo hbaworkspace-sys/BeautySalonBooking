@@ -2,6 +2,7 @@
 using BeautySalonBooking.Maui.Features.Auth;
 using BeautySalonBooking.Maui.Features.Auth.Views;
 using BeautySalonBooking.Maui.Features.Dashboard.Views;
+using BeautySalonBooking.Maui.Features.Pages.Appointment;
 using BeautySalonBooking.Maui.Features.Splash.Views;
 
 namespace BeautySalonBooking.Maui;
@@ -23,5 +24,8 @@ public partial class AppShell : Shell
 
         //Dashboard
         Routing.RegisterRoute(AppRoutes.Dashboard, typeof(DashboardPage));
+
+        //Appointment
+        Routing.RegisterRoute(AppRoutes.Appointments, typeof(AppointmentsPage));
     }
 }

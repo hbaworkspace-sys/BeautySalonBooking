@@ -72,24 +72,61 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="UserControls\ImagesControl\CircularContentView.xaml.cs">
-	    <DependentUpon>CircularContentView.xaml</DependentUpon>
-	  </Compile>
+		<Compile Update="Components\Navigation\NavigationButtonsView.xaml.cs">
+			<DependentUpon>NavigationButtonsView.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Features\Auth\Views\RegistrationSuccessPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Features\Dashboard\Views\DashboardPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="UserControls\CountdownView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="UserControls\IndicatorsControl\SimpleIndicator.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Components\Card\FeatureCardView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Card\ShowcaseCardView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Header\SectionHeaderView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Media\MediaItemView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Media\MediaView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Navigation\TabBar.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Navigation\TabItemView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Shared\ActionIconView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Shared\BadgeView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Appointment\Views\AppointmentsPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Auth\Views\RegistrationSuccessPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Dashboard\Views\DashboardPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Service\Pages\ServiceSelectionPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="UserControls\CountdownView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="UserControls\IndicatorsControl\SimpleIndicator.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Features\Service\ViewModels\" />
 	</ItemGroup>
 
 </Project>

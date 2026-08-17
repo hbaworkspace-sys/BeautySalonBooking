@@ -1,0 +1,973 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Service.Pages.ServiceSelectionPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:uc="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    BackgroundColor="{x:StaticResource White}"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Resources>
+
+        <Color x:Key="PageBackground">#FCE9EF</Color>
+        <Color x:Key="SurmasazhColor">#FFFFFF</Color>
+
+        <Color x:Key="PrimaryColor">#EF638E</Color>
+        <Color x:Key="PrimaryLightColor">#FFF0F5</Color>
+
+        <Color x:Key="TextPrimary">#222222</Color>
+        <Color x:Key="TextSecondary">#999999</Color>
+
+        <Color x:Key="BorderColor">#F5E2E8</Color>
+
+        <Style x:Key="CategoryContainerStyle" TargetType="Border">
+
+            <Setter Property="WidthRequest" Value="52" />
+
+            <Setter Property="HeightRequest" Value="52" />
+
+            <Setter Property="BackgroundColor" Value="#FFFFFF" />
+
+            <Setter Property="StrokeThickness" Value="0" />
+
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow
+                        Brush="#20D96B8A"
+                        Opacity="0.15"
+                        Radius="8"
+                        Offset="0,2" />
+                </Setter.Value>
+            </Setter>
+
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="26" />
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+        <Style x:Key="ServiceCardStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Stroke" Value="#22D96B8A" />
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="10" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow
+                        Brush="#66D96B8A"
+                        Opacity="0.15"
+                        Radius="8"
+                        Offset="0,2" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ServiceCategoryItemStyle" TargetType="uc:MediaItemView">
+            <Setter Property="BorderBrush" Value="#FCE9EF" />
+            <Setter Property="FillBrush" Value="White" />
+            <Setter Property="BorderWidth" Value="1" />
+            <Setter Property="DisplayMode" Value="Image" />
+            <Setter Property="ImageAspect" Value="AspectFit" />
+            <Setter Property="ImageMargin" Value="10" />
+            <Setter Property="Shape" Value="RoundedRectangle" />
+            <Setter Property="CornerRadius" Value="9" />
+            <Setter Property="HeightRequest" Value="55" />
+            <Setter Property="WidthRequest" Value="55" />
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow
+                        Brush="Pink"
+                        Opacity="0.4"
+                        Offset="1,1" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </ContentPage.Resources>
+
+    <ScrollView VerticalScrollBarVisibility="Never">
+
+        <VerticalStackLayout Padding="18,0" Spacing="10">
+
+            <Grid ColumnDefinitions="50,*" VerticalOptions="Start">
+                <!--  Back  -->
+                <Label
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    FontSize="32"
+                    HorizontalOptions="Start"
+                    Text="‹"
+                    TextColor="#999999"
+                    VerticalOptions="Center" />
+
+                <!--  Title  -->
+                <Label
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    Text="انتخاب سرویس"
+                    TextColor="{StaticResource TextPrimary}"
+                    VerticalOptions="Center" />
+
+            </Grid>
+
+            <Border
+                BackgroundColor="#FFFFFF"
+                HeightRequest="43"
+                Stroke="Pink"
+                StrokeThickness="1"
+                WidthRequest="340">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+
+                <Grid Padding="14,0" ColumnDefinitions="*,Auto">
+
+                    <Label
+                        Grid.Column="0"
+                        FontSize="11"
+                        Text="جستجو در خدمات ..."
+                        TextColor="#B5B5B5"
+                        VerticalOptions="Center" />
+
+                    <Label
+                        Grid.Column="1"
+                        FontSize="27"
+                        Text="⌕"
+                        TextColor="#D5C8CD"
+                        VerticalOptions="Center" />
+
+                </Grid>
+
+            </Border>
+
+            <Label
+                Margin="0,19,2,14"
+                FontAttributes="Bold"
+                FontSize="14"
+                HorizontalTextAlignment="Start"
+                Text="دسته بندی خدمات"
+                TextColor="{StaticResource TextPrimary}" />
+
+            <Grid
+                ColumnDefinitions="*,*,*,*,*"
+                ColumnSpacing="20"
+                RowDefinitions="Auto,Auto,Auto"
+                RowSpacing="50">
+
+                <uc:MediaItemView
+                    Title="مو"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    ImageSource="bahar.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="رنگ و مش"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    ImageSource="masazh.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="کوتاهی"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    ImageSource="makup.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="مژه و ابرو"
+                    Grid.Row="0"
+                    Grid.Column="3"
+                    ImageSource="bahar.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="ناخن"
+                    Grid.Row="0"
+                    Grid.Column="5"
+                    ImageSource="masazh.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="مو"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    ImageSource="makup.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="رنگ و مش"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    ImageSource="bahar.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="کوتاهی"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    ImageSource="masazh.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="مژه و ابرو"
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    ImageSource="makup.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="ناخن"
+                    Grid.Row="1"
+                    Grid.Column="5"
+                    ImageSource="bahar.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="مو"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    ImageSource="masazh.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="رنگ و مش"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    ImageSource="makup.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="کوتاهی"
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    ImageSource="bahar.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="مژه و ابرو"
+                    Grid.Row="2"
+                    Grid.Column="3"
+                    ImageSource="masazh.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+                <uc:MediaItemView
+                    Title="ناخن"
+                    Grid.Row="2"
+                    Grid.Column="5"
+                    ImageSource="makup.png"
+                    Style="{x:StaticResource ServiceCategoryItemStyle}" />
+
+
+
+
+            </Grid>
+
+            <Grid
+                Margin="5,40,5,5"
+                ColumnDefinitions="Auto,*"
+                ColumnSpacing="8">
+
+                <BoxView
+                    Grid.Column="1"
+                    BackgroundColor="{StaticResource PrimaryColor}"
+                    HeightRequest="1"
+                    Opacity="0.35"
+                    VerticalOptions="Center" />
+
+                <Label
+                    Grid.Column="0"
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    HorizontalTextAlignment="End"
+                    Text="خدمات مو"
+                    TextColor="{StaticResource TextPrimary}" />
+
+            </Grid>
+
+            <VerticalStackLayout Spacing="0">
+
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+                <Border Style="{StaticResource ServiceCardStyle}">
+
+                    <Grid
+                        Padding="0,0"
+                        ColumnDefinitions="110,*,40"
+                        ColumnSpacing="10"
+                        HeightRequest="110">
+
+                        <!--  Image  -->
+                        <uc:MediaView
+                            CornerRadius="10"
+                            HeightRequest="110"
+                            ImageAspect="AspectFill"
+                            ImageSource="onboarding_chair.png"
+                            Shape="RoundedRectangle"
+                            WidthRequest="110" />
+
+                        <!--  Information  -->
+                        <VerticalStackLayout
+                            Grid.Column="1"
+                            Spacing="7"
+                            VerticalOptions="Center">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                HorizontalTextAlignment="Start"
+                                Text="رنگ مو"
+                                TextColor="{StaticResource TextPrimary}" />
+
+                            <Label
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                LineBreakMode="TailTruncation"
+                                Text="شامل رنگ، مش، هایلایت و ..."
+                                TextColor="{StaticResource TextSecondary}" />
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="10"
+                                HorizontalTextAlignment="Start"
+                                Text="از 850,000 تومان"
+                                TextColor="#444444" />
+
+                        </VerticalStackLayout>
+
+                        <!--  Arrow  -->
+                        <uc:MediaView
+                            Grid.Column="2"
+                            DisplayMode="Glyph"
+                            FillBrush="#99EF638E"
+                            GlowBrush="White"
+                            Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                            HeightRequest="40"
+                            Shape="Circle"
+                            TextSize="25"
+                            WidthRequest="30" />
+                    </Grid>
+
+                </Border>
+
+
+
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

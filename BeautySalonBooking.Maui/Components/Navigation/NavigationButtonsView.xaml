@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Navigation.NavigationButtonsView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    x:Name="self">
+
+    <ContentView.Resources>
+        <Style TargetType="Button">
+            <Setter Property="BorderWidth" Value="0" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="FontFamily" Value="MaterialIconsOut" />
+            <Setter Property="HeightRequest" Value="35" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+    </ContentView.Resources>
+
+    <Grid ColumnDefinitions="auto,*,auto">
+        <Button
+            x:Name="btnNext"
+            Grid.Column="0"
+            Command="{Binding NextCommand, Source={x:Reference self}}"
+            FontSize="{Binding IconSize, Source={x:Reference self}}"
+            IsEnabled="{Binding IsNextEnabled, Source={x:Reference self}}"
+            IsVisible="{Binding IsNextVisible, Source={x:Reference self}}"
+            Text="{Binding NextIcon, Source={x:Reference self}}"
+            TextColor="{Binding NextColor, Source={x:Reference self}}" />
+
+        <Button
+            x:Name="btnBack"
+            Grid.Column="2"
+            Command="{Binding BackCommand, Source={x:Reference self}}"
+            FontSize="{Binding IconSize, Source={x:Reference self}}"
+            IsEnabled="{Binding IsBackEnabled, Source={x:Reference self}}"
+            IsVisible="{Binding IsBackVisible, Source={x:Reference self}}"
+            Text="{Binding BackIcon, Source={x:Reference self}}"
+            TextColor="{Binding BackColor, Source={x:Reference self}}" />
+    </Grid>
+</ContentView>

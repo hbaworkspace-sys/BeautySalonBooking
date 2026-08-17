@@ -99,7 +99,7 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
                     await _navigationService.GoToDashboardAsync();
                     break;
             }
-           
+
         }
         catch (Exception)
         {
@@ -198,5 +198,11 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
 
         CountdownSeconds = timeSecond;
         IsCountdownRunning = true;
+    }
+
+    [RelayCommand]
+    private Task GoBackAsync()
+    {
+        return _navigationService.GoBackAsync();
     }
 }

@@ -3,229 +3,538 @@
     x:Class="BeautySalonBooking.Maui.Features.Dashboard.Views.DashboardPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:header="clr-namespace:BeautySalonBooking.Maui.Components.Header"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
+    xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Dashboard.ViewModels"
-    BackgroundColor="{StaticResource White}"
-    FlowDirection="RightToLeft"
-    NavigationPage.HasNavigationBar="False"
     x:DataType="vm:DashboardViewModel"
-    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources">
+    BackgroundColor="{x:StaticResource White}"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
 
-    <ContentPage.Resources>
-        <Style
-            x:Key="cir"
-            BasedOn="{StaticResource CardBorderStyle}"
-            TargetType="Border">
-            <Setter Property="HeightRequest" Value="50" />
-            <Setter Property="WidthRequest" Value="50" />
-            <Setter Property="Margin" Value="5,0,5,0" />
-            <Setter Property="Shadow">
-                <Setter.Value>
-                    <Shadow
-                        Offset="0,0.2"
-                        Brush="Pink"
-                        Opacity="0.5"
-                        Radius="3" />
-                </Setter.Value>
-            </Setter>
-            <Setter Property="StrokeShape">
-                <Setter.Value>
-                    <RoundRectangle CornerRadius="100" />
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </ContentPage.Resources>
-
-    <Grid 
-        RowDefinitions="*,100">
-        <ScrollView 
+    <Grid Background="Transparent" RowDefinitions="*,90">
+        <ScrollView
             Grid.Row="0"
+            Grid.RowSpan="2"
             Margin="10,10,10,0"
-            Background="Transparent">
-            <Grid 
-                RowDefinitions="auto,auto,auto,auto,auto,auto">
-                <Grid 
-                    Grid.Row="0" 
-                    ColumnSpacing="8"
-                    ColumnDefinitions="80,*,50">
+            Background="Transparent"
+            VerticalScrollBarVisibility="Never">
+
+            <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto" RowSpacing="15">
+
+                <Grid
+                    Grid.Row="0"
+                    ColumnDefinitions="75,*,40"
+                    ColumnSpacing="3">
                     <Border
                         Grid.Column="0"
-                        Style="{x:StaticResource CardBorderStyle}"
-                        HeightRequest="50">
-                        <Grid 
-                            ColumnSpacing="2"
-                            ColumnDefinitions="20,*,20"
-                            Padding="2">
+                        HeightRequest="50"
+                        Style="{x:StaticResource CardBorderStyle}">
+                        <Grid
+                            Padding="4"
+                            ColumnDefinitions="13,*,13"
+                            ColumnSpacing="2">
                             <Label
                                 Grid.Column="0"
+                                FontSize="16"
                                 Style="{StaticResource GlyphLable}"
-                                TextColor="Black"
-                                Text="{x:Static icon:IconSymbols.KeyboardArrowDown}"/>
+                                Text="{x:Static icon:IconSymbols.KeyboardArrowDown}"
+                                TextColor="Black" />
                             <Label
                                 Grid.Column="1"
-                                Text="تهران"
-                                FontSize="12"/>
-                            <Image
-                                Grid.Column="2"
-                                Source="google.png"/>
+                                FontSize="13"
+                                HorizontalTextAlignment="Center"
+                                Text="تهران" />
+                            <Image Grid.Column="2" Source="location.png" />
                         </Grid>
                     </Border>
 
                     <Border
                         Grid.Column="1"
-                        Style="{x:StaticResource CardBorderStyle}"
+                        Padding="5"
                         HeightRequest="50"
-                        Padding="2">
+                        Style="{x:StaticResource CardBorderStyle}">
                         <Grid ColumnDefinitions="*,20">
                             <Label
                                 Grid.Column="0"
+                                FontSize="10"
                                 HorizontalOptions="Center"
-                                Text="جسنجوی سالن ها، خدمات، آرایشگرها ..."
-                                FontSize="10"/>
+                                Text="جستجوی سالن ها، خدمات، آرایشگرها ..." />
                             <Label
                                 Grid.Column="1"
                                 FontFamily="MaterialIcons"
-                                Text="{x:Static icon:IconSymbols.Search}"
-                                FontSize="20"/>
+                                FontSize="24"
+                                Style="{x:StaticResource GlyphLable}"
+                                Text="{x:Static icon:IconSymbols.Search}" />
                         </Grid>
                     </Border>
+
                     <Border
                         Grid.Column="2"
-                        Style="{x:StaticResource CardBorderStyle}"
-                        HeightRequest="50">
-                        <ImageButton
-                            Padding="10"
-                            Source="google.png"/>
+                        HeightRequest="50"
+                        Style="{x:StaticResource CardBorderStyle}">
+                        <ImageButton Padding="6" Source="bell.png" />
                     </Border>
                 </Grid>
+
+                <ScrollView
+                    Grid.Row="1"
+                    HorizontalScrollBarVisibility="Never"
+                    Orientation="Horizontal">
+                    <HorizontalStackLayout Spacing="5">
+
+                        <media:MediaItemView
+                            Title="زیگورات"
+                            ImageSource="onboarding_chair.png"
+                            Style="{x:StaticResource StoryStyle}" />
+
+                        <media:MediaItemView
+                            Title="طره"
+                            ImageSource="onboarding_product.png"
+                            Style="{x:StaticResource StoryStyle}" />
+
+                        <media:MediaItemView
+                            Title="کیمیا"
+                            ImageSource="onboarding_chair.png"
+                            Style="{x:StaticResource StoryStyle}" />
+
+                        <media:MediaItemView
+                            Title="زیگورات"
+                            ImageSource="onboarding_chair.png"
+                            Style="{x:StaticResource StoryStyle}" />
+
+                        <media:MediaItemView
+                            Title="طره"
+                            ImageSource="onboarding_product.png"
+                            Style="{x:StaticResource StoryStyle}" />
+
+                        <media:MediaItemView
+                            Title="کیمیا"
+                            ImageSource="onboarding_chair.png"
+                            Style="{x:StaticResource StoryStyle}" />
+
+                        <media:MediaItemView
+                            Title="زیگورات"
+                            ImageSource="onboarding_chair.png"
+                            Style="{x:StaticResource StoryStyle}" />
+
+                        <media:MediaItemView
+                            Title="طره"
+                            ImageSource="onboarding_product.png"
+                            Style="{x:StaticResource StoryStyle}" />
+
+                        <media:MediaItemView
+                            Title="کیمیا"
+                            ImageSource="onboarding_chair.png"
+                            Style="{x:StaticResource StoryStyle}" />
+                    </HorizontalStackLayout>
+                </ScrollView>
+
+                <Border
+                    Grid.Row="2"
+                    Padding="5"
+                    Style="{x:StaticResource CardBorderStyle}">
+                    <VerticalStackLayout
+                        Grid.Row="3"
+                        Padding="0,5,0,0"
+                        Spacing="10">
+                        <Label FontSize="12" Text="خدمات و لاین های زیبایی" />
+                        <ScrollView HorizontalScrollBarVisibility="Never" Orientation="Horizontal">
+                            <HorizontalStackLayout Spacing="10">
+                                <media:MediaItemView
+                                    Title="عروس"
+                                    ImageSource="bahar.png"
+                                    Style="{x:StaticResource IconLabelStyle}" />
+
+                                <media:MediaItemView
+                                    Title="میکاپ"
+                                    ImageSource="makup.png"
+                                    Style="{x:StaticResource IconLabelStyle}" />
+
+                                <media:MediaItemView
+                                    Title="عروس"
+                                    ImageSource="bahar.png"
+                                    Style="{x:StaticResource IconLabelStyle}" />
+
+                                <media:MediaItemView
+                                    Title="میکاپ"
+                                    ImageSource="makup.png"
+                                    Style="{x:StaticResource IconLabelStyle}" />
+
+                                <media:MediaItemView
+                                    Title="عروس"
+                                    ImageSource="bahar.png"
+                                    Style="{x:StaticResource IconLabelStyle}" />
+
+                                <media:MediaItemView
+                                    Title="میکاپ"
+                                    ImageSource="makup.png"
+                                    Style="{x:StaticResource IconLabelStyle}" />
+
+                                <media:MediaItemView
+                                    Title="عروس"
+                                    ImageSource="bahar.png"
+                                    Style="{x:StaticResource IconLabelStyle}" />
+
+                                <media:MediaItemView
+                                    Title="میکاپ"
+                                    ImageSource="makup.png"
+                                    Style="{x:StaticResource IconLabelStyle}" />
+                            </HorizontalStackLayout>
+                        </ScrollView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <header:SectionHeaderView
+                    Title="سالن های پیشنهادی"
+                    Grid.Row="3"
+                    Margin="10,15,10,0"
+                    ActionText="مشاهده همه" />
+
+                <ScrollView
+                    Grid.Row="4"
+                    HorizontalScrollBarVisibility="Never"
+                    Orientation="Horizontal">
+
+                    <HorizontalStackLayout Spacing="15">
+
+                        <card:ShowcaseCardView
+                            Title="سیب نقره ای"
+                            BadgeText="تخفیف 30%"
+                            Image="onboarding_product.png"
+                            Rating="6.8"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="سنندج - خ.آبیدر" />
+
+                        <card:ShowcaseCardView
+                            Title="نیلوفر آبی"
+                            BadgeText="تخفیف 25%"
+                            Image="onboarding_chair.png"
+                            Rating="9.1"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="تهران - سعادت آباد" />
+
+                        <card:ShowcaseCardView
+                            Title="حنانه"
+                            BadgeText="تخفیف 12%"
+                            Image="onboarding_mobile.png"
+                            Rating="5.4"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="کرمانشاه - شهرک سعدی" />
+
+                        <card:ShowcaseCardView
+                            Title="سیب نقره ای"
+                            BadgeText="تخفیف 30%"
+                            Image="onboarding_product.png"
+                            Rating="6.8"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="سنندج - خ.آبیدر" />
+
+                        <card:ShowcaseCardView
+                            Title="نیلوفر آبی"
+                            BadgeText="تخفیف 25%"
+                            Image="onboarding_chair.png"
+                            Rating="9.1"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="تهران - سعادت آباد" />
+
+                        <card:ShowcaseCardView
+                            Title="حنانه"
+                            BadgeText="تخفیف 12%"
+                            Image="onboarding_mobile.png"
+                            Rating="5.4"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="کرمانشاه - شهرک سعدی" />
+
+                        <card:ShowcaseCardView
+                            Title="سیب نقره ای"
+                            BadgeText="تخفیف 30%"
+                            Image="onboarding_product.png"
+                            Rating="6.8"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="سنندج - خ.آبیدر" />
+
+                        <card:ShowcaseCardView
+                            Title="نیلوفر آبی"
+                            BadgeText="تخفیف 25%"
+                            Image="onboarding_chair.png"
+                            Rating="9.1"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="تهران - سعادت آباد" />
+
+                        <card:ShowcaseCardView
+                            Title="حنانه"
+                            BadgeText="تخفیف 12%"
+                            Image="onboarding_mobile.png"
+                            Rating="5.4"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="کرمانشاه - شهرک سعدی" />
+
+
+                    </HorizontalStackLayout>
+                </ScrollView>
+
+                <header:SectionHeaderView
+                    Title="تخفیف های ویژه"
+                    Grid.Row="5"
+                    Margin="10,15,10,0"
+                    ActionText="مشاهده همه" />
+
+                <ScrollView
+                    Grid.Row="6"
+                    HorizontalScrollBarVisibility="Never"
+                    Orientation="Horizontal">
+
+                    <HorizontalStackLayout Spacing="6">
+
+                        <card:FeatureCardView
+                            Title="شب کریسمس"
+                            Image="kris.png"
+                            Subtitle="تا 60٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="عید نوروز"
+                            Image="noroz.png"
+                            Subtitle="تا 20٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="شب یلدا"
+                            Image="yalda.png"
+                            Subtitle="تا 15٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="روز مادر"
+                            Image="mathar.png"
+                            Subtitle="تا 35٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="شب کریسمس"
+                            Image="kris.png"
+                            Subtitle="تا 60٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="عید نوروز"
+                            Image="noroz.png"
+                            Subtitle="تا 20٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="شب یلدا"
+                            Image="yalda.png"
+                            Subtitle="تا 15٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="روز مادر"
+                            Image="mathar.png"
+                            Subtitle="تا 35٪ تخفیف" />
+
+                    </HorizontalStackLayout>
+                </ScrollView>
+
+                <header:SectionHeaderView
+                    Title="سالن های پیشنهادی"
+                    Grid.Row="7"
+                    Margin="10,15,10,0"
+                    ActionText="مشاهده همه" />
+
+                <ScrollView
+                    Grid.Row="8"
+                    HorizontalScrollBarVisibility="Never"
+                    Orientation="Horizontal">
+
+                    <HorizontalStackLayout Spacing="15">
+
+                        <card:ShowcaseCardView
+                            Title="سیب نقره ای"
+                            BadgeText="تخفیف 30%"
+                            Image="onboarding_product.png"
+                            Rating="6.8"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="سنندج - خ.آبیدر" />
+
+                        <card:ShowcaseCardView
+                            Title="نیلوفر آبی"
+                            BadgeText="تخفیف 25%"
+                            Image="onboarding_chair.png"
+                            Rating="9.1"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="تهران - سعادت آباد" />
+
+                        <card:ShowcaseCardView
+                            Title="حنانه"
+                            BadgeText="تخفیف 12%"
+                            Image="onboarding_mobile.png"
+                            Rating="5.4"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="کرمانشاه - شهرک سعدی" />
+
+                        <card:ShowcaseCardView
+                            Title="سیب نقره ای"
+                            BadgeText="تخفیف 30%"
+                            Image="onboarding_product.png"
+                            Rating="6.8"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="سنندج - خ.آبیدر" />
+
+                        <card:ShowcaseCardView
+                            Title="نیلوفر آبی"
+                            BadgeText="تخفیف 25%"
+                            Image="onboarding_chair.png"
+                            Rating="9.1"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="تهران - سعادت آباد" />
+
+                        <card:ShowcaseCardView
+                            Title="حنانه"
+                            BadgeText="تخفیف 12%"
+                            Image="onboarding_mobile.png"
+                            Rating="5.4"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="کرمانشاه - شهرک سعدی" />
+
+                        <card:ShowcaseCardView
+                            Title="سیب نقره ای"
+                            BadgeText="تخفیف 30%"
+                            Image="onboarding_product.png"
+                            Rating="6.8"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="سنندج - خ.آبیدر" />
+
+                        <card:ShowcaseCardView
+                            Title="نیلوفر آبی"
+                            BadgeText="تخفیف 25%"
+                            Image="onboarding_chair.png"
+                            Rating="9.1"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="تهران - سعادت آباد" />
+
+                        <card:ShowcaseCardView
+                            Title="حنانه"
+                            BadgeText="تخفیف 12%"
+                            Image="onboarding_mobile.png"
+                            Rating="5.4"
+                            Style="{x:StaticResource ShowcaseCardStyle}"
+                            Subtitle="کرمانشاه - شهرک سعدی" />
+
+
+                    </HorizontalStackLayout>
+                </ScrollView>
+
+                <header:SectionHeaderView
+                    Title="تخفیف های ویژه"
+                    Grid.Row="9"
+                    Margin="10,15,10,0"
+                    ActionText="مشاهده همه" />
+
+                <ScrollView
+                    Grid.Row="10"
+                    HorizontalScrollBarVisibility="Never"
+                    Orientation="Horizontal">
+
+                    <HorizontalStackLayout Spacing="6">
+
+                        <card:FeatureCardView
+                            Title="شب کریسمس"
+                            Image="kris.png"
+                            Subtitle="تا 60٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="عید نوروز"
+                            Image="noroz.png"
+                            Subtitle="تا 20٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="شب یلدا"
+                            Image="yalda.png"
+                            Subtitle="تا 15٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="روز مادر"
+                            Image="mathar.png"
+                            Subtitle="تا 35٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="شب کریسمس"
+                            Image="kris.png"
+                            Subtitle="تا 60٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="عید نوروز"
+                            Image="noroz.png"
+                            Subtitle="تا 20٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="شب یلدا"
+                            Image="yalda.png"
+                            Subtitle="تا 15٪ تخفیف" />
+
+                        <card:FeatureCardView
+                            Title="روز مادر"
+                            Image="mathar.png"
+                            Subtitle="تا 35٪ تخفیف" />
+
+                    </HorizontalStackLayout>
+                </ScrollView>
             </Grid>
+
         </ScrollView>
 
-        <Border Grid.Row="1" Background="Gainsboro" />
+        <nav:TabBar
+            x:Name="MainTabBar"
+            Grid.Row="1"
+            Margin="10,10"
+            BorderBrush="Pink"
+            BorderWidth="2"
+            CornerRadius="18"
+            FillBrush="White"
+            HorizontalOptions="Fill"
+            Placement="Bottom"
+            SelectedIndex="2"
+            VerticalOptions="Fill">
+            <nav:TabBar.Items>
 
-        <!--<Grid
-            ColumnDefinitions="80,*,50">
-            
-            <Border
-                Grid.Column="0"
-                Style="{StaticResource sqr }"
-                HorizontalOptions="Fill"/>
-            
-            <Border
-                Grid.Column="1"
-                Style="{StaticResource sqr }"
-                HorizontalOptions="Fill"/>
-            
-            <Border
-                Grid.Column="2"
-                Style="{StaticResource sqr }"
-                HorizontalOptions="Fill"/>
-            
-        </Grid>-->
-        <!--<HorizontalStackLayout
-            Grid.Row="1">
-            
-            <Border
-              Style="{StaticResource cir }"/>
-            
-            <Border
-                Style="{StaticResource cir }"/>
-            
-            <Border
-                Style="{StaticResource cir }"/>
-            
-            <Border
-                Style="{StaticResource cir }"/>
-            
-            <Border
-                Style="{StaticResource cir }"/>
-            
-            <Border
-                Style="{StaticResource cir }"/>
-            
-            <Border
-                Style="{StaticResource cir }"/>
-        </HorizontalStackLayout>
+                <nav:TabItemView
+                    BadgeBackground="#fc6c85"
+                    BadgeMargin="0,0,8,0"
+                    BadgeText="26"
+                    IconMode="Glyph"
+                    IsBadgeVisible="True"
+                    NormalIcon="{x:Static icon:IconFont.Message}"
+                    Style="{x:StaticResource BottomTabItemStyle}"
+                    Text="پیام‌ها" />
 
-        <Border
-             Grid.Row="2"
-             Style="{StaticResource sqr }"
-             HeightRequest="120"/>
+                <nav:TabItemView
+                    IconMode="Glyph"
+                    NormalIcon="{x:Static icon:IconFont.Search}"
+                    Style="{x:StaticResource BottomTabItemStyle}"
+                    Text="جستجو" />
 
-        <Label
-            Text="سالن های پیشنهادی"
-            Grid.Row="3"/>
-        
-        <Border
-            Grid.Row="4">
-            <HorizontalStackLayout>
-                <Border 
-                    Style="{StaticResource sqr}"
-                    HeightRequest="120"
-                    WidthRequest="80"/>
-                <Border 
-                    Style="{StaticResource sqr}"
-                    HeightRequest="120"
-                    WidthRequest="80"/>
-                <Border 
-                    Style="{StaticResource sqr}"
-                    HeightRequest="120"
-                    WidthRequest="80"/>
-                <Border 
-                    Style="{StaticResource sqr}"
-                    HeightRequest="120"
-                    WidthRequest="80"/>
-            </HorizontalStackLayout>
-        </Border>
-        
-        <Label
-             Text="تخفیف های ویژه"
-             Grid.Row="5"/>
-        
-        <Border
-            Grid.Row="6">
-            <HorizontalStackLayout>
-                <Border 
-                     Style="{StaticResource sqr}"
-                     HeightRequest="100"
-                     WidthRequest="80"/>
-                <Border 
-                     Style="{StaticResource sqr}"
-                     HeightRequest="100"
-                     WidthRequest="80"/>
-                <Border 
-                     Style="{StaticResource sqr}"
-                     HeightRequest="100"
-                     WidthRequest="80"/>
-                <Border 
-                     Style="{StaticResource sqr}"
-                     HeightRequest="100"
-                     WidthRequest="80"/>
-            </HorizontalStackLayout>
-        </Border>
-      
-        <Border
-            Grid.Row="6">
-            <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="100"/>
-            </Border.StrokeShape>
-            <HorizontalStackLayout>
-                <Border 
-                     Style="{StaticResource sqr}"
-                     HeightRequest="100"
-                     WidthRequest="80"/>
-                <Border 
-                     Style="{StaticResource sqr}"
-                     HeightRequest="100"
-                     WidthRequest="80"/>
-                <Border 
-                     Style="{StaticResource sqr}"
-                     HeightRequest="100"
-                     WidthRequest="80"/>
-                <Border 
-                     Style="{StaticResource sqr}"
-                     HeightRequest="100"
-                     WidthRequest="80"/>
-            </HorizontalStackLayout>
-        </Border>-->
+                <nav:TabItemView
+                    IconMode="Glyph"
+                    NormalIcon="{x:Static icon:IconFont.Home}"
+                    Style="{x:StaticResource BottomTabItemStyle}"
+                    Text="خانه" />
+
+                <nav:TabItemView
+                    BadgeBackground="#fc6c85"
+                    BadgeMargin="0,0,8,0"
+                    BadgeText="26"
+                    IconMode="Glyph"
+                    IsBadgeVisible="True"
+                    NormalIcon="{x:Static icon:IconSymbols.EventNote}"
+                    Style="{x:StaticResource BottomTabItemStyle}"
+                    Text="نوبت ها" />
+
+                <nav:TabItemView
+                    IconMode="Glyph"
+                    NormalIcon="{x:Static icon:IconFont.Person}"
+                    Style="{x:StaticResource BottomTabItemStyle}"
+                    Text="پروفایل" />
+
+            </nav:TabBar.Items>
+        </nav:TabBar>
     </Grid>
 </ContentPage>
