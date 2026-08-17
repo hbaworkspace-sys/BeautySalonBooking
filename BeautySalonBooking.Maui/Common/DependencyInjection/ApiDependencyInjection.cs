@@ -42,13 +42,12 @@ public static class ApiDependencyInjection
     {
         services.AddHttpClient<IAuthApiService, AuthApiService>(Configure)
                 .ConfigurePrimaryHttpMessageHandler(CreateHttpClientHandler);
-
         return services;
     }
 
     private static void Configure(HttpClient client)
     {
-        client.BaseAddress = new Uri("https://192.168.1.103:7036/");
+        client.BaseAddress = new Uri("https://192.168.1.105:7036/");
         client.Timeout = TimeSpan.FromSeconds(30);
     }
 

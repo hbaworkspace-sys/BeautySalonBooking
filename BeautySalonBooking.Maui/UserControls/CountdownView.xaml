@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeautySalonBooking.Maui.UserControls.CountdownView"
-             x:Name="self">
+<ContentView
+    x:Class="BeautySalonBooking.Maui.UserControls.CountdownView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="self">
 
-    <HorizontalStackLayout
-        HorizontalOptions="Center"
-        Spacing="5">
+    <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
 
         <Label
             x:Name="lblTitle"
-            Text="{Binding Title, Source={x:Reference self}}"
             FontSize="14"
-            TextColor="LightGray"/>
+            Text="{Binding Title, Source={x:Reference self}}"
+            TextColor="LightGray" />
 
         <Label
             x:Name="lblTimer"
-            FontSize="14"
             FontAttributes="Bold"
-            TextColor="#ED7F89"/>
+            FontSize="14"
+            TextColor="#ED7F89" />
 
         <Label
             x:Name="lblAction"
-            Text="{Binding ActionText, Source={x:Reference self}}"
-            FontSize="14"
             FontAttributes="Bold"
+            FontSize="14"
             IsVisible="False"
+            Text="{Binding ActionText, Source={x:Reference self}}"
             TextColor="#ED7F89">
 
             <Label.GestureRecognizers>
-                <TapGestureRecognizer
-                    Tapped="OnActionTapped"/>
+                <TapGestureRecognizer Tapped="OnActionTapped" />
             </Label.GestureRecognizers>
         </Label>
 

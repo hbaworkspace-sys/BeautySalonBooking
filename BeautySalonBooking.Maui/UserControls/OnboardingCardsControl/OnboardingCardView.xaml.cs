@@ -67,7 +67,7 @@ public partial class OnboardingCardView : ContentView
                 btnNext.IsVisible = true;
                 Indicator_1.Color = Color.FromArgb("#F59DB4");
                 Indicator_2.Color = Indicator_3.Color = Color.FromArgb("#D9D9D9");
-                imgCircularIcon.InternalMargin = 20;
+                imgCircularIcon.ImageMargin = 20;
 
                 break;
 
@@ -76,14 +76,14 @@ public partial class OnboardingCardView : ContentView
                 btnNext.IsVisible = true;
                 Indicator_1.Color = Indicator_2.Color = Color.FromArgb("#F59DB4");
                 Indicator_3.Color = Color.FromArgb("#D9D9D9");
-                imgCircularIcon.InternalMargin = 30;
+                imgCircularIcon.ImageMargin = 20;
                 break;
 
             case 2:
                 btnBack.IsVisible = true;
                 btnNext.IsVisible = true;
                 Indicator_1.Color = Indicator_2.Color = Indicator_3.Color = Color.FromArgb("#F59DB4");
-                imgCircularIcon.InternalMargin = 30;
+                imgCircularIcon.ImageMargin = 20;
 
                 break;
         }

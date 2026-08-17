@@ -90,6 +90,11 @@ namespace BeautySalonBooking.Maui.Features.Auth
         {
             return _navigationService.GoToLoginAsync();
         }
+        [RelayCommand]
+        private Task GoBackAsync()
+        {
+            return _navigationService.GoBackAsync();
+        }
         private async Task<bool> ValidateInputAsync()
         {
             if (string.IsNullOrWhiteSpace(FirstName))

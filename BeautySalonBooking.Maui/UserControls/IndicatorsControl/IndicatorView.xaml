@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeautySalonBooking.Maui.UserControls.Indicator.IndicatorView"
-             xmlns:local="clr-namespace:BeautySalonBooking.Maui.UserControls.Indicator"
-             x:Name="self">
+<ContentView
+    x:Class="BeautySalonBooking.Maui.UserControls.Indicator.IndicatorView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:BeautySalonBooking.Maui.UserControls.Indicator"
+    x:Name="self">
 
     <FlexLayout
         x:Name="PART_Container"
-        Direction="Row"
-        Wrap="NoWrap"
-        JustifyContent="Center"
         AlignItems="Center"
-        BindableLayout.ItemsSource="{Binding Indicators, Source={x:Reference self}}">
+        BindableLayout.ItemsSource="{Binding Indicators, Source={x:Reference self}}"
+        Direction="Row"
+        JustifyContent="Center"
+        Wrap="NoWrap">
         <BindableLayout.ItemTemplate>
             <DataTemplate x:DataType="local:IndicatorItem">
                 <Border
-                    WidthRequest="{Binding Width}"
-                    HeightRequest="{Binding Height}"
                     Margin="{Binding Margin}"
                     Background="{Binding Background}"
+                    HeightRequest="{Binding Height}"
                     Stroke="{Binding Stroke}"
-                    StrokeThickness="{Binding StrokeThickness}">
+                    StrokeThickness="{Binding StrokeThickness}"
+                    WidthRequest="{Binding Width}">
                     <Border.StrokeShape>
-                        <RoundRectangle
-                            CornerRadius="{Binding CornerRadius}" />
+                        <RoundRectangle CornerRadius="{Binding CornerRadius}" />
                     </Border.StrokeShape>
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer
-                            Command="{Binding Source={x:Reference self}, Path=IndicatorTappedCommand}"
-                            CommandParameter="{Binding Index}" />
+                        <TapGestureRecognizer Command="{Binding Source={x:Reference self}, Path=IndicatorTappedCommand}" CommandParameter="{Binding Index}" />
                     </Border.GestureRecognizers>
                 </Border>
             </DataTemplate>

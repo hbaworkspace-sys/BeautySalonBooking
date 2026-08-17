@@ -13,4 +13,14 @@ public static class AppRoutes
 
     //Dashboard
     public const string Dashboard = "dashboard";
+
+    // Appointments
+    public const string Appointments = "appointments";
+    public const string AppointmentDetail = "appointments/detail";
+
+    // Booking
+    public const string Booking = "appointments/booking";
+    public const string BookingService = "appointments/booking/service";
+    public const string BookingDate = "appointments/booking/date";
+    public const string BookingTime = "appointments/booking/time";
 }

@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeautySalonBooking.Maui.Features.Auth.RegisterPage"
-             NavigationPage.HasNavigationBar="False"
-             xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
-             xmlns:ucBtn="clr-namespace:BeautySalonBooking.Maui.UserControls.ButtonControl"
-             BackgroundColor="{StaticResource White}"
-             xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
-             x:DataType="vm:RegisterViewModel"
-             xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources">
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Auth.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
+    x:DataType="vm:RegisterViewModel"
+    BackgroundColor="{StaticResource White}"
+    NavigationPage.HasNavigationBar="False">
 
     <Grid
+        Padding="15,10,15,10"
         RowDefinitions="35,auto,*,auto,auto"
-        RowSpacing="20"
-        Padding="15,10,15,10">
+        RowSpacing="20">
 
-        <ucBtn:NextAndBackButtonView
+        <nav:NavigationButtonsView
             Grid.Row="0"
-            IsBackVisible="True"/>
+            BackCommand="{Binding GoBackCommand}"
+            NavigationMode="Back" />
 
         <uc:TitleSubtitleView
-            Grid.Row="1"
             Title="ثبت نام"
-            Subtitle="لطفا اطلاعات خود را وارد کنید"/>
+            Grid.Row="1"
+            Subtitle="لطفا اطلاعات خود را وارد کنید" />
 
         <VerticalStackLayout
             Grid.Row="2"
@@ -30,41 +32,39 @@
             VerticalOptions="Center">
 
             <uc:TextEntry
-                PlaceHolder="نام"
                 Glyph="{x:Static icon:IconSymbols.Person}"
-                Text="{Binding FirstName ,Mode=TwoWay}"/>
+                PlaceHolder="نام"
+                Text="{Binding FirstName, Mode=TwoWay}" />
 
             <uc:TextEntry
-                PlaceHolder="نام خانوادگی"
                 Glyph="{x:Static icon:IconSymbols.Person}"
-                Text="{Binding LastName,Mode=TwoWay}"/>
+                PlaceHolder="نام خانوادگی"
+                Text="{Binding LastName, Mode=TwoWay}" />
 
-            <uc:PhoneNumberEntry
-                Text="{Binding PhoneNumber,Mode=TwoWay}"
-                PhoneType="Mobile"/>
+            <uc:PhoneNumberEntry PhoneType="Mobile" Text="{Binding PhoneNumber, Mode=TwoWay}" />
 
             <uc:NumericEntry
-                PlaceHolder="کد ملی"
                 Glyph="{x:Static icon:IconSymbols.IdCard}"
-                Text="{Binding NationalCode, Mode=TwoWay}"/>
+                PlaceHolder="کد ملی"
+                Text="{Binding NationalCode, Mode=TwoWay}" />
 
             <uc:TextEntry
-                PlaceHolder="جنسیت"
                 Glyph="{x:Static icon:IconSymbols.IdCard}"
-                ReturnTypeValue="Done"/>
+                PlaceHolder="جنسیت"
+                ReturnTypeValue="Done" />
 
         </VerticalStackLayout>
 
         <uc:DefaultButton
+            Title="ثبت نام"
             Grid.Row="3"
-            HCommand="{Binding RegisterCommand}"
-            Title="ثبت نام"/>
+            HCommand="{Binding RegisterCommand}" />
 
         <uc:TextLink
             Grid.Row="4"
-            QuestionText="حساب کاربری دارید؟"
-            Text="وارد شوید"
+            HCommand="{Binding GoToLoginCommand}"
             HorizontalOptions="Center"
-            HCommand="{Binding GoToLoginCommand}"/>
+            QuestionText="حساب کاربری دارید؟"
+            Text="وارد شوید" />
     </Grid>
 </ContentPage>

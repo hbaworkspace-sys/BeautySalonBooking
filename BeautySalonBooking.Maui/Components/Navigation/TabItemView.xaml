@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Navigation.TabItemView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared">
+
+    <Border
+        x:Name="ContainerBorder"
+        Background="Transparent"
+        HorizontalOptions="Fill"
+        InputTransparent="False"
+        StrokeThickness="0"
+        VerticalOptions="Fill">
+
+        <Border.StrokeShape>
+            <RoundRectangle x:Name="Shape" />
+        </Border.StrokeShape>
+
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnTapped" />
+        </Border.GestureRecognizers>
+
+        <Grid
+            HorizontalOptions="Fill"
+            InputTransparent="True"
+            RowDefinitions="*,Auto"
+            VerticalOptions="Fill">
+
+            <StackLayout
+                x:Name="MainLayout"
+                Grid.Row="0"
+                HorizontalOptions="Fill"
+                InputTransparent="True"
+                VerticalOptions="Fill">
+
+                <Grid
+                    x:Name="IconContainer"
+                    HorizontalOptions="Fill"
+                    InputTransparent="True"
+                    VerticalOptions="Center">
+
+                    <media:MediaView
+                        x:Name="IconView"
+                        HorizontalOptions="Center"
+                        InputTransparent="True"
+                        VerticalOptions="Center" />
+
+                    <shared:BadgeView
+                        x:Name="BadgeView"
+                        Margin="0,1,6,0"
+                        Padding="0"
+                        HorizontalOptions="End"
+                        InputTransparent="True"
+                        IsVisible="False"
+                        VerticalOptions="Start" />
+                </Grid>
+
+                <Label
+                    x:Name="TitleLabel"
+                    FontSize="11"
+                    HorizontalTextAlignment="Center"
+                    InputTransparent="True"
+                    VerticalTextAlignment="Center" />
+
+            </StackLayout>
+
+            <Border
+                x:Name="SelectedIndicator"
+                Grid.Row="1"
+                HeightRequest="2"
+                HorizontalOptions="Center"
+                InputTransparent="True"
+                IsVisible="False"
+                StrokeThickness="0"
+                VerticalOptions="End"
+                WidthRequest="40">
+
+                <Border.StrokeShape>
+                    <RoundRectangle x:Name="IndicatorShape" CornerRadius="1" />
+                </Border.StrokeShape>
+
+            </Border>
+
+        </Grid>
+
+    </Border>
+
+</ContentView>

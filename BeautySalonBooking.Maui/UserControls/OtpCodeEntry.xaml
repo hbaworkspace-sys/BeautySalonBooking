@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeautySalonBooking.Maui.UserControls.OtpCodeEntry"
-             x:Name="self"
-             HeightRequest="50">
+<ContentView
+    x:Class="BeautySalonBooking.Maui.UserControls.OtpCodeEntry"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="self"
+    HeightRequest="50">
 
     <ContentView.Resources>
         <Style TargetType="Border">
@@ -11,64 +12,62 @@
             <Setter Property="StrokeThickness" Value="2" />
             <Setter Property="Stroke" Value="{StaticResource StrokeColor}" />
             <Setter Property="HeightRequest" Value="50" />
-            <Setter Property="WidthRequest" Value="40"/>
-            <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="WidthRequest" Value="40" />
+            <Setter Property="Margin" Value="10,0,10,0" />
             <Setter Property="StrokeShape">
                 <Setter.Value>
-                    <RoundRectangle CornerRadius="10"/>
+                    <RoundRectangle CornerRadius="10" />
                 </Setter.Value>
             </Setter>
             <Setter Property="Shadow">
                 <Setter.Value>
                     <Shadow
                         Brush="{StaticResource ShadowColor}"
-                        Offset="0,0.5"
+                        Opacity="0.3"
                         Radius="5"
-                        Opacity="0.3"/>
+                        Offset="0,0.5" />
                 </Setter.Value>
             </Setter>
         </Style>
 
         <Style TargetType="Entry">
-            <Setter Property="HorizontalOptions" Value="Center"/>
-            <Setter Property="VerticalOptions" Value="Center"/>
-            <Setter Property="Keyboard" Value="Numeric"/>
-            <Setter Property="MaxLength" Value="1"/>
-            <Setter Property="ReturnType" Value="Next"/>
-            <Setter Property="BackgroundColor" Value="Transparent"/>
-            <Setter Property="TextColor" Value="{x:StaticResource PrimaryText}"/>
-            <Setter Property="FontFamily" Value="Sans"/>
-            <Setter Property="HorizontalTextAlignment" Value="Center"/>
-            <Setter Property="FlowDirection" Value="LeftToRight"/>
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="Keyboard" Value="Numeric" />
+            <Setter Property="MaxLength" Value="1" />
+            <Setter Property="ReturnType" Value="Next" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="TextColor" Value="{x:StaticResource PrimaryText}" />
+            <Setter Property="FontFamily" Value="Sans" />
+            <Setter Property="HorizontalTextAlignment" Value="Center" />
+            <Setter Property="FlowDirection" Value="LeftToRight" />
         </Style>
     </ContentView.Resources>
 
-    <Grid
-        FlowDirection="LeftToRight"
-        ColumnDefinitions="*,*,*,*,*,*">
+    <Grid ColumnDefinitions="*,*,*,*,*,*" FlowDirection="LeftToRight">
 
         <Border Grid.Column="0">
-            <Entry x:Name="txtDigit_1"/>
+            <Entry x:Name="txtDigit_1" />
         </Border>
 
         <Border Grid.Column="1">
-            <Entry x:Name="txtDigit_2"/>
+            <Entry x:Name="txtDigit_2" />
         </Border>
 
         <Border Grid.Column="2">
-            <Entry x:Name="txtDigit_3"/>
+            <Entry x:Name="txtDigit_3" />
         </Border>
 
         <Border Grid.Column="3">
-            <Entry x:Name="txtDigit_4"/>
+            <Entry x:Name="txtDigit_4" />
         </Border>
 
         <Border Grid.Column="4">
-            <Entry x:Name="txtDigit_5"/>
+            <Entry x:Name="txtDigit_5" />
         </Border>
 
         <Border Grid.Column="5">
-            <Entry x:Name="txtDigit_6"/>
+            <Entry x:Name="txtDigit_6" />
         </Border>
     </Grid>
 </ContentView>

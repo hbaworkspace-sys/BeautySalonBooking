@@ -1,66 +1,97 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeautySalonBooking.Maui.Features.Auth.LoginPage"
-             NavigationPage.HasNavigationBar="False"
-             xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
-             xmlns:ucBtn="clr-namespace:BeautySalonBooking.Maui.UserControls.ButtonControl"
-             BackgroundColor="{StaticResource White}"
-             xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
-             x:DataType="vm:LoginViewModel">
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Auth.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
+    xmlns:ucBtn="clr-namespace:BeautySalonBooking.Maui.UserControls.ButtonControl"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
+    x:DataType="vm:LoginViewModel"
+    BackgroundColor="{StaticResource White}"
+    NavigationPage.HasNavigationBar="False">
 
     <Grid
-        RowDefinitions="35,auto,*,auto,auto,auto,auto"
-        RowSpacing="20"
-        Padding="15,10,15,10">
-
-        <ucBtn:NextAndBackButtonView
-            Grid.Row="0"
-            IsBackVisible="True"/>
+        Padding="15,10,15,10"
+        RowDefinitions="35,auto,*,auto,auto,60,auto"
+        RowSpacing="20">
 
         <uc:TitleSubtitleView
-            Grid.Row="1"
             Title="ورود به حساب کاربری"
-            Subtitle="لطفا شماره موبایل خود را وارد کنید"/>
+            Grid.Row="1"
+            Subtitle="لطفا شماره موبایل خود را وارد کنید" />
 
         <uc:PhoneNumberEntry
             Grid.Row="2"
-            Text="{Binding PhoneNumber, Mode=OneWayToSource}"
             PhoneType="Mobile"
-            ReturnTypeValue="Done"/>
+            ReturnTypeValue="Done"
+            Text="{Binding PhoneNumber, Mode=OneWayToSource}" />
 
         <uc:DefaultButton
+            Title="ورود"
             Grid.Row="3"
-            HCommand="{Binding LoginCommand}"
-            Title="ورود"/>
+            HCommand="{Binding LoginCommand}" />
 
         <Label
             Grid.Row="4"
-            Text="یا با شبکه های اجتماعی وارد شوید"
-            Style="{StaticResource PageSubtitleStyle}"/>
+            Style="{StaticResource PageSubtitleStyle}"
+            Text="یا با شبکه های اجتماعی وارد شوید" />
 
         <Grid
             Grid.Row="5"
-            ColumnDefinitions="*,*,*">
+            ColumnDefinitions="*,*,*"
+            ColumnSpacing="20">
 
-            <ucBtn:IconButtonView
+            <media:MediaView
                 Grid.Column="0"
-                ImageSource="geography.png"/>
+                BorderBrush="{StaticResource StrokeColor}"
+                BorderWidth="1"
+                CornerRadius="12"
+                FillBrush="White"
+                ImageMargin="10"
+                ImageSource="geography.png"
+                Shape="RoundedRectangle">
+                <media:MediaView.Shadow>
+                    <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
+                </media:MediaView.Shadow>
+            </media:MediaView>
 
-            <ucBtn:IconButtonView
+            <media:MediaView
                 Grid.Column="1"
-                ImageSource="google.png"/>
+                BorderBrush="{StaticResource StrokeColor}"
+                BorderWidth="1"
+                CornerRadius="12"
+                FillBrush="White"
+                ImageMargin="10"
+                ImageSource="google.png"
+                Shape="RoundedRectangle">
+                <media:MediaView.Shadow>
+                    <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
+                </media:MediaView.Shadow>
+            </media:MediaView>
 
-            <ucBtn:IconButtonView
+            <media:MediaView
                 Grid.Column="2"
-                ImageSource="apple_logo.png"/>
+                BorderBrush="{StaticResource StrokeColor}"
+                BorderWidth="1"
+                CornerRadius="12"
+                FillBrush="White"
+                ImageMargin="10"
+                ImageSource="apple_logo.png"
+                Shape="RoundedRectangle">
+                <media:MediaView.Shadow>
+                    <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
+                </media:MediaView.Shadow>
+
+            </media:MediaView>
         </Grid>
 
         <uc:TextLink
             Grid.Row="6"
-            QuestionText="حساب کاربری ندارید؟"
-            Text="ثبت نام کنید"
+            HCommand="{Binding GoToRegisterCommand}"
             HorizontalOptions="Center"
-            HCommand="{Binding GoToRegisterCommand}"/>
+            QuestionText="حساب کاربری ندارید؟"
+            Text="ثبت نام کنید" />
     </Grid>
 </ContentPage>

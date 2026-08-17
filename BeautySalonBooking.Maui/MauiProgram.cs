@@ -16,6 +16,7 @@ public static class MauiProgram
                 fonts.AddFont("IRANSans.ttf", "Sans");
                 fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIcons");
                 fonts.AddFont("MaterialSymbolsOutlined.ttf", "MaterialIconsOut");
+                fonts.AddFont("MaterialIconsRound-Regular.otf", "MaterialIconsRnd");
             });
 
         builder.Services.AddApiServices();

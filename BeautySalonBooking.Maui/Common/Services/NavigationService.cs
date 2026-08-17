@@ -33,12 +33,19 @@ public sealed class NavigationService : INavigationService
             ["OtpNavigation"] = model
         });
     }
+
     public Task GoToRegistrationSuccessAsync()
     {
         return Shell.Current.GoToAsync(AppRoutes.RegistrationSuccess);
     }
+
     public Task GoToDashboardAsync()
     {
         return Shell.Current.GoToAsync(AppRoutes.Dashboard);
+    }
+
+    public Task GoToAppointmentsAsyn()
+    {
+        return Shell.Current.GoToAsync(AppRoutes.Appointments);
     }
 }
