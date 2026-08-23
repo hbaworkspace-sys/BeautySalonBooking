@@ -1,4 +1,6 @@
-namespace BeautySalonBooking.Maui.Features.Splash;
+using BeautySalonBooking.Maui.Features.Splash.ViewModels;
+
+namespace BeautySalonBooking.Maui.Features.Splash.Views;
 
 public partial class SplashPage : ContentPage
 {

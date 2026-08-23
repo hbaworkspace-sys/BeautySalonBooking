@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Card.SelectedStylistCardView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media">
+
+    <Border
+        Padding="12"
+        BackgroundColor="#FFF7F9"
+        Stroke="#F8DDE5"
+        StrokeThickness="1">
+
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="14" />
+        </Border.StrokeShape>
+
+        <Grid ColumnDefinitions="90,*" ColumnSpacing="12">
+
+            <!--  Stylist Image  -->
+            <media:MediaView
+                x:Name="StylistImageView"
+                Grid.Column="0"
+                BorderWidth="2"
+                CornerRadius="60"
+                FillBrush="#AAD2B48C"
+                HeightRequest="120"
+                ImageAspect="AspectFit"
+                ImageBorderBrush="White"
+                ImageBorderWidth="2"
+                ImageMargin="0,5,0,0"
+                Shape="RoundedRectangle"
+                VerticalOptions="Center" />
+
+            <!--  Information  -->
+            <VerticalStackLayout
+                Grid.Column="1"
+                Spacing="4"
+                VerticalOptions="Center">
+
+                <!--  Stylist  -->
+                <Label
+                    x:Name="StylistNameLabel"
+                    FontAttributes="Bold"
+                    FontSize="13"
+                    TextColor="#292329" />
+
+                <Label
+                    x:Name="StylistTitleLabel"
+                    FontSize="10"
+                    TextColor="#8F858A" />
+
+                <!--  Service  -->
+                <Label
+                    x:Name="ServiceNameLabel"
+                    FontSize="10"
+                    TextColor="#6F666B" />
+
+                <!--  Duration / Price  -->
+                <HorizontalStackLayout Spacing="12">
+
+                    <HorizontalStackLayout Spacing="4">
+
+                        <Label
+                            FontSize="12"
+                            Style="{x:StaticResource GlyphLable}"
+                            Text="{x:Static icon:IconFont.Timer}"
+                            TextColor="#F05C80" />
+
+                        <Label
+                            x:Name="DurationLabel"
+                            FontSize="10"
+                            TextColor="#6F666B" />
+
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="4">
+
+                        <Label
+                            FontSize="10"
+                            Style="{x:StaticResource GlyphLable}"
+                            Text="{x:Static icon:IconFont.Sell}"
+                            TextColor="#F05C80" />
+
+                        <Label
+                            x:Name="PriceLabel"
+                            FontSize="10"
+                            TextColor="#6F666B" />
+
+                        <Label
+                            FontSize="10"
+                            Text="تومان"
+                            TextColor="#6F666B" />
+
+                    </HorizontalStackLayout>
+
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </Border>
+
+</ContentView>

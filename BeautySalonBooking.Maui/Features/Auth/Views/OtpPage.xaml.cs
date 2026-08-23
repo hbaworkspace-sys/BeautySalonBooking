@@ -1,4 +1,6 @@
-namespace BeautySalonBooking.Maui.Features.Auth;
+using BeautySalonBooking.Maui.Features.Auth.ViewModels;
+
+namespace BeautySalonBooking.Maui.Features.Auth.Views;
 
 public partial class OtpPage : ContentPage
 {

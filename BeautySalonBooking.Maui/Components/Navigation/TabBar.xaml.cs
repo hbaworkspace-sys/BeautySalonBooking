@@ -1,8 +1,6 @@
-﻿using Microsoft.Maui.Controls;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace BeautySalonBooking.Maui.Components.Navigation;
 
@@ -32,9 +30,7 @@ public partial class TabBar : ContentView
 
 
     #region Items
-
     public ObservableCollection<TabItemView> Items { get; } = new();
-
     #endregion
 
 
@@ -273,6 +269,7 @@ public partial class TabBar : ContentView
             typeof(TabBar),
             new CornerRadius(12),
             propertyChanged: OnAppearancePropertyChanged);
+
     public static readonly BindableProperty BarShadowProperty =
         BindableProperty.Create(
             nameof(BarShadow),
@@ -306,8 +303,6 @@ public partial class TabBar : ContentView
             nameof(SelectionChangedCommand),
             typeof(ICommand),
             typeof(TabBar));
-
-
     public ICommand? SelectionChangedCommand
     {
         get => (ICommand?)GetValue(SelectionChangedCommandProperty);
@@ -320,8 +315,6 @@ public partial class TabBar : ContentView
             nameof(SelectionChangedCommandParameter),
             typeof(object),
             typeof(TabBar));
-
-
     public object? SelectionChangedCommandParameter
     {
         get => GetValue(SelectionChangedCommandParameterProperty);
@@ -371,55 +364,19 @@ public partial class TabBar : ContentView
     #endregion
 
     #region Tab Events
-    //private void OnTabTapped(
-    //    object? sender,
-    //    TappedEventArgs e)
-    //{
-    //    if (sender is not TabItemView tab)
-    //        return;
-
-    //    var index = Items.IndexOf(tab);
-
-    //    if (index < 0)
-    //        return;
-
-    //    Select(index);
-    //}
     private void OnTabTapped(
         object? sender,
         TappedEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine(
-            "[5] TabBar.OnTabTapped ENTER");
-
         if (sender is not TabItemView tab)
-        {
-            System.Diagnostics.Debug.WriteLine(
-                "[6] Sender is NOT TabItemView");
-
             return;
-        }
 
         var index = Items.IndexOf(tab);
 
-        System.Diagnostics.Debug.WriteLine(
-            $"[6] TabBar received tab | Text={tab.Text} | Index={index} | SelectedIndex={SelectedIndex}");
-
         if (index < 0)
-        {
-            System.Diagnostics.Debug.WriteLine(
-                "[7] Tab index is invalid");
-
             return;
-        }
-
-        System.Diagnostics.Debug.WriteLine(
-            $"[7] Calling Select({index})");
 
         Select(index);
-
-        System.Diagnostics.Debug.WriteLine(
-            $"[8] Select finished | SelectedIndex={SelectedIndex} | Tab.IsSelected={tab.IsSelected}");
     }
     #endregion
 

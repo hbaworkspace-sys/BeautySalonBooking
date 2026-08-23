@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Card.OrganizationCardView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:enums="clr-namespace:BeautySalonBooking.Maui.Components.Shared.Enums"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
+    x:Name="self"
+    FlowDirection="RightToLeft">
+
+    <Border x:Name="ContainerBorder">
+
+        <Border.StrokeShape>
+            <RoundRectangle x:Name="CardShape" />
+        </Border.StrokeShape>
+
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Command, Source={x:Reference self}}" CommandParameter="{Binding CommandParameter, Source={x:Reference self}}" />
+        </Border.GestureRecognizers>
+        <Grid ColumnDefinitions="*,170" ColumnSpacing="12">
+
+            <VerticalStackLayout
+                Grid.Column="0"
+                Margin="10"
+                Spacing="5"
+                VerticalOptions="Center">
+
+                <Label
+                    x:Name="BranchNameLabel"
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    TextColor="#292329" />
+
+                <Label
+                    x:Name="SalonTypeLabel"
+                    Margin="20,0"
+                    FontSize="10"
+                    TextColor="#8F858A" />
+
+                <HorizontalStackLayout Margin="15,0" Spacing="10">
+
+                    <Label
+                        FontSize="11"
+                        Text="★"
+                        TextColor="#F5A623"
+                        VerticalOptions="Start" />
+
+                    <Label
+                        x:Name="RatingLabel"
+                        FontSize="11"
+                        TextColor="#40383D"
+                        VerticalOptions="Center" />
+
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Margin="15,0" Spacing="10">
+
+                    <Label
+                        FontSize="11"
+                        Text="♙"
+                        TextColor="#A89CA2"
+                        VerticalOptions="Center" />
+
+                    <Label
+                        x:Name="BeauticianCountLabel"
+                        FontSize="10"
+                        TextColor="#6F666B"
+                        VerticalOptions="Center" />
+
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Margin="15,0" Spacing="10">
+
+                    <Ellipse
+                        Fill="#25C759"
+                        HeightRequest="9"
+                        VerticalOptions="Center"
+                        WidthRequest="9" />
+
+                    <Label
+                        x:Name="AvailableTimesLabel"
+                        FontSize="10"
+                        TextColor="#5E575B"
+                        VerticalOptions="Center" />
+
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+
+            <media:MediaItemView
+                x:Name="SalonImageView"
+                Grid.Column="1"
+                Margin="0,10"
+                CornerRadius="12"
+                HeightRequest="150"
+                HorizontalOptions="Center"
+                ImageAspect="AspectFill"
+                MediaHeightRequest="150"
+                MediaWidthRequest="150"
+                Shape="RoundedRectangle"
+                VerticalOptions="Center"
+                WidthRequest="150" />
+
+            <shared:BadgeView
+                x:Name="BadgeView"
+                Grid.Column="1"
+                CornerRadius="10"
+                FontSize="9"
+                HeightRequest="30"
+                HorizontalOptions="End"
+                VerticalOptions="Start"
+                WidthRequest="70" />
+
+        </Grid>
+
+    </Border>
+
+</ContentView>

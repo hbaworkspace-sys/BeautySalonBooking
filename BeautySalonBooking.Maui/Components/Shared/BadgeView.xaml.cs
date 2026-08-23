@@ -1,10 +1,14 @@
-﻿namespace BeautySalonBooking.Maui.Components.Shared;
+﻿using BeautySalonBooking.Maui.Components.Shared.Enums;
+
+namespace BeautySalonBooking.Maui.Components.Shared;
 
 public partial class BadgeView : ContentView
 {
     public BadgeView()
     {
         InitializeComponent();
+
+        UpdateBadgeType();
 
         UpdateText();
         UpdateTextColor();
@@ -283,6 +287,66 @@ public partial class BadgeView : ContentView
     {
         ContainerBorder.Shadow =
             Shadow;
+    }
+
+    #endregion
+
+    #region Badge Type
+
+    public BadgeType BadgeType
+    {
+        get => (BadgeType)GetValue(BadgeTypeProperty);
+        set => SetValue(BadgeTypeProperty, value);
+    }
+
+    public static readonly BindableProperty BadgeTypeProperty =
+        BindableProperty.Create(
+            nameof(BadgeType),
+            typeof(BadgeType),
+            typeof(BadgeView),
+            BadgeType.None,
+            propertyChanged: OnBadgeTypeChanged);
+
+    private static void OnBadgeTypeChanged(
+        BindableObject bindable,
+        object oldValue,
+        object newValue)
+    {
+        ((BadgeView)bindable).UpdateBadgeType();
+    }
+
+    private void UpdateBadgeType()
+    {
+        switch (BadgeType)
+        {
+            case BadgeType.Popular:
+                Text = "محبوب";
+                TextColor = Colors.White;
+                FillBrush = new SolidColorBrush(
+                    Color.FromArgb("#F34F78"));
+                break;
+
+            case BadgeType.Discount:
+                Text = "تخفیف";
+                TextColor = Colors.White;
+                FillBrush = new SolidColorBrush(
+                    Color.FromArgb("#25C759"));
+                break;
+
+            case BadgeType.New:
+                Text = "جدید";
+                TextColor = Colors.White;
+                FillBrush = new SolidColorBrush(
+                    Color.FromArgb("#6C63FF"));
+                break;
+
+            case BadgeType.Special:
+                Text = "پیشنهاد ویژه";
+                TextColor = Colors.White;
+                FillBrush = new SolidColorBrush(
+                    Color.FromArgb("#F5A623"));
+                break;
+        }
     }
     #endregion
 }

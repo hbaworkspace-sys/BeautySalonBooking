@@ -1,49 +1,62 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="BeautySalonBooking.Maui.Features.Auth.OtpPage"
+    x:Class="BeautySalonBooking.Maui.Features.Auth.Views.OtpPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
     xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
     xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
-    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth.ViewModels"
     x:DataType="vm:OtpViewModel"
     BackgroundColor="{StaticResource White}"
     NavigationPage.HasNavigationBar="False">
-    <Grid
-        Padding="15,10,15,10"
-        RowDefinitions="auto,auto,*,0.5*"
-        RowSpacing="20">
 
-        <nav:NavigationButtonsView
+    <Grid RowDefinitions="Auto,*" RowSpacing="0">
+
+        <nav:NavigationHeaderView
             Grid.Row="0"
             BackCommand="{Binding GoBackCommand}"
-            NavigationMode="Back" />
-
-        <uc:TitleSubtitleView
-            Title="کد تایید"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+        <Grid
             Grid.Row="1"
-            Subtitle="کد 4 رقمی ارسال شده را وارد کنید" />
+            Padding="16"
+            RowDefinitions="Auto,*,*"
+            RowSpacing="25">
 
-        <VerticalStackLayout
-            Grid.Row="2"
-            Spacing="30"
-            VerticalOptions="Center">
+            <uc:TitleSubtitleView
+                Title="کد تایید"
+                Grid.Row="0"
+                Subtitle="کد 4 رقمی ارسال شده را وارد کنید" />
 
-            <uc:OtpCodeEntry x:Name="txtOtp" OtpCode="{Binding OtpCode, Mode=OneWayToSource}" />
+            <VerticalStackLayout
+                Grid.Row="1"
+                Spacing="30"
+                VerticalOptions="Center">
 
-            <uc:CountdownView
-                Title="ارسال مجدد تا"
-                Grid.Row="3"
-                ActionCommand="{Binding ResendOtpCommand}"
-                ActionText="ارسال مجدد کد"
-                IsRunning="{Binding IsCountdownRunning, Mode=TwoWay}"
-                Duration="{Binding CountdownSeconds, Mode=TwoWay}" />
+                <uc:OtpCodeEntry x:Name="txtOtp" OtpCode="{Binding OtpCode, Mode=OneWayToSource}" />
 
-            <uc:DefaultButton
-                Title="ورود"
-                Grid.Row="3"
-                HCommand="{Binding VerifyOtpCommand}" />
-        </VerticalStackLayout>
+                <uc:CountdownView
+                    Title="ارسال مجدد تا"
+                    Grid.Row="3"
+                    ActionCommand="{Binding ResendOtpCommand}"
+                    ActionText="ارسال مجدد کد"
+                    IsRunning="{Binding IsCountdownRunning, Mode=TwoWay}"
+                    Duration="{Binding CountdownSeconds, Mode=TwoWay}" />
+
+                <btn:PrimaryButtonView
+                    Title="ورود"
+                    Grid.Row="3"
+                    Command="{Binding VerifyOtpCommand}">
+                    <btn:PrimaryButtonView.FillBrush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Offset="0.0" Color="#ccFFBB80" />
+                            <GradientStop Offset="1.1" Color="#ccEA6A96" />
+                        </LinearGradientBrush>
+                    </btn:PrimaryButtonView.FillBrush>
+                </btn:PrimaryButtonView>
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

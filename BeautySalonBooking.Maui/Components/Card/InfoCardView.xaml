@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Card.InfoCardView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    x:Name="self">
+
+    <Border x:Name="ContainerBorder">
+
+        <Border.StrokeShape>
+            <RoundRectangle x:Name="ContainerShape" />
+        </Border.StrokeShape>
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Command, Source={x:Reference self}}" CommandParameter="{Binding CommandParameter, Source={x:Reference self}}" />
+        </Border.GestureRecognizers>
+        <Grid
+            x:Name="ContainerGrid"
+            Padding="0,5"
+            ColumnDefinitions="110,*,40"
+            ColumnSpacing="20"
+            HeightRequest="110">
+
+            <media:MediaView
+                x:Name="ImageView"
+                Grid.Column="0"
+                CornerRadius="16"
+                FillBrush="#55D6C1B7"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" />
+
+            <Grid
+                Grid.Column="1"
+                RowDefinitions="Auto,Auto,Auto"
+                RowSpacing="7"
+                VerticalOptions="Center">
+
+                <Label
+                    x:Name="TitleLabel"
+                    Grid.Row="0"
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    HorizontalTextAlignment="Start"
+                    LineBreakMode="TailTruncation" />
+
+                <Label
+                    x:Name="SubtitleLabel"
+                    Grid.Row="1"
+                    FontSize="10"
+                    HorizontalTextAlignment="Start"
+                    LineBreakMode="TailTruncation"
+                    TextColor="Gray" />
+
+                <Label
+                    x:Name="ThirdRowLabel"
+                    Grid.Row="2"
+                    FontAttributes="Bold"
+                    FontSize="10"
+                    HorizontalTextAlignment="Start"
+                    LineBreakMode="TailTruncation"
+                    TextColor="#444444" />
+
+            </Grid>
+
+            <media:MediaView
+                x:Name="ArrowView"
+                Grid.Column="2"
+                Margin="10"
+                DisplayMode="Glyph"
+                FillBrush="#55eeeeee"
+                Glyph="{x:Static icon:IconSymbols.ChevronBackward}"
+                GlyphColor="#EA6A96"
+                HeightRequest="35"
+                Shape="Circle"
+                TextSize="25"
+                WidthRequest="30" />
+
+        </Grid>
+    </Border>
+</ContentView>

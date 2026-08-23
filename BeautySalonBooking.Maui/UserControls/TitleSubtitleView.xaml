@@ -5,11 +5,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Name="self">
 
-    <VerticalStackLayout Spacing="8">
+    <VerticalStackLayout Spacing="5">
 
-        <Label Style="{StaticResource PageTitleStyle}" Text="{Binding Title, Source={x:Reference self}}" />
+        <Label
+            Style="{StaticResource PageTitleStyle}"
+            Text="{Binding Title, Source={x:Reference self}}"
+            TextColor="#7d0a26" />
 
-        <Label Style="{StaticResource PageSubtitleStyle}" Text="{Binding Subtitle, Source={x:Reference self}}" />
+        <Label
+            Style="{StaticResource PageSubtitleStyle}"
+            Text="{Binding Subtitle, Source={x:Reference self}}"
+            TextColor="#87767b" />
 
     </VerticalStackLayout>
 </ContentView>

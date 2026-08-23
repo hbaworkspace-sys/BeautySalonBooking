@@ -4,8 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
-    xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
-    xmlns:ucImg="clr-namespace:BeautySalonBooking.Maui.UserControls.Images"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
     BackgroundColor="{x:StaticResource White}">
 
     <Grid RowDefinitions="380,*,70">
@@ -30,24 +29,28 @@
             WidthRequest="135">
             <media:MediaView.FillBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Offset="0" Color="#fabaac" />
-                    <GradientStop Offset="1" Color="#f99bd3" />
+                    <GradientStop Offset="0" Color="#FFBB80" />
+                    <GradientStop Offset="1" Color="#eeEA6A96" />
                 </LinearGradientBrush>
             </media:MediaView.FillBrush>
         </media:MediaView>
 
-        <uc:TitleSubtitleView
+        <shared:TitleDescriptionView
             x:Name="textContent"
             Grid.Row="1"
+            DescriptionFontSize="12"
+            TitleFontSize="22"
             VerticalOptions="Center" />
 
-        <Grid Grid.Row="2" ColumnDefinitions="70,*,70">
+        <Grid Grid.Row="2" ColumnDefinitions="100,*,100">
 
             <Button
                 x:Name="btnBack"
                 Grid.Column="2"
                 BackgroundColor="Transparent"
                 Clicked="btnBack_Clicked"
+                FontFamily="Sans"
+                HorizontalOptions="End"
                 Text="Back"
                 TextColor="#777777" />
 
@@ -81,6 +84,8 @@
                 Grid.Column="0"
                 BackgroundColor="Transparent"
                 Clicked="btnNext_Clicked"
+                FontFamily="Sans"
+                HorizontalOptions="Start"
                 Text="Next"
                 TextColor="#777777" />
         </Grid>

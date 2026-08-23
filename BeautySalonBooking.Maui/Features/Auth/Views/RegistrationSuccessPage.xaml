@@ -3,6 +3,7 @@
     x:Class="BeautySalonBooking.Maui.Features.Auth.Views.RegistrationSuccessPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
     xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
     xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth.ViewModels"
@@ -39,9 +40,9 @@
             Grid.Row="2"
             Subtitle="حساب کاربری شما با موفقیت ایجاد شد&#10;حالا می توانید از امکانات آپ استفاده کنید" />
 
-        <uc:DefaultButton
+        <btn:PrimaryButtonView
             Title="شروع کنید"
             Grid.Row="3"
-            HCommand="{Binding GoToDashbordPageCommand}" />
+            Command="{Binding GoToMainPageCommand}" />
     </Grid>
 </ContentPage>
