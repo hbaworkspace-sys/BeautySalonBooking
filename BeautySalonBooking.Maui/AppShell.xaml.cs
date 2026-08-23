@@ -1,8 +1,8 @@
 ﻿using BeautySalonBooking.Maui.Common.Navigation;
 using BeautySalonBooking.Maui.Features.Auth;
 using BeautySalonBooking.Maui.Features.Auth.Views;
-using BeautySalonBooking.Maui.Features.Dashboard.Views;
-using BeautySalonBooking.Maui.Features.Pages.Appointment;
+using BeautySalonBooking.Maui.Features.Booking.Views;
+using BeautySalonBooking.Maui.Features.Main.Views;
 using BeautySalonBooking.Maui.Features.Splash.Views;
 
 namespace BeautySalonBooking.Maui;
@@ -22,10 +22,12 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(AppRoutes.Otp, typeof(OtpPage));
         Routing.RegisterRoute(AppRoutes.RegistrationSuccess, typeof(RegistrationSuccessPage));
 
-        //Dashboard
-        Routing.RegisterRoute(AppRoutes.Dashboard, typeof(DashboardPage));
-
-        //Appointment
-        Routing.RegisterRoute(AppRoutes.Appointments, typeof(AppointmentsPage));
+        //BOOKING
+        Routing.RegisterRoute(AppRoutes.ServiceSelection, typeof(ServiceSelectionPage));
+        Routing.RegisterRoute(AppRoutes.OrganizationSelection, typeof(OrganizationSelectionPage));
+        Routing.RegisterRoute(AppRoutes.StylistSelection, typeof(StylistSelectionPage));
+        Routing.RegisterRoute(AppRoutes.BookingDateTimeSelection, typeof(DateTimeSelectionPage));
+        Routing.RegisterRoute(AppRoutes.BookingConfirmation, typeof(ConfirmationPage));
+        Routing.RegisterRoute(AppRoutes.BookingSuccess, typeof(SuccessPage));
     }
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Information.InfoSummaryItemView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Grid
+        x:Name="RootGrid"
+        Padding="15,5"
+        ColumnDefinitions="Auto,Auto,*"
+        ColumnSpacing="25"
+        RowDefinitions="Auto,Auto"
+        RowSpacing="14">
+
+        <!--  Column 1  -->
+        <Label
+            x:Name="Column1Label"
+            Grid.Row="0"
+            Grid.Column="0"
+            FontFamily="MaterialSymbolsOutlined"
+            FontSize="20"
+            TextColor="#8A6F7B" />
+
+        <!--  Column 2  -->
+        <Label
+            x:Name="Column2Label"
+            Grid.Row="0"
+            Grid.Column="1"
+            FontSize="12" />
+
+        <!--  Column 3  -->
+        <Label
+            x:Name="Column3Label"
+            Grid.Row="0"
+            Grid.Column="2"
+            FontSize="12"
+            HorizontalTextAlignment="End" />
+
+        <!--  Separator  -->
+        <BoxView
+            x:Name="Separator"
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HeightRequest="1"
+            HorizontalOptions="Fill"
+            Color="#FFEBF5" />
+
+    </Grid>
+
+</ContentView>

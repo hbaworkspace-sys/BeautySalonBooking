@@ -14,8 +14,8 @@
             x:Name="IconLabel"
             HorizontalOptions="Center"
             HorizontalTextAlignment="Center"
-            VerticalOptions="Center"
-            VerticalTextAlignment="Center" />
+            VerticalOptions="Start"
+            VerticalTextAlignment="Start" />
 
         <Border.GestureRecognizers>
             <TapGestureRecognizer x:Name="TapGesture" />

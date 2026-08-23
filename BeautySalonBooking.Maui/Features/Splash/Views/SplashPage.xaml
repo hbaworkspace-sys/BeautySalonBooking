@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="BeautySalonBooking.Maui.Features.Splash.SplashPage"
+    x:Class="BeautySalonBooking.Maui.Features.Splash.Views.SplashPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
     xmlns:ucInd="clr-namespace:BeautySalonBooking.Maui.UserControls.Indicators"
-    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Splash"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Splash.ViewModels"
     x:DataType="vm:SplashViewModel"
     Background="#fee0f5"
     NavigationPage.HasNavigationBar="False">
@@ -97,8 +98,8 @@
             WidthRequest="170">
             <media:MediaView.FillBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Offset="0" Color="#fabaac" />
-                    <GradientStop Offset="1" Color="#f99bd3" />
+                    <GradientStop Offset="0" Color="#ccFFBB80" />
+                    <GradientStop Offset="1" Color="#ccEA6A96" />
                 </LinearGradientBrush>
             </media:MediaView.FillBrush>
             <media:MediaView.Shadow>
@@ -110,25 +111,15 @@
             Grid.Row="1"
             Grid.RowSpan="2"
             Margin="0,220,0,0"
-            RowDefinitions="60,40,*,*,*">
+            RowDefinitions="100,*,*,*">
 
-            <Label
+            <shared:TitleDescriptionView
+                Title="به دنیای زیبایی خوش آمدید"
                 Grid.Row="0"
-                FontAttributes="Bold"
-                FontSize="20"
-                HorizontalOptions="Center"
-                Text="به دنیای زیبایی خوش آمدید"
-                TextColor="#242124" />
+                Description="تجربه ای متفاوت در مدیریت و رزرو خدمات زیبایی" />
 
-            <Label
-                Grid.Row="1"
-                FontAttributes="Bold"
-                FontSize="12"
-                HorizontalOptions="Center"
-                Text="تجربه ای متفاوت در مدیریت و رزرو خدمات زیبایی"
-                TextColor="#8f8c8c" />
 
-            <ucInd:SimpleIndicator x:Name="Indicator" Grid.Row="2" />
+            <ucInd:SimpleIndicator x:Name="Indicator" Grid.Row="1" />
         </Grid>
     </Grid>
 </ContentPage>

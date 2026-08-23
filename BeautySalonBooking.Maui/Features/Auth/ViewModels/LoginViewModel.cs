@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Text.RegularExpressions;
 
-namespace BeautySalonBooking.Maui.Features.Auth;
+namespace BeautySalonBooking.Maui.Features.Auth.ViewModels;
 
 public partial class LoginViewModel : ObservableObject
 {

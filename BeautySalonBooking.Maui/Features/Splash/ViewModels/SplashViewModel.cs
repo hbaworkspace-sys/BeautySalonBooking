@@ -1,7 +1,7 @@
 ﻿using BeautySalonBooking.Maui.Common.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace BeautySalonBooking.Maui.Features.Splash;
+namespace BeautySalonBooking.Maui.Features.Splash.ViewModels;
 
 public partial class SplashViewModel : ObservableObject
 {

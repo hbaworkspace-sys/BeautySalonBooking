@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Main.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:main="clr-namespace:BeautySalonBooking.Maui.Features.Main.Models"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Main.ViewModels"
+    x:DataType="vm:MainViewModel"
+    BackgroundColor="White">
+
+    <Grid RowDefinitions="*,90">
+
+        <ContentView
+            x:Name="PageContainer"
+            Grid.Row="0"
+            Grid.RowSpan="2" />
+
+        <nav:TabBar
+            x:Name="MainTabBar"
+            Grid.Row="1"
+            Margin="10,10,10,5"
+            Background="White"
+            BorderBrush="Pink"
+            BorderWidth="1"
+            CornerRadius="10"
+            HorizontalOptions="Fill"
+            Placement="Bottom"
+            SelectedIndex="2"
+            VerticalOptions="End">
+
+            <nav:TabBar.Items>
+
+                <nav:TabItemView
+                    BadgeBackground="#fc6c85"
+                    BadgeMargin="0,0,8,0"
+                    BadgeText="26"
+                    Command="{Binding SelectTabCommand}"
+                    CommandParameter="{x:Static main:MainTab.Messages}"
+                    IconMode="Glyph"
+                    IsBadgeVisible="True"
+                    NormalIcon="{x:Static icon:IconFont.Message}"
+                    Style="{x:StaticResource BottomTabItemStyle}"
+                    Text="پیام‌ها" />
+
+                <nav:TabItemView
+                    Command="{Binding SelectTabCommand}"
+                    CommandParameter="{x:Static main:MainTab.Search}"
+                    IconMode="Glyph"
+                    NormalIcon="{x:Static icon:IconFont.Search}"
+                    Style="{x:StaticResource BottomTabItemStyle}"
+                    Text="جستجو" />
+
+                <nav:TabItemView
+                    Command="{Binding SelectTabCommand}"
+                    CommandParameter="{x:Static main:MainTab.Dashboard}"
+                    IconMode="Glyph"
+                    NormalIcon="{x:Static icon:IconFont.Home}"
+                    Style="{x:StaticResource BottomTabItemStyle}"
+                    Text="خانه" />
+
+                <nav:TabItemView
+                    BadgeBackground="#fc6c85"
+                    BadgeMargin="0,0,8,0"
+                    BadgeText="26"
+                    Command="{Binding SelectTabCommand}"
+                    CommandParameter="{x:Static main:MainTab.Appointments}"
+                    IconMode="Glyph"
+                    IsBadgeVisible="True"
+                    NormalIcon="{x:Static icon:IconSymbols.EventNote}"
+                    Style="{x:StaticResource BottomTabItemStyle}"
+                    Text="نوبت‌ها" />
+
+                <nav:TabItemView
+                    Command="{Binding SelectTabCommand}"
+                    CommandParameter="{x:Static main:MainTab.Profile}"
+                    IconMode="Glyph"
+                    NormalIcon="{x:Static icon:IconFont.Person}"
+                    Style="{x:StaticResource BottomTabItemStyle}"
+                    Text="پروفایل" />
+
+            </nav:TabBar.Items>
+        </nav:TabBar>
+
+    </Grid>
+
+</ContentPage>

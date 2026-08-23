@@ -7,7 +7,7 @@ using BeautySalonBooking.Maui.Features.Auth.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace BeautySalonBooking.Maui.Features.Auth
+namespace BeautySalonBooking.Maui.Features.Auth.ViewModels
 {
     public partial class RegisterViewModel : ObservableObject
     {

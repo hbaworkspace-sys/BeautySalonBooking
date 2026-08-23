@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Booking.Views.StylistSelectionPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:headers="clr-namespace:BeautySalonBooking.Maui.Components.Header"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
+    x:DataType="vm:StylistSelectionViewModel"
+    BackgroundColor="{x:StaticResource White}"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="0">
+
+        <nav:NavigationHeaderView
+            x:Name="HeaderView"
+            Title="انتخاب استایلیست"
+            Grid.Row="0"
+            BackCommand="{Binding GoBackCommand}"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+
+        <headers:SectionTitleView
+            Title="سالن انتخابی"
+            Grid.Row="1"
+            Margin="20,10,0,10"
+            ShowDivider="False" />
+
+        <card:InfoCardView
+            Title="سالن زیگورات"
+            Grid.Row="2"
+            Margin="15,5"
+            BorderBrush="#aaF5E2E8"
+            BorderWidth="1"
+            CornerRadius="20"
+            FillBrush="#fffdfd"
+            ImageAspect="Center"
+            ImageShape="RoundedRectangle"
+            ImageSource="salon_q1r2.png"
+            IsArrowVisible="False"
+            IsThirdRowVisible="False"
+            Subtitle="شهرک سعدی" />
+
+        <headers:SectionTitleView
+            Title="استایلیست های این سالن"
+            Grid.Row="3"
+            Margin="20,30,10,10"
+            ShowDivider="False" />
+
+        <ScrollView
+            Grid.Row="4"
+            Margin="15,5"
+            VerticalScrollBarVisibility="Never">
+
+            <VerticalStackLayout Spacing="10">
+
+                <card:StylistSelectionCardView
+                    Command="{Binding GoToBookingDateTimeSelectionCommand}"
+                    FirstAvailableTime="15:30"
+                    ImageSource="arayeshgar.png"
+                    Price="850,000"
+                    Rating="1"
+                    StylistName="سارا محمدی"
+                    StylistTitle="استایلیست ارشد"
+                    Duration="۴۵ دقیقه" />
+
+                <card:StylistSelectionCardView
+                    Command="{Binding GoToBookingDateTimeSelectionCommand}"
+                    FirstAvailableTime="15:30"
+                    ImageSource="arayeshgar.png"
+                    Price="850,000"
+                    Rating="2"
+                    StylistName="سارا محمدی"
+                    StylistTitle="استایلیست ارشد"
+                    Duration="۴۵ دقیقه" />
+
+                <card:StylistSelectionCardView
+                    Command="{Binding GoToBookingDateTimeSelectionCommand}"
+                    FirstAvailableTime="15:30"
+                    ImageSource="arayeshgar.png"
+                    Price="850,000"
+                    Rating="3.5"
+                    StylistName="سارا محمدی"
+                    StylistTitle="استایلیست ارشد"
+                    Duration="۴۵ دقیقه" />
+
+                <card:StylistSelectionCardView
+                    Command="{Binding GoToBookingDateTimeSelectionCommand}"
+                    FirstAvailableTime="15:30"
+                    ImageSource="arayeshgar.png"
+                    Price="850,000"
+                    Rating="2.9"
+                    StylistName="سارا محمدی"
+                    StylistTitle="استایلیست ارشد"
+                    Duration="۴۵ دقیقه" />
+
+                <card:StylistSelectionCardView
+                    Command="{Binding GoToBookingDateTimeSelectionCommand}"
+                    FirstAvailableTime="15:30"
+                    ImageSource="arayeshgar.png"
+                    Price="850,000"
+                    Rating="4"
+                    StylistName="سارا محمدی"
+                    StylistTitle="استایلیست ارشد"
+                    Duration="۴۵ دقیقه" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

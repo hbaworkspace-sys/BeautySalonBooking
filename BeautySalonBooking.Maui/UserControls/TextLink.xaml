@@ -15,7 +15,7 @@
             Grid.Column="1"
             FontSize="12"
             Text="{Binding Text, Source={x:Reference self}}"
-            TextColor="#ED7F89" />
+            TextColor="#F05C80" />
 
         <Button
             Grid.Column="1"
@@ -27,7 +27,7 @@
             x:Name="UnderLineBox"
             Grid.Column="1"
             Margin="0,12,0,0"
-            BackgroundColor="#ED7F89"
+            BackgroundColor="#F05C80"
             HeightRequest="1.5"
             IsVisible="False" />
     </Grid>

@@ -70,12 +70,11 @@
                 x:Name="SelectedIndicator"
                 Grid.Row="1"
                 HeightRequest="2"
-                HorizontalOptions="Center"
+                HorizontalOptions="Fill"
                 InputTransparent="True"
                 IsVisible="False"
                 StrokeThickness="0"
-                VerticalOptions="End"
-                WidthRequest="40">
+                VerticalOptions="End">
 
                 <Border.StrokeShape>
                     <RoundRectangle x:Name="IndicatorShape" CornerRadius="1" />

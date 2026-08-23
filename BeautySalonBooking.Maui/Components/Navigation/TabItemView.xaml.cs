@@ -12,14 +12,12 @@ public partial class TabItemView : ContentView
         UpdateAll();
     }
 
-
     #region Layout
     public StackOrientation TabOrientation
     {
         get => (StackOrientation)GetValue(TabOrientationProperty);
         set => SetValue(TabOrientationProperty, value);
     }
-
     public static readonly BindableProperty TabOrientationProperty =
         BindableProperty.Create(
             nameof(TabOrientation),
@@ -28,13 +26,11 @@ public partial class TabItemView : ContentView
             StackOrientation.Vertical,
             propertyChanged: OnLayoutChanged);
 
-
     public Thickness ContentPadding
     {
         get => (Thickness)GetValue(ContentPaddingProperty);
         set => SetValue(ContentPaddingProperty, value);
     }
-
     public static readonly BindableProperty ContentPaddingProperty =
         BindableProperty.Create(
             nameof(ContentPadding),
@@ -49,7 +45,6 @@ public partial class TabItemView : ContentView
         get => (double)GetValue(SpacingProperty);
         set => SetValue(SpacingProperty, value);
     }
-
     public static readonly BindableProperty SpacingProperty =
         BindableProperty.Create(
             nameof(Spacing),
@@ -64,7 +59,6 @@ public partial class TabItemView : ContentView
         get => (LayoutOptions)GetValue(ContentHorizontalOptionsProperty);
         set => SetValue(ContentHorizontalOptionsProperty, value);
     }
-
     public static readonly BindableProperty ContentHorizontalOptionsProperty =
         BindableProperty.Create(
             nameof(ContentHorizontalOptions),
@@ -73,13 +67,11 @@ public partial class TabItemView : ContentView
             LayoutOptions.Fill,
             propertyChanged: OnLayoutChanged);
 
-
     public LayoutOptions ContentVerticalOptions
     {
         get => (LayoutOptions)GetValue(ContentVerticalOptionsProperty);
         set => SetValue(ContentVerticalOptionsProperty, value);
     }
-
     public static readonly BindableProperty ContentVerticalOptionsProperty =
         BindableProperty.Create(
             nameof(ContentVerticalOptions),
@@ -87,7 +79,6 @@ public partial class TabItemView : ContentView
             typeof(TabItemView),
             LayoutOptions.Fill,
             propertyChanged: OnLayoutChanged);
-
 
     private static void OnLayoutChanged(
         BindableObject bindable,
@@ -97,7 +88,6 @@ public partial class TabItemView : ContentView
         if (bindable is TabItemView control)
             control.UpdateLayout();
     }
-
 
     private void UpdateLayout()
     {
@@ -232,9 +222,6 @@ public partial class TabItemView : ContentView
 
     private void UpdateSelection()
     {
-        System.Diagnostics.Debug.WriteLine(
-      $"[TAB UPDATE SELECTION] Text={Text} | IsSelected={IsSelected}");
-
         ContainerBorder.Background =
             IsSelected
                 ? SelectedBackground ?? NormalBackground
@@ -246,11 +233,6 @@ public partial class TabItemView : ContentView
             IsSelected
                 ? SelectedIconColor
                 : NormalIconColor;
-
-        System.Diagnostics.Debug.WriteLine(
-            $"[TAB ICON COLOR SET] Text={Text} | " +
-            $"IsSelected={IsSelected} | " +
-            $"Color={IconView.GlyphColor}");
 
         UpdateText();
         UpdateIndicator();
@@ -264,7 +246,6 @@ public partial class TabItemView : ContentView
         get => (string?)GetValue(NormalIconProperty);
         set => SetValue(NormalIconProperty, value);
     }
-
     public static readonly BindableProperty NormalIconProperty =
         BindableProperty.Create(
             nameof(NormalIcon),
@@ -279,7 +260,6 @@ public partial class TabItemView : ContentView
         get => (string?)GetValue(SelectedIconProperty);
         set => SetValue(SelectedIconProperty, value);
     }
-
     public static readonly BindableProperty SelectedIconProperty =
         BindableProperty.Create(
             nameof(SelectedIcon),
@@ -288,28 +268,24 @@ public partial class TabItemView : ContentView
             null,
             propertyChanged: OnIconChanged);
 
-
     public bool IsIconVisible
     {
         get => (bool)GetValue(IsIconVisibleProperty);
         set => SetValue(IsIconVisibleProperty, value);
     }
-
     public static readonly BindableProperty IsIconVisibleProperty =
         BindableProperty.Create(
             nameof(IsIconVisible),
             typeof(bool),
             typeof(TabItemView),
-            true,
+            false,
             propertyChanged: OnIconChanged);
-
 
     public double IconSize
     {
         get => (double)GetValue(IconSizeProperty);
         set => SetValue(IconSizeProperty, value);
     }
-
     public static readonly BindableProperty IconSizeProperty =
         BindableProperty.Create(
             nameof(IconSize),
@@ -318,13 +294,11 @@ public partial class TabItemView : ContentView
             24d,
             propertyChanged: OnIconChanged);
 
-
     public string IconFontFamily
     {
         get => (string)GetValue(IconFontFamilyProperty);
         set => SetValue(IconFontFamilyProperty, value);
     }
-
     public static readonly BindableProperty IconFontFamilyProperty =
         BindableProperty.Create(
             nameof(IconFontFamily),
@@ -333,13 +307,11 @@ public partial class TabItemView : ContentView
             "MaterialIconsRnd",
             propertyChanged: OnIconChanged);
 
-
     public FontAttributes IconFontAttributes
     {
         get => (FontAttributes)GetValue(IconFontAttributesProperty);
         set => SetValue(IconFontAttributesProperty, value);
     }
-
     public static readonly BindableProperty IconFontAttributesProperty =
         BindableProperty.Create(
             nameof(IconFontAttributes),
@@ -348,13 +320,11 @@ public partial class TabItemView : ContentView
             FontAttributes.None,
             propertyChanged: OnIconChanged);
 
-
     public DisplayMode IconMode
     {
         get => (DisplayMode)GetValue(IconModeProperty);
         set => SetValue(IconModeProperty, value);
     }
-
     public static readonly BindableProperty IconModeProperty =
         BindableProperty.Create(
             nameof(IconMode),
@@ -369,7 +339,6 @@ public partial class TabItemView : ContentView
         get => (ImageSource?)GetValue(NormalIconImageProperty);
         set => SetValue(NormalIconImageProperty, value);
     }
-
     public static readonly BindableProperty NormalIconImageProperty =
         BindableProperty.Create(
             nameof(NormalIconImage),
@@ -378,13 +347,11 @@ public partial class TabItemView : ContentView
             null,
             propertyChanged: OnIconChanged);
 
-
     public ImageSource? SelectedIconImage
     {
         get => (ImageSource?)GetValue(SelectedIconImageProperty);
         set => SetValue(SelectedIconImageProperty, value);
     }
-
     public static readonly BindableProperty SelectedIconImageProperty =
         BindableProperty.Create(
             nameof(SelectedIconImage),
@@ -458,18 +425,14 @@ public partial class TabItemView : ContentView
         IconView.ImageOpacity =
             1;
     }
-
     #endregion
 
-
     #region Text
-
     public string? Text
     {
         get => (string?)GetValue(TextProperty);
         set => SetValue(TextProperty, value);
     }
-
     public static readonly BindableProperty TextProperty =
         BindableProperty.Create(
             nameof(Text),
@@ -478,13 +441,11 @@ public partial class TabItemView : ContentView
             null,
             propertyChanged: OnTextChanged);
 
-
     public bool IsTextVisible
     {
         get => (bool)GetValue(IsTextVisibleProperty);
         set => SetValue(IsTextVisibleProperty, value);
     }
-
     public static readonly BindableProperty IsTextVisibleProperty =
         BindableProperty.Create(
             nameof(IsTextVisible),
@@ -493,13 +454,11 @@ public partial class TabItemView : ContentView
             true,
             propertyChanged: OnTextChanged);
 
-
     public double TextSize
     {
         get => (double)GetValue(TextSizeProperty);
         set => SetValue(TextSizeProperty, value);
     }
-
     public static readonly BindableProperty TextSizeProperty =
         BindableProperty.Create(
             nameof(TextSize),
@@ -988,6 +947,19 @@ public partial class TabItemView : ContentView
             propertyChanged: OnIndicatorChanged);
 
 
+    public Brush? NormalIndicatorBrush
+    {
+        get => (Brush?)GetValue(NormalIndicatorBrushProperty);
+        set => SetValue(NormalIndicatorBrushProperty, value);
+    }
+    public static readonly BindableProperty NormalIndicatorBrushProperty =
+            BindableProperty.Create(
+                nameof(NormalIndicatorBrush),
+                typeof(Brush),
+                typeof(TabItemView),
+                new SolidColorBrush(Colors.DarkGray),
+                propertyChanged: OnIndicatorChanged);
+
     public Brush? SelectedIndicatorBrush
     {
         get => (Brush?)GetValue(SelectedIndicatorBrushProperty);
@@ -999,24 +971,8 @@ public partial class TabItemView : ContentView
             nameof(SelectedIndicatorBrush),
             typeof(Brush),
             typeof(TabItemView),
-            null,
+            new SolidColorBrush(Colors.Gray),
             propertyChanged: OnIndicatorChanged);
-
-
-    public double SelectedIndicatorWidth
-    {
-        get => (double)GetValue(SelectedIndicatorWidthProperty);
-        set => SetValue(SelectedIndicatorWidthProperty, value);
-    }
-
-    public static readonly BindableProperty SelectedIndicatorWidthProperty =
-        BindableProperty.Create(
-            nameof(SelectedIndicatorWidth),
-            typeof(double),
-            typeof(TabItemView),
-            40d,
-            propertyChanged: OnIndicatorChanged);
-
 
     public double SelectedIndicatorHeight
     {
@@ -1073,14 +1029,11 @@ public partial class TabItemView : ContentView
     }
     private void UpdateIndicator()
     {
-        SelectedIndicator.IsVisible =
-            IsSelected && ShowSelectedIndicator;
+        SelectedIndicator.IsVisible = ShowSelectedIndicator;
 
         SelectedIndicator.Background =
-            SelectedIndicatorBrush;
-
-        SelectedIndicator.WidthRequest =
-            SelectedIndicatorWidth;
+            IsSelected ?
+            SelectedIndicatorBrush : NormalIndicatorBrush;
 
         SelectedIndicator.HeightRequest =
             SelectedIndicatorHeight;
@@ -1153,6 +1106,5 @@ public partial class TabItemView : ContentView
         UpdateBadge();
         UpdateIndicator();
     }
-
     #endregion
 }

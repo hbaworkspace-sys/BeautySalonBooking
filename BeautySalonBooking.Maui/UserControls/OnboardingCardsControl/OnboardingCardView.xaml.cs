@@ -58,7 +58,7 @@ public partial class OnboardingCardView : ContentView
         imgMainBox.Source = Data[Selected].MainImageBoxSource;
         imgCircularIcon.ImageSource = Data[Selected].CircularImageSource;
         textContent.Title = Data[Selected].Title;
-        textContent.Subtitle = Data[Selected].Description;
+        textContent.Description = Data[Selected].Description;
 
         switch (Selected)
         {
