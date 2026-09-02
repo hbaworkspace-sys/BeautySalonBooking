@@ -4,10 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
-    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
     xmlns:information="clr-namespace:BeautySalonBooking.Maui.Components.Information"
     xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
-    xmlns:model="clr-namespace:BeautySalonBooking.Maui.Components.Information.Models"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
     xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
@@ -18,7 +16,7 @@
 
     <Grid
         Padding="16,60,16,16"
-        RowDefinitions="auto, auto,*,auto,auto"
+        RowDefinitions="Auto,Auto,*,Auto,Auto"
         RowSpacing="15">
 
         <media:MediaView
@@ -40,55 +38,9 @@
         <uc:TitleSubtitleView
             Title="رزرو با موفقیت انجام شد !"
             Grid.Row="1"
-            Subtitle="جرئیات رزرو برای شما پیامک و در بخش رزرو ها ذخیره شد" />
+            Subtitle="جزئیات رزرو برای شما پیامک و در بخش رزرو ها ذخیره شد" />
 
-
-        <information:InfoSummaryView Grid.Row="2">
-
-            <information:InfoSummaryView.Items>
-
-                <x:Array Type="{x:Type model:InfoSummaryItem}">
-
-                    <model:InfoSummaryItem
-                        Column2="رنگ مو"
-                        Column3="سرویس"
-                        IsSeparatorVisible="False" />
-
-                    <model:InfoSummaryItem
-                        Column2="سارا محمدی"
-                        Column3="استایلیست"
-                        IsSeparatorVisible="False" />
-
-                    <model:InfoSummaryItem
-                        Column2="شعبه سعادت آباد"
-                        Column3="سالن"
-                        IsSeparatorVisible="False" />
-
-                    <model:InfoSummaryItem
-                        Column2="شنبه 30 تیر 1405"
-                        Column3="تاریخ"
-                        IsSeparatorVisible="False" />
-
-                    <model:InfoSummaryItem
-                        Column2="15:30"
-                        Column3="ساعت"
-                        IsSeparatorVisible="False" />
-
-                    <model:InfoSummaryItem
-                        Column2="45 دقیقه"
-                        Column3="مدت زمان"
-                        IsSeparatorVisible="False" />
-
-                    <model:InfoSummaryItem
-                        Column2="850,000 تومان"
-                        Column3="قیمت"
-                        IsSeparatorVisible="False" />
-
-                </x:Array>
-
-            </information:InfoSummaryView.Items>
-
-        </information:InfoSummaryView>
+        <information:InfoSummaryView Grid.Row="2" Items="{Binding SummaryItems}" />
 
         <btn:PrimaryButtonView
             Title="مشاهده رزرو ها"
@@ -100,5 +52,6 @@
             Grid.Row="4"
             AppearanceMode="Secondary"
             Command="{Binding GoToDashboardCommand}" />
+
     </Grid>
 </ContentPage>

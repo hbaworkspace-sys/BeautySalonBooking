@@ -4,6 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:dto_cat="clr-namespace:BeautySalonBooking.Contracts.Category.Dtos;assembly=BeautySalonBooking.Contracts"
+    xmlns:dto_ser="clr-namespace:BeautySalonBooking.Contracts.Service.Dtos;assembly=BeautySalonBooking.Contracts"
     xmlns:headers="clr-namespace:BeautySalonBooking.Maui.Components.Header"
     xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
     xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
@@ -26,10 +28,11 @@
 
         <ScrollView
             Grid.Row="1"
-            Padding="10,10"
+            Margin="10"
+            Padding="15"
             VerticalScrollBarVisibility="Never">
 
-            <VerticalStackLayout Spacing="10">
+            <VerticalStackLayout Spacing="20">
 
                 <Border
                     BackgroundColor="#FFFFFF"
@@ -42,7 +45,7 @@
                         <RoundRectangle CornerRadius="10" />
                     </Border.StrokeShape>
 
-                    <Grid Padding="14,0" ColumnDefinitions="*,Auto">
+                    <Grid ColumnDefinitions="*,Auto">
 
                         <Label
                             Grid.Column="0"
@@ -60,180 +63,93 @@
                     </Grid>
                 </Border>
 
-                <headers:SectionTitleView
-                    Title="دسته بندی خدمات"
-                    Margin="10,10"
-                    ShowDivider="False" />
+                <headers:SectionTitleView Title="دسته بندی خدمات" ShowDivider="False" />
 
-                <Grid
-                    Margin="10,10"
-                    ColumnDefinitions="*,*,*,*,*"
-                    ColumnSpacing="20"
-                    RowDefinitions="Auto,Auto,Auto"
-                    RowSpacing="50">
+                <CollectionView
+                    HorizontalScrollBarVisibility="Never"
+                    ItemsSource="{Binding Categories}"
+                    SelectionMode="None"
+                    VerticalScrollBarVisibility="Never">
 
-                    <media:MediaItemView
-                        Title="مو"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        ImageSource="bahar.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="رنگ و مش"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        ImageSource="masazh.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="کوتاهی"
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        ImageSource="makup.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="مژه و ابرو"
-                        Grid.Row="0"
-                        Grid.Column="3"
-                        ImageSource="bahar.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="ناخن"
-                        Grid.Row="0"
-                        Grid.Column="5"
-                        ImageSource="masazh.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="مو"
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        ImageSource="makup.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="رنگ و مش"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        ImageSource="bahar.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="کوتاهی"
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        ImageSource="masazh.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="مژه و ابرو"
-                        Grid.Row="1"
-                        Grid.Column="3"
-                        ImageSource="makup.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="ناخن"
-                        Grid.Row="1"
-                        Grid.Column="5"
-                        ImageSource="bahar.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="مو"
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        ImageSource="masazh.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="رنگ و مش"
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        ImageSource="makup.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="کوتاهی"
-                        Grid.Row="2"
-                        Grid.Column="2"
-                        ImageSource="bahar.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="مژه و ابرو"
-                        Grid.Row="2"
-                        Grid.Column="3"
-                        ImageSource="masazh.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-
-                    <media:MediaItemView
-                        Title="ناخن"
-                        Grid.Row="2"
-                        Grid.Column="5"
-                        ImageSource="makup.png"
-                        Style="{x:StaticResource ServiceCategoryItemStyle}" />
-                </Grid>
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="20"
+                            Orientation="Vertical"
+                            Span="5"
+                            VerticalItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto_cat:CategoryDto">
+                            <media:MediaItemView
+                                Title="{Binding Title}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectCategoryCommand}"
+                                CommandParameter="{Binding}"
+                                ImageSource="bahar.png"
+                                Style="{StaticResource ServiceCategoryItemStyle}" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
                 <headers:SectionTitleView
-                    Title="خدمات مو"
-                    Margin="10,30,10,0"
+                    Title="{Binding SelectedCategory.Title}"
+                    IsVisible="{Binding IsSubCategoriesVisible, Mode=TwoWay}"
                     ShowDivider="True" />
 
-                <VerticalStackLayout Spacing="0">
+                <CollectionView
+                    HorizontalScrollBarVisibility="Never"
+                    IsVisible="{Binding IsSubCategoriesVisible, Mode=TwoWay}"
+                    ItemsSource="{Binding SubCategories}"
+                    SelectionMode="None"
+                    VerticalScrollBarVisibility="Never">
 
-                    <card:InfoCardView
-                        Title="رنگ مو"
-                        Command="{Binding GoToOrganizationSelectionCommand}"
-                        ImageSource="serv_mo.png"
-                        Style="{StaticResource ServiceCardStyle}"
-                        Subtitle="شامل رنگ، مش، هایلایت و ..."
-                        ThirdRowText="از 850,000 تومان" />
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="20"
+                            Orientation="Vertical"
+                            Span="5"
+                            VerticalItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto_cat:CategoryDto">
+                            <media:MediaItemView
+                                Title="{Binding Title}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectSubCategoryCommand}"
+                                CommandParameter="{Binding .}"
+                                ImageSource="makup.png"
+                                Style="{StaticResource ServiceCategoryItemStyle}" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
-                    <card:InfoCardView
-                        Title="رنگ مو"
-                        Command="{Binding GoToOrganizationSelectionCommand}"
-                        ImageSource="serv_mo.png"
-                        Style="{StaticResource ServiceCardStyle}"
-                        Subtitle="شامل رنگ، مش، هایلایت و ..."
-                        ThirdRowText="از 850,000 تومان" />
+                <headers:SectionTitleView
+                    Title="{Binding SelectedCategory.Description}"
+                    IsVisible="{Binding IsServicesVisible}"
+                    ShowDivider="True" />
 
-                    <card:InfoCardView
-                        Title="رنگ مو"
-                        Command="{Binding GoToOrganizationSelectionCommand}"
-                        ImageSource="serv_mo.png"
-                        Style="{StaticResource ServiceCardStyle}"
-                        Subtitle="شامل رنگ، مش، هایلایت و ..."
-                        ThirdRowText="از 850,000 تومان" />
+                <CollectionView
+                    IsVisible="{Binding IsServicesVisible}"
+                    ItemsSource="{Binding Services}"
+                    SelectionMode="None">
 
-                    <card:InfoCardView
-                        Title="رنگ مو"
-                        Command="{Binding GoToOrganizationSelectionCommand}"
-                        ImageSource="serv_mo.png"
-                        Style="{StaticResource ServiceCardStyle}"
-                        Subtitle="شامل رنگ، مش، هایلایت و ..."
-                        ThirdRowText="از 850,000 تومان" />
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="0" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
 
-                    <card:InfoCardView
-                        Title="رنگ مو"
-                        Command="{Binding GoToOrganizationSelectionCommand}"
-                        ImageSource="serv_mo.png"
-                        Style="{StaticResource ServiceCardStyle}"
-                        Subtitle="شامل رنگ، مش، هایلایت و ..."
-                        ThirdRowText="از 850,000 تومان" />
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto_ser:ServiceDto">
+                            <card:InfoCardView
+                                Title="{Binding Title}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectServiceCommand}"
+                                CommandParameter="{Binding .}"
+                                ImageSource="serv_mo.png"
+                                Style="{StaticResource ServiceCardStyle}"
+                                Subtitle="{Binding Description}"
+                                ThirdRowText="{Binding BasePrice, StringFormat='از {0:N0} تومان'}" />
 
-                    <card:InfoCardView
-                        Title="رنگ مو"
-                        Command="{Binding GoToOrganizationSelectionCommand}"
-                        ImageSource="serv_mo.png"
-                        Style="{StaticResource ServiceCardStyle}"
-                        Subtitle="شامل رنگ، مش، هایلایت و ..."
-                        ThirdRowText="از 850,000 تومان" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
 
-                </VerticalStackLayout>
+                </CollectionView>
 
             </VerticalStackLayout>
         </ScrollView>

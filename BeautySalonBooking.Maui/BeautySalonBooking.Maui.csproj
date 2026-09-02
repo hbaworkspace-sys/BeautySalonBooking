@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;</TargetFrameworks>
@@ -8,12 +8,13 @@
 		<RootNamespace>BeautySalonBooking.Maui</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
+		<AotAssemblies>true</AotAssemblies>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<AndroidPackageFormats>apk</AndroidPackageFormats>
 
 		<!-- Display name -->
-		<ApplicationTitle>BeautySalonBooking.Maui</ApplicationTitle>
+		<ApplicationTitle>Noura</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.beautysalonbooking.maui</ApplicationId>
@@ -160,7 +161,7 @@
 		<MauiXaml Update="Features\Booking\Views\SuccessPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Features\Dashboard\Views\DashboardView.xaml">
+		<MauiXaml Update="Features\Home\Views\HomView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Features\Main\Views\MainPage.xaml">
@@ -169,7 +170,7 @@
 		<MauiXaml Update="Features\Booking\Views\ServiceSelectionPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Features\Booking\Views\OrganizationSelectionPage.xaml">
+		<MauiXaml Update="Features\Booking\Views\BranchSelectionPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Features\Booking\Views\StylistSelectionPage.xaml">
@@ -187,9 +188,16 @@
 		<Compile Update="Features\Appointment\Views\AppointmentsView.xaml.cs">
 			<DependentUpon>AppointmentsView.xaml</DependentUpon>
 		</Compile>
-		<Compile Update="Features\Dashboard\Views\DashboardView.xaml.cs">
-			<DependentUpon>DashboardView.xaml</DependentUpon>
+		<Compile Update="Features\Booking\Views\BranchSelectionPage.xaml.cs">
+			<DependentUpon>BranchSelectionPage.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Features\Home\Views\HomView.xaml.cs">
+			<DependentUpon>HomView.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Features\Scheduling\Services\" />
 	</ItemGroup>
 
 </Project>

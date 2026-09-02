@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
     x:Name="self">
 
     <VerticalStackLayout x:Name="RootLayout" HorizontalOptions="Center">
@@ -12,12 +13,32 @@
             <TapGestureRecognizer Command="{Binding Command, Source={x:Reference self}}" CommandParameter="{Binding CommandParameter, Source={x:Reference self}}" />
         </VerticalStackLayout.GestureRecognizers>
 
-        <media:MediaView x:Name="Media" />
+        <media:MediaView x:Name="Media" InputTransparent="True" />
+
+        <!--<Border
+            Margin="-20,-25,0,0"
+            Background="#F05C80"
+            HeightRequest="15"
+            HorizontalOptions="Center"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="5" />
+            </Border.StrokeShape>
+            <Label
+                Padding="5,0"
+                FontSize="12"
+                HeightRequest="20"
+                HorizontalOptions="Center"
+                Text="Live"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </Border>-->
 
         <Label
             x:Name="TitleLabel"
             HorizontalOptions="Center"
             HorizontalTextAlignment="Center"
+            InputTransparent="True"
             LineBreakMode="TailTruncation" />
 
     </VerticalStackLayout>

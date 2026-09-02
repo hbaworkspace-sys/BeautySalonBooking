@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Booking.Views.BranchSelectionPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:dto_brs="clr-namespace:BeautySalonBooking.Contracts.Branch.BranchService.Dtos;assembly=BeautySalonBooking.Contracts"
+    xmlns:headers="clr-namespace:BeautySalonBooking.Maui.Components.Header"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
+    x:DataType="vm:BranchSelectionViewModel"
+    BackgroundColor="{x:StaticResource White}"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="0">
+
+        <nav:NavigationHeaderView
+            x:Name="HeaderView"
+            Title="انتخاب سالن"
+            Grid.Row="0"
+            BackCommand="{Binding GoBackCommand}"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+
+        <headers:SectionTitleView
+            Title="سرویس انتخابی"
+            Grid.Row="1"
+            Margin="20,10,0,10"
+            ShowDivider="False" />
+
+        <card:InfoCardView
+            Title="{Binding SelectedService.Title}"
+            Grid.Row="2"
+            Margin="15,5"
+            BorderBrush="#aaF5E2E8"
+            BorderWidth="1"
+            CornerRadius="20"
+            FillBrush="#fffdfd"
+            ImageShape="RoundedRectangle"
+            ImageSource="serv_mo.png"
+            IsArrowVisible="False"
+            IsThirdRowVisible="True"
+            Subtitle="{Binding SelectedService.Description}"
+            ThirdRowText="{Binding SelectedService.BasePrice, StringFormat='از {0:N0} تومان'}" />
+
+        <headers:SectionTitleView
+            Title="سالن های ارائه دهنده این سرویس"
+            Grid.Row="3"
+            Margin="20,30,10,10"
+            IsVisible="{Binding IsBranchesVisible}"
+            ShowDivider="False" />
+
+        <ScrollView
+            Grid.Row="4"
+            Margin="15,5"
+            VerticalScrollBarVisibility="Never">
+
+            <CollectionView
+                Margin="0,0"
+                IsVisible="{Binding IsBranchesVisible}"
+                ItemsSource="{Binding Branches}"
+                SelectionMode="None"
+                VerticalScrollBarVisibility="Never">
+
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="dto_brs:BranchServiceOrganizationDto">
+                        <card:OrganizationCardView
+                            AvailableTimes="19"
+                            BadgeType="Popular"
+                            BeauticianCount="25"
+                            BranchTitle="{Binding BranchTitle}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectBranchCommand}"
+                            CommandParameter="{Binding .}"
+                            ImageSource="salon_q1r2.png"
+                            OrganizationName="{Binding OrganizationTitle}"
+                            Rating="4.5" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </ScrollView>
+    </Grid>
+</ContentPage>

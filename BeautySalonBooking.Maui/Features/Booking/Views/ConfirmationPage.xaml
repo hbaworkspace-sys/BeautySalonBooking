@@ -4,9 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
-    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
     xmlns:information="clr-namespace:BeautySalonBooking.Maui.Components.Information"
-    xmlns:model="clr-namespace:BeautySalonBooking.Maui.Components.Information.Models"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
     x:DataType="vm:ConfirmationViewModel"
@@ -14,62 +12,30 @@
     FlowDirection="RightToLeft"
     NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="Auto,*" RowSpacing="0">
+    <Grid RowDefinitions="Auto,*">
 
         <nav:NavigationHeaderView
             x:Name="HeaderView"
             Title="تایید و خلاصه رزرو"
             Grid.Row="0"
-            BackCommand="{Binding GoBackAsync}"
+            BackCommand="{Binding GoBackCommand}"
             IsBackEnabled="True"
             IsBackVisible="True" />
-
 
         <Grid
             Grid.Row="1"
             Padding="16"
-            RowDefinitions="Auto,*,Auto"
+            RowDefinitions="*,Auto"
             RowSpacing="25">
 
-            <card:OrganizationCardView
-                AvailableTimes="3"
-                BadgeType="Popular"
-                BeauticianCount="8"
-                ImageSource="salon_q1r2.png"
-                OrganizationName="شعبه نیاوران"
-                OrganizationType="تهران - نیاوران - خیابان مولانا" />
-
-            <information:InfoSummaryView Grid.Row="1">
-
-                <information:InfoSummaryView.Items>
-
-                    <x:Array Type="{x:Type model:InfoSummaryItem}">
-
-                        <model:InfoSummaryItem Column1="content_cut" Column2="رنگ مو" />
-
-                        <model:InfoSummaryItem Column1="person" Column2="سارا محمدی" />
-
-                        <model:InfoSummaryItem Column1="calendar_month" Column2="شنبه 30 تیر 1405" />
-
-                        <model:InfoSummaryItem Column1="schedule" Column2="15:30" />
-
-                        <model:InfoSummaryItem Column1="hourglass_top" Column2="45 دقیقه" />
-
-                        <model:InfoSummaryItem
-                            Column1="sell"
-                            Column2="850,000 تومان"
-                            IsSeparatorVisible="False" />
-
-                    </x:Array>
-
-                </information:InfoSummaryView.Items>
-
-            </information:InfoSummaryView>
+            <information:InfoSummaryView Grid.Row="0" Items="{Binding SummaryItems}" />
 
             <btn:PrimaryButtonView
                 Title="ادامه و تایید"
-                Grid.Row="2"
-                Command="{Binding GoToBookingSuccessCommand}" />
+                Grid.Row="1"
+                Command="{Binding ConfirmBookingCommand}" />
+
         </Grid>
+
     </Grid>
 </ContentPage>

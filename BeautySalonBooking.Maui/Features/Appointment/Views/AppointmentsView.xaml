@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
     xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
-    xmlns:enums="clr-namespace:BeautySalonBooking.Maui.Features.Appointment.Enums"
+    xmlns:dto="clr-namespace:BeautySalonBooking.Contracts.Appointment.Dtos;assembly=BeautySalonBooking.Contracts"
+    xmlns:enums="clr-namespace:BeautySalonBooking.Contracts.Appointment.Enums;assembly=BeautySalonBooking.Contracts"
     xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Appointment.ViewModels"
@@ -20,7 +21,7 @@
             Title="رزرو های من"
             Grid.Row="0" />
 
-        <nav:TabBar
+        <!--<nav:TabBar
             x:Name="TopTabBar"
             Grid.Row="1"
             Margin="10,0"
@@ -35,6 +36,12 @@
             <nav:TabBar.Items>
                 <nav:TabItemView
                     Command="{Binding ChangeAppointmentListCommand}"
+                    CommandParameter="{x:Static enums:AppointmentListType.All}"
+                    Style="{StaticResource TopTabItemStyle}"
+                    Text="همه" />
+
+                <nav:TabItemView
+                    Command="{Binding ChangeAppointmentListCommand}"
                     CommandParameter="{x:Static enums:AppointmentListType.Upcoming}"
                     Style="{StaticResource TopTabItemStyle}"
                     Text="آینده" />
@@ -43,10 +50,10 @@
                     Command="{Binding ChangeAppointmentListCommand}"
                     CommandParameter="{x:Static enums:AppointmentListType.History}"
                     Style="{StaticResource TopTabItemStyle}"
-                    Text="تاریخچه" />
+                    Text="گذشته" />
             </nav:TabBar.Items>
 
-        </nav:TabBar>
+        </nav:TabBar>-->
 
         <CollectionView
             Grid.Row="2"
@@ -56,16 +63,16 @@
 
             <CollectionView.ItemTemplate>
 
-                <DataTemplate x:DataType="vm:Appointment">
+                <DataTemplate x:DataType="dto:AppointmentDto">
 
                     <card:AppointmentCardView
                         Margin="0,5"
                         Date="{Binding Date, Mode=OneWay}"
-                        Organization="{Binding Organization, Mode=OneWay}"
-                        OrganizationImage="{Binding OrganizationImage, Mode=OneWay}"
-                        Services="{Binding Services, Mode=OneWay}"
+                        Organization="{Binding OrganizationTitle, Mode=OneWay}"
+                        OrganizationImage="salon_q1r2.png"
+                        Services="{Binding ServiceTitle, Mode=OneWay}"
                         Status="{Binding Status, Mode=OneWay}"
-                        Time="{Binding Time, Mode=OneWay}" />
+                        Time="{Binding StartTime, Mode=OneWay}" />
 
                 </DataTemplate>
 

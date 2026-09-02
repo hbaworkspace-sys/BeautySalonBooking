@@ -111,11 +111,6 @@ public partial class MediaView : ContentView
         GlyphLabel.FontSize = GlyphSize;
         GlyphLabel.TextColor = GlyphColor;
         GlyphLabel.FontFamily = GlyphFontFamily;
-
-        System.Diagnostics.Debug.WriteLine(
-            $"GLYPH => Text={GlyphLabel.Text} | " +
-            $"Color={GlyphLabel.TextColor} | " +
-            $"Font={GlyphLabel.FontFamily}");
     }
     public string? Text
     {
@@ -371,18 +366,11 @@ public partial class MediaView : ContentView
             typeof(MediaView),
             30d,
             propertyChanged: OnGlyphChanged);
-
     public Color GlyphColor
     {
         set
         {
-            System.Diagnostics.Debug.WriteLine(
-                $"[MEDIA SET] GlyphColor: {GlyphColor} -> {value}");
-
             SetValue(GlyphColorProperty, value);
-
-            System.Diagnostics.Debug.WriteLine(
-                $"[MEDIA SET AFTER] GlyphColor = {GlyphColor}");
         }
         get => (Color)GetValue(GlyphColorProperty);
         //set => SetValue(GlyphColorProperty, value);

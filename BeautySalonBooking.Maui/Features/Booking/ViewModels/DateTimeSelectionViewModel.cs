@@ -1,19 +1,41 @@
-﻿using BeautySalonBooking.Maui.Common.Interfaces;
+﻿using BeautySalonBooking.Contracts.Booking.Availability.Requests;
+using BeautySalonBooking.Contracts.Booking.Availability.Responses;
+using BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;
+using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Components.DateAndTime.Models;
+using BeautySalonBooking.Maui.Features.Booking.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace BeautySalonBooking.Maui.Features.Booking.ViewModels;
 
 public partial class DateTimeSelectionViewModel : ObservableObject
 {
     private readonly INavigationService _navigationService;
-    public DateTimeSelectionViewModel(INavigationService navigationService)
+    private readonly IBookingApiService _bookingAvailabilityApiService;
+    private readonly IBookingSelectionState _bookingSelectionState;
+
+    // تمام Availability دریافت‌شده از سرور
+    private GetBookingAvailabilityResponse? _availability;
+
+    public DateTimeSelectionViewModel(
+        INavigationService navigationService,
+        IBookingApiService bookingAvailabilityApiService,
+      IBookingSelectionState bookingSelectionState)
     {
         _navigationService = navigationService;
-        LoadAvailableDates();
+        _bookingAvailabilityApiService = bookingAvailabilityApiService;
+        _bookingSelectionState = bookingSelectionState;
     }
+
+    #region Selected Member
+
+    public BranchMemberServiceDto? SelectedMember =>
+        _bookingSelectionState.Current.Stylist;
+
+    #endregion
 
     #region Dates
 
@@ -26,181 +48,38 @@ public partial class DateTimeSelectionViewModel : ObservableObject
     [ObservableProperty]
     private string selectedDateTitle = string.Empty;
 
-    partial void OnSelectedDateChanged(DateSelectionItem? value)
+    [ObservableProperty]
+    private bool isDatesLoading;
+
+    partial void OnSelectedDateChanged(
+        DateSelectionItem? value)
     {
         if (value is null)
+        {
+            SelectedDateTitle = string.Empty;
+
+            AvailableTimes.Clear();
+            SelectedTime = null;
+
+            _bookingSelectionState.Current.Date = null;
+            _bookingSelectionState.Current.Time = null;
+
             return;
+        }
 
         SelectedDateTitle =
             $"تایم‌های خالی - {value.DayName} {value.DayNumber} {value.MonthName}";
 
+        // ذخیره تاریخ انتخاب‌شده
+        _bookingSelectionState.Current.Date = value;
+
+        // با تغییر تاریخ، زمان قبلی دیگر معتبر نیست.
+        _bookingSelectionState.Current.Time = null;
+
         LoadAvailableTimes(value);
     }
 
-    private void LoadAvailableDates()
-    {
-        AvailableDates = new ObservableCollection<DateSelectionItem>
-        {
-            new()
-            {
-                Date = new DateTime(2026, 7, 18),
-                DayName = "پنجشنبه",
-                DayNumber = "27",
-                MonthName = "تیر"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 19),
-                DayName = "جمعه",
-                DayNumber = "28",
-                MonthName = "تیر"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 20),
-                DayName = "شنبه",
-                DayNumber = "29",
-                MonthName = "تیر",
-                IsSelected = true
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 21),
-                DayName = "یکشنبه",
-                DayNumber = "30",
-                MonthName = "تیر"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 22),
-                DayName = "دوشنبه",
-                DayNumber = "31",
-                MonthName = "تیر"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 23),
-                DayName = "سه‌شنبه",
-                DayNumber = "1",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 24),
-                DayName = "چهارشنبه",
-                DayNumber = "2",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 25),
-                DayName = "پنجشنبه",
-                DayNumber = "3",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 26),
-                DayName = "جمعه",
-                DayNumber = "4",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 27),
-                DayName = "شنبه",
-                DayNumber = "5",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 28),
-                DayName = "یکشنبه",
-                DayNumber = "6",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 29),
-                DayName = "دوشنبه",
-                DayNumber = "7",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 30),
-                DayName = "سه‌شنبه",
-                DayNumber = "8",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 7, 31),
-                DayName = "چهارشنبه",
-                DayNumber = "9",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 8, 1),
-                DayName = "پنجشنبه",
-                DayNumber = "10",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 8, 2),
-                DayName = "جمعه",
-                DayNumber = "11",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 8, 3),
-                DayName = "شنبه",
-                DayNumber = "12",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 8, 4),
-                DayName = "یکشنبه",
-                DayNumber = "13",
-                MonthName = "مرداد"
-            },
-
-            new()
-            {
-                Date = new DateTime(2026, 8, 5),
-                DayName = "دوشنبه",
-                DayNumber = "14",
-                MonthName = "مرداد"
-            }
-        };
-
-        SelectedDate =
-            AvailableDates.FirstOrDefault(x => x.IsSelected);
-    }
-
     #endregion
-
 
     #region Times
 
@@ -210,105 +89,283 @@ public partial class DateTimeSelectionViewModel : ObservableObject
     [ObservableProperty]
     private TimeSelectionItem? selectedTime;
 
-    partial void OnSelectedTimeChanged(TimeSelectionItem? value)
+    partial void OnSelectedTimeChanged(
+        TimeSelectionItem? value)
     {
         if (value is null)
+        {
+            _bookingSelectionState.Current.Time = null;
+            return;
+        }
+
+        // ذخیره زمان انتخاب‌شده
+        _bookingSelectionState.Current.Time = value;
+    }
+
+    private void LoadAvailableTimes(
+        DateSelectionItem date)
+    {
+        if (_availability?.Dates is null)
             return;
 
-        // در صورت نیاز بعداً اینجا منطق انتخاب تایم قرار می‌گیرد.
-    }
+        var availableDate =
+            _availability.Dates.FirstOrDefault(x =>
+                x.Date == DateOnly.FromDateTime(date.Date));
 
-    private void LoadAvailableTimes(DateSelectionItem date)
-    {
-        AvailableTimes = new ObservableCollection<TimeSelectionItem>
+        if (availableDate?.Slots is null ||
+            availableDate.Slots.Count == 0)
         {
-            new()
-            {
-                Time = new TimeSpan(9, 0, 0),
-                DisplayTime = "۰۹:۰۰"
-            },
+            AvailableTimes = new ObservableCollection<TimeSelectionItem>();
+            SelectedTime = null;
+            return;
+        }
 
-            new()
+        var times = availableDate.Slots
+            .Select(slot => new TimeSelectionItem
             {
-                Time = new TimeSpan(10, 0, 0),
-                DisplayTime = "۱۰:۰۰"
-            },
+                Time = slot.StartTime.ToTimeSpan(),
+                DisplayTime =
+                    $"{slot.StartTime:hh\\:mm} - {slot.EndTime:hh\\:mm}"
+            })
+            .ToList();
 
-            new()
-            {
-                Time = new TimeSpan(11, 0, 0),
-                DisplayTime = "۱۱:۰۰"
-            },
-
-            new()
-            {
-                Time = new TimeSpan(12, 0, 0),
-                DisplayTime = "۱۲:۰۰"
-            },
-
-            new()
-            {
-                Time = new TimeSpan(13, 0, 0),
-                DisplayTime = "۱۳:۰۰"
-            },
-
-            new()
-            {
-                Time = new TimeSpan(14, 0, 0),
-                DisplayTime = "۱۴:۰۰"
-            },
-
-            new()
-            {
-                Time = new TimeSpan(15, 30, 0),
-                DisplayTime = "۱۵:۳۰",
-                IsSelected = true
-            },
-
-            new()
-            {
-                Time = new TimeSpan(16, 30, 0),
-                DisplayTime = "۱۶:۳۰"
-            },
-
-            new()
-            {
-                Time = new TimeSpan(17, 0, 0),
-                DisplayTime = "۱۷:۰۰"
-            },
-
-            new()
-            {
-                Time = new TimeSpan(18, 0, 0),
-                DisplayTime = "۱۸:۰۰"
-            },
-
-            new()
-            {
-                Time = new TimeSpan(19, 0, 0),
-                DisplayTime = "۱۹:۰۰"
-            },
-
-            new()
-            {
-                Time = new TimeSpan(20, 0, 0),
-                DisplayTime = "۲۰:۰۰"
-            }
-        };
+        AvailableTimes =
+            new ObservableCollection<TimeSelectionItem>(times);
 
         SelectedTime =
-            AvailableTimes.FirstOrDefault(x => x.IsSelected);
+            AvailableTimes.FirstOrDefault();
     }
     #endregion
+
+    #region Availability
+
+    private async Task LoadAvailabilityAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var member = _bookingSelectionState.Current.Stylist;
+
+        if (member is null)
+            return;
+
+        if (member.BranchMemberServiceId <= 0)
+            return;
+
+        IsDatesLoading = true;
+
+        try
+        {
+            var fromDate =
+                new DateOnly(2026, 9, 1);
+
+            var toDate =
+                fromDate.AddDays(6);
+
+            var request =
+                new GetBookingAvailabilityRequest
+                {
+                    BranchMemberServiceId =
+                        member.BranchMemberServiceId,
+
+                    FromDate = fromDate,
+
+                    ToDate = toDate,
+
+                    SlotInterval =
+                        TimeSpan.FromMinutes(15)
+                };
+
+            var result =
+                await _bookingAvailabilityApiService
+                    .GetAvailabilityAsync(
+                        request,
+                        cancellationToken);
+
+            if (!result.IsSuccess ||
+                result.Payload?.Dates is null)
+            {
+                _availability = null;
+
+                AvailableDates.Clear();
+                AvailableTimes.Clear();
+
+                SelectedDate = null;
+                SelectedTime = null;
+
+                return;
+            }
+
+            _availability = result.Payload;
+
+            BuildAvailableDates();
+        }
+        finally
+        {
+            IsDatesLoading = false;
+        }
+    }
+
+    private void BuildAvailableDates()
+    {
+        if (_availability?.Dates is null ||
+            _availability.Dates.Count == 0)
+        {
+            AvailableDates = new ObservableCollection<DateSelectionItem>();
+            SelectedDate = null;
+            SelectedDateTitle = string.Empty;
+            SelectedTime = null;
+            return;
+        }
+
+        var dates = _availability.Dates
+            .Where(x => x.Slots is { Count: > 0 })
+            .Select(date =>
+            {
+                var dateTime =
+                    date.Date.ToDateTime(TimeOnly.MinValue);
+
+                return new DateSelectionItem
+                {
+                    Date = dateTime,
+
+                    DayName =
+                        GetPersianDayName(
+                            dateTime.DayOfWeek),
+
+                    DayNumber =
+                        GetPersianDayNumber(
+                            dateTime),
+
+                    MonthName =
+                        GetPersianMonthName(
+                            dateTime)
+                };
+            })
+            .ToList();
+
+        AvailableDates =
+            new ObservableCollection<DateSelectionItem>(dates);
+
+        var firstAvailableDate =
+            AvailableDates.FirstOrDefault();
+
+        if (firstAvailableDate is null)
+        {
+            SelectedDate = null;
+            SelectedDateTitle = string.Empty;
+            SelectedTime = null;
+            return;
+        }
+
+        firstAvailableDate.IsSelected = true;
+
+        SelectedDate = firstAvailableDate;
+    }
+    #endregion
+
+    #region Persian Date Helpers
+
+    private static readonly PersianCalendar PersianCalendar = new();
+
+    private static string GetPersianDayName(
+        DayOfWeek dayOfWeek)
+    {
+        return dayOfWeek switch
+        {
+            DayOfWeek.Saturday => "شنبه",
+            DayOfWeek.Sunday => "یکشنبه",
+            DayOfWeek.Monday => "دوشنبه",
+            DayOfWeek.Tuesday => "سه‌شنبه",
+            DayOfWeek.Wednesday => "چهارشنبه",
+            DayOfWeek.Thursday => "پنجشنبه",
+            DayOfWeek.Friday => "جمعه",
+
+            _ => string.Empty
+        };
+    }
+
+    private static string GetPersianDayNumber(
+        DateTime date)
+    {
+        return PersianCalendar
+            .GetDayOfMonth(date)
+            .ToString(
+                CultureInfo.InvariantCulture);
+    }
+
+    private static string GetPersianMonthName(
+        DateTime date)
+    {
+        return PersianCalendar
+            .GetMonth(date) switch
+        {
+            1 => "فروردین",
+            2 => "اردیبهشت",
+            3 => "خرداد",
+            4 => "تیر",
+            5 => "مرداد",
+            6 => "شهریور",
+            7 => "مهر",
+            8 => "آبان",
+            9 => "آذر",
+            10 => "دی",
+            11 => "بهمن",
+            12 => "اسفند",
+
+            _ => string.Empty
+        };
+    }
+
+    #endregion
+
+    #region Commands
 
     [RelayCommand]
     private Task GoToBookingConfirmationAsync()
     {
-        return _navigationService.GoToBookingConfirmationAsync();
+        var selection = _bookingSelectionState.Current;
+
+        if (selection.Service is null)
+            return Task.CompletedTask;
+
+        if (selection.Branch is null)
+            return Task.CompletedTask;
+
+        if (selection.Stylist is null)
+            return Task.CompletedTask;
+
+        if (selection.Date is null)
+            return Task.CompletedTask;
+
+        if (selection.Time is null)
+            return Task.CompletedTask;
+
+        return _navigationService
+            .GoToBookingConfirmationAsync();
     }
+
     [RelayCommand]
     private Task GoBackAsync()
     {
-        return _navigationService.GoBackAsync();
+        return _navigationService
+            .GoBackAsync();
     }
+
+    #endregion
+
+    #region Initialization
+
+    private bool _isInitialized;
+
+    public async Task InitializeAsync(
+        CancellationToken cancellationToken = default)
+    {
+        if (_isInitialized)
+            return;
+
+        _isInitialized = true;
+
+        await LoadAvailabilityAsync(cancellationToken);
+    }
+
+    #endregion
 }

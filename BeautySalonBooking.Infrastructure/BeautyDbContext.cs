@@ -3,7 +3,6 @@ using BeautySalonBooking.Domain.Base.Entities;
 using BeautySalonBooking.Domain.BranchAggregate.Entities;
 using BeautySalonBooking.Domain.CategoryAggregate.Entities;
 using BeautySalonBooking.Domain.CommonAggregate.Entities;
-using BeautySalonBooking.Domain.ContactAggregate.Entities;
 using BeautySalonBooking.Domain.GeographyAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.PermissionAggregate.Entities;

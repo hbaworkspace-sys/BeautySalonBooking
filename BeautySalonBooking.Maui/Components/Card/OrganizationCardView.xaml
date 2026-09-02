@@ -33,7 +33,7 @@
                     TextColor="#292329" />
 
                 <Label
-                    x:Name="SalonTypeLabel"
+                    x:Name="BranchTitleLabel"
                     Margin="20,0"
                     FontSize="10"
                     TextColor="#8F858A" />

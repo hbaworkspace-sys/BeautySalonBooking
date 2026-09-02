@@ -652,5 +652,4 @@ public partial class MediaItemView : ContentView
         if (bindable is MediaItemView control)
             control.RootLayout.Spacing = (double)newValue;
     }
-
 }

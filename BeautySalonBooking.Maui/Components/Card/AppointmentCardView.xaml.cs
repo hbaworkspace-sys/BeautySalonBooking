@@ -1,4 +1,5 @@
-﻿using BeautySalonBooking.Maui.Common.Enums;
+﻿using BeautySalonBooking.Contracts.Appointment.Enums;
+using BeautySalonBooking.Maui.Common.Enums;
 namespace BeautySalonBooking.Maui.Components.Card;
 
 public partial class AppointmentCardView : ContentView
@@ -156,18 +157,18 @@ public partial class AppointmentCardView : ContentView
     #endregion
     #region Status
 
-    public Status Status
+    public AppointmentStatus Status
     {
-        get => (Status)GetValue(StatusProperty);
+        get => (AppointmentStatus)GetValue(StatusProperty);
         set => SetValue(StatusProperty, value);
     }
 
     public static readonly BindableProperty StatusProperty =
         BindableProperty.Create(
             nameof(Status),
-            typeof(Status),
+            typeof(AppointmentStatus),
             typeof(AppointmentCardView),
-            Status.Confirmed,
+            AppointmentStatus.Confirmed,
             propertyChanged: OnStatusChanged);
 
     private static void OnStatusChanged(
@@ -185,7 +186,7 @@ public partial class AppointmentCardView : ContentView
     {
         switch (Status)
         {
-            case Status.Confirmed:
+            case AppointmentStatus.Confirmed:
 
                 StatusLabel.Text = "تایید شده";
                 StatusLabel.TextColor =
@@ -197,7 +198,7 @@ public partial class AppointmentCardView : ContentView
                 break;
 
 
-            case Status.Pending:
+            case AppointmentStatus.Pending:
 
                 StatusLabel.Text = "در انتظار تایید";
                 StatusLabel.TextColor =
@@ -208,19 +209,19 @@ public partial class AppointmentCardView : ContentView
 
                 break;
 
-            case Status.Completed:
+            case AppointmentStatus.Completed:
 
                 break;
 
-            case Status.Cancelled:
+            case AppointmentStatus.Cancelled:
 
                 break;
 
-            case Status.Rejected:
+            case AppointmentStatus.Rejected:
 
                 break;
 
-            case Status.NoShow:
+            case AppointmentStatus.NoShow:
 
                 break;
         }

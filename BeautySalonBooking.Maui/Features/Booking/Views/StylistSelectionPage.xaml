@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:dto_bms="clr-namespace:BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;assembly=BeautySalonBooking.Contracts"
     xmlns:headers="clr-namespace:BeautySalonBooking.Maui.Components.Header"
     xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
@@ -31,7 +32,7 @@
             ShowDivider="False" />
 
         <card:InfoCardView
-            Title="سالن زیگورات"
+            Title="{Binding SelectedBranch.OrganizationTitle}"
             Grid.Row="2"
             Margin="15,5"
             BorderBrush="#aaF5E2E8"
@@ -42,8 +43,9 @@
             ImageShape="RoundedRectangle"
             ImageSource="salon_q1r2.png"
             IsArrowVisible="False"
-            IsThirdRowVisible="False"
-            Subtitle="شهرک سعدی" />
+            IsThirdRowVisible="True"
+            Subtitle="{Binding SelectedBranch.BranchTitle}"
+            ThirdRowText="{Binding SelectedBranch.OrganizationType}" />
 
         <headers:SectionTitleView
             Title="استایلیست های این سالن"
@@ -51,64 +53,34 @@
             Margin="20,30,10,10"
             ShowDivider="False" />
 
-        <ScrollView
+        <CollectionView
             Grid.Row="4"
             Margin="15,5"
+            ItemsSource="{Binding Members}"
+            SelectionMode="None"
             VerticalScrollBarVisibility="Never">
 
-            <VerticalStackLayout Spacing="10">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
 
-                <card:StylistSelectionCardView
-                    Command="{Binding GoToBookingDateTimeSelectionCommand}"
-                    FirstAvailableTime="15:30"
-                    ImageSource="arayeshgar.png"
-                    Price="850,000"
-                    Rating="1"
-                    StylistName="سارا محمدی"
-                    StylistTitle="استایلیست ارشد"
-                    Duration="۴۵ دقیقه" />
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="dto_bms:BranchMemberServiceDto">
 
-                <card:StylistSelectionCardView
-                    Command="{Binding GoToBookingDateTimeSelectionCommand}"
-                    FirstAvailableTime="15:30"
-                    ImageSource="arayeshgar.png"
-                    Price="850,000"
-                    Rating="2"
-                    StylistName="سارا محمدی"
-                    StylistTitle="استایلیست ارشد"
-                    Duration="۴۵ دقیقه" />
+                    <card:StylistSelectionCardView
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectMemberCommand}"
+                        CommandParameter="{Binding .}"
+                        FirstAvailableTime="15:30"
+                        ImageSource="arayeshgar.png"
+                        Price="{Binding Price}"
+                        Rating="0"
+                        StylistName="{Binding FullName}"
+                        StylistTitle="استایلیست ارشد"
+                        Duration="{Binding Duration}" />
 
-                <card:StylistSelectionCardView
-                    Command="{Binding GoToBookingDateTimeSelectionCommand}"
-                    FirstAvailableTime="15:30"
-                    ImageSource="arayeshgar.png"
-                    Price="850,000"
-                    Rating="3.5"
-                    StylistName="سارا محمدی"
-                    StylistTitle="استایلیست ارشد"
-                    Duration="۴۵ دقیقه" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
 
-                <card:StylistSelectionCardView
-                    Command="{Binding GoToBookingDateTimeSelectionCommand}"
-                    FirstAvailableTime="15:30"
-                    ImageSource="arayeshgar.png"
-                    Price="850,000"
-                    Rating="2.9"
-                    StylistName="سارا محمدی"
-                    StylistTitle="استایلیست ارشد"
-                    Duration="۴۵ دقیقه" />
-
-                <card:StylistSelectionCardView
-                    Command="{Binding GoToBookingDateTimeSelectionCommand}"
-                    FirstAvailableTime="15:30"
-                    ImageSource="arayeshgar.png"
-                    Price="850,000"
-                    Rating="4"
-                    StylistName="سارا محمدی"
-                    StylistTitle="استایلیست ارشد"
-                    Duration="۴۵ دقیقه" />
-
-            </VerticalStackLayout>
-        </ScrollView>
+        </CollectionView>
     </Grid>
 </ContentPage>

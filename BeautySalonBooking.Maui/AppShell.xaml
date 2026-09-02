@@ -5,10 +5,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:main="clr-namespace:BeautySalonBooking.Maui.Features.Main.Views"
     xmlns:splash="clr-namespace:BeautySalonBooking.Maui.Features.Splash.Views"
+    xmlns:view="clr-namespace:BeautySalonBooking.Maui.Features.Booking.Views"
     FlowDirection="RightToLeft"
     Shell.NavBarIsVisible="False">
 
     <ShellContent ContentTemplate="{DataTemplate splash:SplashPage}" Route="Splash" />
 
     <ShellContent ContentTemplate="{DataTemplate main:MainPage}" Route="main" />
+
+    <!--<ShellContent ContentTemplate="{DataTemplate view:ServiceSelectionPage}" />-->
+
 </Shell>
