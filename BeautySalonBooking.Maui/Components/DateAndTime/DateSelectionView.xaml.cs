@@ -1,11 +1,12 @@
 ﻿using BeautySalonBooking.Maui.Components.DateAndTime.Models;
+using System.Collections.Specialized;
 
 namespace BeautySalonBooking.Maui.Components.DateAndTime;
 
 public partial class DateSelectionView : ContentView
 {
     private bool _isUpdatingSelection;
-
+    private INotifyCollectionChanged? _itemsSourceCollection;
     private readonly Dictionary<int, DateItemView> _dateItemViews = new();
 
     public DateSelectionView()
@@ -252,9 +253,39 @@ public partial class DateSelectionView : ContentView
     {
         var control = (DateSelectionView)bindable;
 
+        control.UnsubscribeFromItemsSource(oldValue);
+        control.SubscribeToItemsSource(newValue);
+
         control.UpdateItems();
     }
 
+    private void SubscribeToItemsSource(object? source)
+    {
+        if (source is not INotifyCollectionChanged collection)
+            return;
+
+        _itemsSourceCollection = collection;
+
+        collection.CollectionChanged += OnItemsSourceCollectionChanged;
+    }
+
+    private void UnsubscribeFromItemsSource(object? source)
+    {
+        if (_itemsSourceCollection is null)
+            return;
+
+        _itemsSourceCollection.CollectionChanged -=
+            OnItemsSourceCollectionChanged;
+
+        _itemsSourceCollection = null;
+    }
+
+    private void OnItemsSourceCollectionChanged(
+        object? sender,
+        NotifyCollectionChangedEventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(UpdateItems);
+    }
 
     private static void OnAppearanceChanged(
         BindableObject bindable,
@@ -269,22 +300,58 @@ public partial class DateSelectionView : ContentView
     #endregion
 
     #region Items
-
     private void UpdateItems()
     {
         DatesLayout.Clear();
         _dateItemViews.Clear();
 
         if (ItemsSource is null)
+        {
+            SelectedDate = null;
+            SelectedIndex = -1;
             return;
+        }
 
-        foreach (var item in ItemsSource)
+        var items = ItemsSource.ToList();
+
+        if (items.Count == 0)
+        {
+            SelectedDate = null;
+            SelectedIndex = -1;
+            return;
+        }
+
+        foreach (var item in items)
         {
             var dateItem = CreateDateItem(item);
 
             _dateItemViews[item.Id] = dateItem;
 
             DatesLayout.Children.Add(dateItem);
+        }
+
+        var selectedItem =
+            items.FirstOrDefault(x => x.IsSelected);
+
+        if (selectedItem is null)
+        {
+            SelectedDate = null;
+            SelectedIndex = -1;
+            return;
+        }
+
+        _isUpdatingSelection = true;
+
+        try
+        {
+            SelectedDate = selectedItem;
+
+            SelectedIndex =
+                items.FindIndex(x => x.Id == selectedItem.Id);
+        }
+        finally
+        {
+            _isUpdatingSelection = false;
         }
     }
 

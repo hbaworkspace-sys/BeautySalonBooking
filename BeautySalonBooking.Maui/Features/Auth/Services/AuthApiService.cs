@@ -27,11 +27,11 @@ public class AuthApiService : BaseApiService, IAuthApiService
         VerifyOtpRequest request,
         CancellationToken cancellationToken = default)
     {
-        var xx = PostAsync<VerifyOtpRequest, AuthResult>(
+        return PostAsync<VerifyOtpRequest, AuthResult>(
             AuthRoutes.RegisterVerifyOtp,
             request,
             cancellationToken);
-        return xx;
+       
     }
 
     public Task<ApiResponse_New<AuthResult>> RequestOtpForLoginAsync(

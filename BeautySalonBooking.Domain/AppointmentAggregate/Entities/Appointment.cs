@@ -24,4 +24,31 @@ public class Appointment : AuditableSoftDeleteEntity<long>
     public User? CancelledByUser { get; private set; }
     public DateTime? CancelledAt { get; private set; }
     public string? CancelReason { get; private set; }
+
+    private Appointment()
+    {
+    }
+
+    public static Appointment Create(
+        long customerUserId,
+        long branchMemberServiceId,
+        DateOnly date,
+        TimeOnly startTime,
+        TimeOnly endTime,
+        decimal totalPrice,
+        string? note)
+    {
+        return new Appointment
+        {
+            CustomerUserId = customerUserId,
+            BranchMemberServiceId = branchMemberServiceId,
+            Date = date,
+            StartTime = startTime,
+            EndTime = endTime,
+            TotalPrice = totalPrice,
+            Status = AppointmentStatus.Pending,
+            PaymentStatus = PaymentStatus.Unpaid,
+            Note = note
+        };
+    }
 }

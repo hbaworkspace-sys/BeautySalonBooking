@@ -1,4 +1,7 @@
-﻿using BeautySalonBooking.Maui.Common.Interfaces;
+﻿using BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;
+using BeautySalonBooking.Contracts.Branch.BranchService.Dtos;
+using BeautySalonBooking.Contracts.Service.Dtos;
+using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Common.Navigation;
 using BeautySalonBooking.Maui.Features.Auth.Models;
 using BeautySalonBooking.Maui.Features.Main.Models;
@@ -58,6 +61,7 @@ public sealed class NavigationService : INavigationService
     }
     #endregion
 
+
     #region Booking
     public Task GoToServiceSelectionAsync()
     {
@@ -69,7 +73,7 @@ public sealed class NavigationService : INavigationService
         return Shell.Current.GoToAsync(AppRoutes.StylistSelection);
     }
 
-    public Task GoToOrganizationSelectionAsync()
+    public Task GoToBranchSelectionAsync()
     {
         return Shell.Current.GoToAsync(AppRoutes.OrganizationSelection);
     }

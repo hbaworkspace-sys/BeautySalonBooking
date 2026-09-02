@@ -1,12 +1,10 @@
 ﻿using BeautySalonBooking.Domain.Base.UnitOfWork;
 using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Repositories;
-using BeautySalonBooking.Domain.Identity.PermissionAggregate.Repositories;
-using BeautySalonBooking.Domain.Identity.RoleAggregate.Repositories;
-using BeautySalonBooking.Domain.Identity.UserAggregate.Repositories;
 using BeautySalonBooking.Domain.PersonAggregate.Repositories;
 using BeautySalonBooking.Domain.Repositories;
-using BeautySalonBooking.Infrastructure.Persistence.Repositories.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 
 namespace BeautySalonBooking.Infrastructure
 {
@@ -56,9 +54,10 @@ namespace BeautySalonBooking.Infrastructure
                 return;
 
             _transaction = await context.Database
-                .BeginTransactionAsync(cancellationToken);
+                .BeginTransactionAsync(
+                    IsolationLevel.ReadCommitted,
+                    cancellationToken);
         }
-
         public async Task CommitAsync(
             CancellationToken cancellationToken = default)
         {

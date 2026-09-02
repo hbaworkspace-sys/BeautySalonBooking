@@ -1,11 +1,12 @@
 using BeautySalonBooking.Maui.Components.DateAndTime.Models;
+using System.Collections.Specialized;
 
 namespace BeautySalonBooking.Maui.Components.DateAndTime;
 
 public partial class TimeSelectionView : ContentView
 {
     private bool _isUpdatingSelection;
-
+    private INotifyCollectionChanged? _itemsSourceCollection;
     private readonly Dictionary<int, TimeItemView> _timeItemViews = new();
 
     public TimeSelectionView()
@@ -253,9 +254,38 @@ public partial class TimeSelectionView : ContentView
     {
         var control = (TimeSelectionView)bindable;
 
+        control.UnsubscribeFromItemsSource(oldValue);
+        control.SubscribeToItemsSource(newValue);
+
         control.UpdateItems();
     }
+    private void SubscribeToItemsSource(object? source)
+    {
+        if (source is not INotifyCollectionChanged collection)
+            return;
 
+        _itemsSourceCollection = collection;
+
+        collection.CollectionChanged += OnItemsSourceCollectionChanged;
+    }
+
+    private void UnsubscribeFromItemsSource(object? source)
+    {
+        if (_itemsSourceCollection is null)
+            return;
+
+        _itemsSourceCollection.CollectionChanged -=
+            OnItemsSourceCollectionChanged;
+
+        _itemsSourceCollection = null;
+    }
+
+    private void OnItemsSourceCollectionChanged(
+        object? sender,
+        NotifyCollectionChangedEventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(UpdateItems);
+    }
 
     private static void OnAppearanceChanged(
         BindableObject bindable,
@@ -275,13 +305,23 @@ public partial class TimeSelectionView : ContentView
     {
         TimesLayout.Clear();
         TimesLayout.RowDefinitions.Clear();
-
         _timeItemViews.Clear();
 
         if (ItemsSource is null)
+        {
+            SelectedTime = null;
+            SelectedIndex = -1;
             return;
+        }
 
         var items = ItemsSource.ToList();
+
+        if (items.Count == 0)
+        {
+            SelectedTime = null;
+            SelectedIndex = -1;
+            return;
+        }
 
         var rowCount = (int)Math.Ceiling(items.Count / 3d);
 
@@ -310,8 +350,31 @@ public partial class TimeSelectionView : ContentView
 
             TimesLayout.Children.Add(timeItem);
         }
-    }
 
+        var selectedItem =
+            items.FirstOrDefault(x => x.IsSelected);
+
+        if (selectedItem is null)
+        {
+            SelectedTime = null;
+            SelectedIndex = -1;
+            return;
+        }
+
+        _isUpdatingSelection = true;
+
+        try
+        {
+            SelectedTime = selectedItem;
+
+            SelectedIndex =
+                items.FindIndex(x => x.Id == selectedItem.Id);
+        }
+        finally
+        {
+            _isUpdatingSelection = false;
+        }
+    }
 
     private TimeItemView CreateTimeItem(TimeSelectionItem item)
     {

@@ -24,7 +24,7 @@ public partial class AppShell : Shell
 
         //BOOKING
         Routing.RegisterRoute(AppRoutes.ServiceSelection, typeof(ServiceSelectionPage));
-        Routing.RegisterRoute(AppRoutes.OrganizationSelection, typeof(OrganizationSelectionPage));
+        Routing.RegisterRoute(AppRoutes.OrganizationSelection, typeof(BranchSelectionPage));
         Routing.RegisterRoute(AppRoutes.StylistSelection, typeof(StylistSelectionPage));
         Routing.RegisterRoute(AppRoutes.BookingDateTimeSelection, typeof(DateTimeSelectionPage));
         Routing.RegisterRoute(AppRoutes.BookingConfirmation, typeof(ConfirmationPage));

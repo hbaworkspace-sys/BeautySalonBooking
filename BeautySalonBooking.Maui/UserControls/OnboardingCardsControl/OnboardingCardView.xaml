@@ -38,6 +38,7 @@
         <shared:TitleDescriptionView
             x:Name="textContent"
             Grid.Row="1"
+            DescriptionFontAttributes="None"
             DescriptionFontSize="12"
             TitleFontSize="22"
             VerticalOptions="Center" />

@@ -120,7 +120,7 @@
     </Style>
 
     <Style x:Key="IconLabelStyle" TargetType="media:MediaItemView">
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="FillBrush" Value="White" />
         <Setter Property="DisplayMode" Value="Image" />
         <Setter Property="ImageMargin" Value="10" />
         <Setter Property="Shape" Value="Circle" />
@@ -198,15 +198,15 @@
         <Setter Property="ContentPadding" Value="10" />
         <Setter Property="ContentVerticalOptions" Value="Fill" />
 
-        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="CornerRadius" Value="8" />
 
-        <Setter Property="NormalBackground" Value="#FFFFFF" />
-        <Setter Property="NormalIndicatorBrush" Value="DarkGray" />
-        <Setter Property="NormalTextColor" Value="DarkGray" />
+        <Setter Property="NormalBackground" Value="#44eeeeee" />
+        <Setter Property="NormalIndicatorBrush" Value="#EA6A96" />
+        <Setter Property="NormalTextColor" Value="#EA6A96" />
 
-        <Setter Property="SelectedBackground" Value="#33eeeeee" />
+        <Setter Property="SelectedBackground" Value="#EA6A96" />
         <Setter Property="SelectedIndicatorBrush" Value="#EA6A96" />
-        <Setter Property="SelectedTextColor" Value="#EA6A96" />
+        <Setter Property="SelectedTextColor" Value="White" />
 
         <Setter Property="ShowSelectedIndicator" Value="True" />
 
@@ -243,14 +243,18 @@
         <Setter Property="BorderWidth" Value="1" />
 
         <Setter Property="DisplayMode" Value="Image" />
-        <Setter Property="ImageAspect" Value="AspectFit" />
+        <Setter Property="ImageAspect" Value="AspectFill" />
+
         <Setter Property="ImageMargin" Value="10" />
 
         <Setter Property="Shape" Value="RoundedRectangle" />
         <Setter Property="CornerRadius" Value="9" />
 
-        <Setter Property="HeightRequest" Value="55" />
-        <Setter Property="WidthRequest" Value="55" />
+        <Setter Property="MediaWidthRequest" Value="60" />
+        <Setter Property="MediaHeightRequest" Value="60" />
+        <Setter Property="Spacing" Value="4" />
+        <Setter Property="TitleFontFamily" Value="Sans" />
+        <Setter Property="TitleFontSize" Value="10" />
 
         <Setter Property="Shadow">
             <Setter.Value>

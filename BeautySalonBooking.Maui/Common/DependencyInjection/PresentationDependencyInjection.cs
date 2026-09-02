@@ -4,12 +4,16 @@ using BeautySalonBooking.Maui.Features.Appointment.ViewModels;
 using BeautySalonBooking.Maui.Features.Appointment.Views;
 using BeautySalonBooking.Maui.Features.Auth.ViewModels;
 using BeautySalonBooking.Maui.Features.Auth.Views;
+using BeautySalonBooking.Maui.Features.Booking.Models;
+using BeautySalonBooking.Maui.Features.Booking.Services;
 using BeautySalonBooking.Maui.Features.Booking.ViewModels;
 using BeautySalonBooking.Maui.Features.Booking.Views;
-using BeautySalonBooking.Maui.Features.Dashboard.ViewModels;
-using BeautySalonBooking.Maui.Features.Dashboard.Views;
+using BeautySalonBooking.Maui.Features.Category.Cache;
+using BeautySalonBooking.Maui.Features.Home.ViewModels;
+using BeautySalonBooking.Maui.Features.Home.Views;
 using BeautySalonBooking.Maui.Features.Main.ViewModels;
 using BeautySalonBooking.Maui.Features.Main.Views;
+using BeautySalonBooking.Maui.Features.Service.Cache;
 using BeautySalonBooking.Maui.Features.Splash.ViewModels;
 using BeautySalonBooking.Maui.Features.Splash.Views;
 
@@ -33,8 +37,8 @@ public static class PresentationDependencyInjection
         services.AddTransient<RegisterPage>();
         services.AddTransient<RegisterViewModel>();
 
-        services.AddTransient<DashboardView>();
-        services.AddTransient<DashboardViewModel>();
+        services.AddTransient<HomeView>();
+        services.AddTransient<HomeViewModel>();
 
         services.AddTransient<RegistrationSuccessPage>();
         services.AddTransient<RegistrationSuccessViewModel>();
@@ -48,8 +52,8 @@ public static class PresentationDependencyInjection
         services.AddTransient<ServiceSelectionPage>();
         services.AddTransient<ServiceSelectionViewModel>();
 
-        services.AddTransient<OrganizationSelectionPage>();
-        services.AddTransient<OrganizationSelectionViewModel>();
+        services.AddTransient<BranchSelectionPage>();
+        services.AddTransient<BranchSelectionViewModel>();
 
         services.AddTransient<StylistSelectionPage>();
         services.AddTransient<StylistSelectionViewModel>();
@@ -66,7 +70,10 @@ public static class PresentationDependencyInjection
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IViewService, ViewService>();
-
+        services.AddSingleton<ICategoryCache, MemoryCategoryCache>();
+        services.AddSingleton<IServiceCache, MemoryServiceCache>();
+        services.AddSingleton<IBookingSelectionState, BookingSelectionState>();
+        services.AddSingleton<IBookingResultState, BookingResultState>();
         return services;
     }
 }

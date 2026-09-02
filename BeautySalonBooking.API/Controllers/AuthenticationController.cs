@@ -1,7 +1,5 @@
 ﻿using BeautySalonBooking.Application.Authentication.Interfaces;
-using BeautySalonBooking.Application.Authentication.Services;
 using BeautySalonBooking.Contracts.Authentication.Requests;
-
 using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
 //using FluentValidation;
@@ -25,10 +23,12 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("register/request-otp")]
-    public async Task<IActionResult> RegisterInitiate([FromBody] RegisterInitiateRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> RegisterInitiate(
+        [FromBody] RegisterInitiateRequest request,
+        CancellationToken cancellationToken)
     {
-
-        var result = await _authenticationService.RequestRegisterOtpAsync(request, cancellationToken);
+        var result = await _authenticationService
+            .RequestRegisterOtpAsync(request, cancellationToken);
         return Ok(result);
     }
 

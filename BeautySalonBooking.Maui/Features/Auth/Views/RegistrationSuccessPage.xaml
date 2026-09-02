@@ -11,7 +11,7 @@
     BackgroundColor="{StaticResource White}"
     NavigationPage.HasNavigationBar="False">
 
-    <Grid RowDefinitions="*,1.5*,*,*">
+    <Grid Padding="16" RowDefinitions="*,1.5*,*,*">
 
         <media:MediaView
             Grid.Row="1"
@@ -19,18 +19,18 @@
             BorderWidth="2"
             DisplayMode="Glyph"
             GlowPadding="15"
-            Glyph="check"
-            GlyphSize="150"
-            HeightRequest="200"
+            Glyph="✓"
+            GlyphSize="100"
+            HeightRequest="150"
             ImageMargin="15"
-            IsGlowVisible="True"
+            IsGlowVisible="False"
             Shape="Circle"
             VerticalOptions="Start"
-            WidthRequest="200">
+            WidthRequest="150">
             <media:MediaView.FillBrush>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Offset="0" Color="#fabaac" />
-                    <GradientStop Offset="1" Color="#f99bd3" />
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Offset="0.0" Color="#ccFFBB80" />
+                    <GradientStop Offset="1.1" Color="#ccEA6A96" />
                 </LinearGradientBrush>
             </media:MediaView.FillBrush>
         </media:MediaView>
@@ -43,6 +43,13 @@
         <btn:PrimaryButtonView
             Title="شروع کنید"
             Grid.Row="3"
-            Command="{Binding GoToMainPageCommand}" />
+            Command="{Binding GoToMainPageCommand}">
+            <btn:PrimaryButtonView.FillBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Offset="0.0" Color="#ccFFBB80" />
+                    <GradientStop Offset="1.1" Color="#ccEA6A96" />
+                </LinearGradientBrush>
+            </btn:PrimaryButtonView.FillBrush>
+        </btn:PrimaryButtonView>
     </Grid>
 </ContentPage>

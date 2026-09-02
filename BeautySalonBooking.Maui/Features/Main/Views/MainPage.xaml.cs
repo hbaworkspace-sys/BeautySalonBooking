@@ -1,5 +1,5 @@
 using BeautySalonBooking.Maui.Common.Interfaces;
-using BeautySalonBooking.Maui.Features.Dashboard.Views;
+using BeautySalonBooking.Maui.Features.Home.Views;
 using BeautySalonBooking.Maui.Features.Main.Models;
 using BeautySalonBooking.Maui.Features.Main.ViewModels;
 using BeautySalonBooking.Maui.Features.Appointment.Views;
@@ -51,7 +51,7 @@ public partial class MainPage : ContentPage, IQueryAttributable
         PageContainer.Content = tab switch
         {
             MainTab.Dashboard =>
-                _viewService.GetView<DashboardView>(),
+                _viewService.GetView<HomeView>(),
 
             MainTab.Appointments =>
                 _viewService.GetView<AppointmentsView>(),

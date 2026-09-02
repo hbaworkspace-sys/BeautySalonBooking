@@ -7,9 +7,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="ContactAggregate\**" />
-	  <EmbeddedResource Remove="ContactAggregate\**" />
-	  <None Remove="ContactAggregate\**" />
+		<Compile Remove="ContactAggregate\**" />
+		<EmbeddedResource Remove="ContactAggregate\**" />
+		<None Remove="ContactAggregate\**" />
 	</ItemGroup>
 
 </Project>

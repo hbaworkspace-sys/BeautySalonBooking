@@ -167,17 +167,17 @@ public partial class OrganizationCardView : ContentView
     #endregion
 
 
-    #region Organization Type
+    #region Branch Title
 
-    public string? OrganizationType
+    public string? BranchTitle
     {
-        get => (string?)GetValue(OrganizationTypeProperty);
-        set => SetValue(OrganizationTypeProperty, value);
+        get => (string?)GetValue(BranchTitleProperty);
+        set => SetValue(BranchTitleProperty, value);
     }
 
-    public static readonly BindableProperty OrganizationTypeProperty =
+    public static readonly BindableProperty BranchTitleProperty =
         BindableProperty.Create(
-            nameof(OrganizationType),
+            nameof(BranchTitle),
             typeof(string),
             typeof(OrganizationCardView),
             default(string),
@@ -196,7 +196,7 @@ public partial class OrganizationCardView : ContentView
 
     private void UpdateSalonType()
     {
-        SalonTypeLabel.Text = OrganizationType;
+        BranchTitleLabel.Text = BranchTitle;
     }
 
     #endregion

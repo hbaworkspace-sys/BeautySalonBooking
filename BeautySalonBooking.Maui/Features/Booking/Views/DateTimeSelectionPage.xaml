@@ -6,6 +6,7 @@
     xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
     xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
     xmlns:dateTime="clr-namespace:BeautySalonBooking.Maui.Components.DateAndTime"
+    xmlns:dto_bms="clr-namespace:BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;assembly=BeautySalonBooking.Contracts"
     xmlns:header="clr-namespace:BeautySalonBooking.Maui.Components.Header"
     xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
@@ -25,47 +26,49 @@
             IsBackEnabled="True"
             IsBackVisible="True" />
 
-        <Grid
-            Grid.Row="1"
-            Padding="16"
-            RowDefinitions="Auto,Auto,Auto,*,Auto"
-            RowSpacing="20">
-
-            <dateTime:DateSelectionView
-                Grid.Row="0"
-                ItemsSource="{Binding AvailableDates}"
-                SelectedDate="{Binding SelectedDate, Mode=TwoWay}" />
-
-            <!--  Selected Date Title  -->
-            <header:SectionTitleView
-                Title="{Binding SelectedDateTitle, Mode=TwoWay}"
+        <ScrollView Grid.Row="1">
+            <Grid
                 Grid.Row="1"
-                Margin="0,10,0,0" />
+                Padding="16"
+                RowDefinitions="Auto,Auto,Auto,*,Auto"
+                RowSpacing="20">
 
-            <!--  Time Slots  -->
-            <dateTime:TimeSelectionView
-                Grid.Row="2"
-                ItemsSource="{Binding AvailableTimes}"
-                SelectedTime="{Binding SelectedTime, Mode=TwoWay}" />
+                <dateTime:DateSelectionView
+                    Grid.Row="0"
+                    ItemsSource="{Binding AvailableDates}"
+                    SelectedDate="{Binding SelectedDate, Mode=TwoWay}" />
 
-            <!--  Selected Stylist Summary  -->
-            <card:SelectedStylistCardView
-                Grid.Row="3"
-                ImageSource="arayeshgar.png"
-                Price="850,000"
-                ServiceName="رنگ مو"
-                StylistName="سارا محمدی"
-                StylistTitle="استایلیست ارشد"
-                Duration="45 دقیقه" />
+                <!--  Selected Date Title  -->
+                <header:SectionTitleView
+                    Title="{Binding SelectedDateTitle, Mode=TwoWay}"
+                    Grid.Row="1"
+                    Margin="0,10,0,0" />
 
-            <!--  Continue  -->
-            <btn:PrimaryButtonView
-                Title="ادامه و تایید"
-                Grid.Row="4"
-                Command="{Binding GoToBookingConfirmationCommand}" />
+                <!--  Time Slots  -->
+                <dateTime:TimeSelectionView
+                    Grid.Row="2"
+                    ItemsSource="{Binding AvailableTimes}"
+                    SelectedTime="{Binding SelectedTime, Mode=TwoWay}" />
 
-        </Grid>
+                <!--  Selected Stylist Summary  -->
+                <card:StylistSelectionCardView
+                    Grid.Row="3"
+                    FirstAvailableTime="15:30"
+                    ImageSource="arayeshgar.png"
+                    Price="{Binding SelectedMember.Price}"
+                    StylistName="{Binding SelectedMember.FullName}"
+                    StylistTitle="استایلیست ارشد"
+                    VerticalOptions="Start"
+                    Duration="{Binding SelectedMember.Duration}" />
 
+                <!--  Continue  -->
+                <btn:PrimaryButtonView
+                    Title="ادامه و تایید"
+                    Grid.Row="4"
+                    Command="{Binding GoToBookingConfirmationCommand}" />
 
+            </Grid>
+
+        </ScrollView>
     </Grid>
 </ContentPage>

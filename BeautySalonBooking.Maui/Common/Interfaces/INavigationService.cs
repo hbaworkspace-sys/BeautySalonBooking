@@ -23,7 +23,7 @@ public interface INavigationService
     //Booking
     Task GoToServiceSelectionAsync();
     Task GoToStylistSelectionAsync();
-    Task GoToOrganizationSelectionAsync();
+    Task GoToBranchSelectionAsync();
     Task GoToBookingDateTimeSelectionAsync();
     Task GoToBookingConfirmationAsync();
     Task GoToBookingSuccessAsync();
