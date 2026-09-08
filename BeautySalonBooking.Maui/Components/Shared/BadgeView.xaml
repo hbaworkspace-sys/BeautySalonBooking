@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Shared.BadgeView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Border x:Name="ContainerBorder" StrokeThickness="0">
+
+        <Border.StrokeShape>
+            <RoundRectangle x:Name="BadgeShape" />
+        </Border.StrokeShape>
+
+        <Label
+            x:Name="TextLabel"
+            HorizontalOptions="Center"
+            HorizontalTextAlignment="Center"
+            LineBreakMode="NoWrap"
+            VerticalOptions="Center"
+            VerticalTextAlignment="Center" />
+    </Border>
+
+</ContentView>

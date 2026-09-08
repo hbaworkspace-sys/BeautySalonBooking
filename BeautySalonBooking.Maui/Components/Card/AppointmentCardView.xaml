@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Card.AppointmentCardView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media">
+
+    <ContentView.Resources>
+
+        <Color x:Key="AppointmentTextPrimaryColor">
+            #222222
+        </Color>
+
+        <Color x:Key="AppointmentTextSecondaryColor">
+            #999999
+        </Color>
+
+        <Color x:Key="AppointmentPrimaryColor">
+            #ED5F91
+        </Color>
+
+        <Color x:Key="AppointmentSuccessBackgroundColor">
+            #EAF4EC
+        </Color>
+
+        <Color x:Key="AppointmentSuccessTextColor">
+            #75A47D
+        </Color>
+
+        <Color x:Key="AppointmentPendingBackgroundColor">
+            #FFF0DF
+        </Color>
+
+        <Color x:Key="AppointmentPendingTextColor">
+            #D69B62
+        </Color>
+
+        <Style x:Key="AppointmentSecondaryTextStyle" TargetType="Label">
+
+            <Setter Property="FontSize" Value="11" />
+
+            <Setter Property="TextColor" Value="{StaticResource AppointmentTextSecondaryColor}" />
+
+        </Style>
+
+    </ContentView.Resources>
+
+    <Border Padding="10,10" Style="{StaticResource CardBorderStyle}">
+
+        <Grid
+            ColumnDefinitions="*,100"
+            ColumnSpacing="10"
+            RowDefinitions="*,Auto">
+
+            <Grid
+                Grid.Column="0"
+                Padding="10,0"
+                RowDefinitions="Auto,Auto,Auto,Auto,*"
+                RowSpacing="4"
+                VerticalOptions="Center">
+
+                <Label
+                    x:Name="OrganizationLabel"
+                    Grid.Row="0"
+                    FontAttributes="Bold"
+                    TextColor="{StaticResource AppointmentTextPrimaryColor}" />
+
+                <Label
+                    x:Name="ServicesLabel"
+                    Grid.Row="1"
+                    Padding="20,0"
+                    Style="{StaticResource AppointmentSecondaryTextStyle}" />
+
+                <Grid
+                    Grid.Row="2"
+                    Padding="20,0"
+                    ColumnDefinitions="Auto,*"
+                    ColumnSpacing="5">
+
+                    <Label
+                        Grid.Column="0"
+                        FontSize="14"
+                        Text="▣"
+                        TextColor="{StaticResource AppointmentPrimaryColor}" />
+
+                    <Label
+                        x:Name="DateLabel"
+                        Grid.Column="1"
+                        Style="{StaticResource AppointmentSecondaryTextStyle}" />
+
+                </Grid>
+
+                <Grid
+                    Grid.Row="3"
+                    Padding="20,0"
+                    ColumnDefinitions="Auto,*"
+                    ColumnSpacing="5">
+
+                    <Label
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        FontSize="25"
+                        Text="◌"
+                        TextColor="{StaticResource AppointmentPrimaryColor}" />
+
+                    <Label
+                        x:Name="TimeLabel"
+                        Grid.Column="1"
+                        Style="{StaticResource AppointmentSecondaryTextStyle}" />
+
+                </Grid>
+
+            </Grid>
+
+            <media:MediaView
+                x:Name="OrganizationMediaView"
+                Grid.Column="1"
+                HeightRequest="100"
+                HorizontalOptions="Center"
+                ImageAspect="AspectFill"
+                Shape="Circle"
+                VerticalOptions="Center"
+                WidthRequest="100" />
+
+            <Border
+                x:Name="StatusBorder"
+                Grid.Row="1"
+                Grid.Column="1"
+                Padding="8,4"
+                HorizontalOptions="Center"
+                StrokeThickness="0"
+                VerticalOptions="End">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="5" />
+                </Border.StrokeShape>
+
+                <Label x:Name="StatusLabel" FontSize="10" />
+            </Border>
+        </Grid>
+    </Border>
+</ContentView>

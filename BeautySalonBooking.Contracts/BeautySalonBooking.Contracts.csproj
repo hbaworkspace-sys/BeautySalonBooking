@@ -7,17 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!--<PackageReference Include="FluentValidation" Version="9.5.4" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="9.5.4" />-->
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="A1\Enums\" />
-		<Folder Include="Permission\Requests\" />
-		<Folder Include="Permission\Responses\" />
-		<Folder Include="A1\Dtos\" />
-		<Folder Include="A1\Responses\" />
-		<Folder Include="A1\Requests\" />
+	  <Folder Include="Booking\CreateBooking\Dtos\" />
 	</ItemGroup>
 
 </Project>

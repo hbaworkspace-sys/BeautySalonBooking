@@ -6,7 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Text.RegularExpressions;
 
-namespace BeautySalonBooking.Maui.Features.Auth;
+namespace BeautySalonBooking.Maui.Features.Auth.ViewModels;
 
 public partial class LoginViewModel : ObservableObject
 {
@@ -75,6 +75,12 @@ public partial class LoginViewModel : ObservableObject
         return _navigationService.GoToRegisterAsync();
     }
 
+    [RelayCommand]
+    private Task GoBackAsync()
+    {
+        return _navigationService.GoBackAsync();
+    }
+
     private static readonly HashSet<string> ValidPrefixes =
     [
         // MCI
@@ -88,6 +94,7 @@ public partial class LoginViewModel : ObservableObject
         // Rightel
         "920","921","922"
     ];
+
     private async Task<bool> ValidateInputAsync()
     {
         if (string.IsNullOrWhiteSpace(PhoneNumber))

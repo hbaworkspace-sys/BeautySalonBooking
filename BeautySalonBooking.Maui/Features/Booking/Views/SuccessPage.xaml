@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Booking.Views.SuccessPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
+    xmlns:information="clr-namespace:BeautySalonBooking.Maui.Components.Information"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
+    x:DataType="vm:SuccessViewModel"
+    BackgroundColor="{x:StaticResource White}"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+
+    <Grid
+        Padding="16,60,16,16"
+        RowDefinitions="Auto,Auto,*,Auto,Auto"
+        RowSpacing="15">
+
+        <media:MediaView
+            Grid.Row="0"
+            BorderBrush="White"
+            BorderWidth="2"
+            DisplayMode="Glyph"
+            FillBrush="#F05C80"
+            GlowPadding="15"
+            Glyph="✓"
+            GlyphSize="50"
+            HeightRequest="100"
+            ImageMargin="15"
+            IsGlowVisible="False"
+            Shape="Circle"
+            VerticalOptions="Start"
+            WidthRequest="100" />
+
+        <uc:TitleSubtitleView
+            Title="رزرو با موفقیت انجام شد !"
+            Grid.Row="1"
+            Subtitle="جزئیات رزرو برای شما پیامک و در بخش رزرو ها ذخیره شد" />
+
+        <information:InfoSummaryView Grid.Row="2" Items="{Binding SummaryItems}" />
+
+        <btn:PrimaryButtonView
+            Title="مشاهده رزرو ها"
+            Grid.Row="3"
+            Command="{Binding GoToAppointmentsCommand}" />
+
+        <btn:PrimaryButtonView
+            Title="بازگشت به صفحه اصلی"
+            Grid.Row="4"
+            AppearanceMode="Secondary"
+            Command="{Binding GoToDashboardCommand}" />
+
+    </Grid>
+</ContentPage>

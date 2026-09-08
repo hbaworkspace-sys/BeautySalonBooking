@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Card.StylistSelectionCardView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
+    x:Name="self">
+
+    <Border
+        Padding="10"
+        BackgroundColor="White"
+        Stroke="Pink"
+        StrokeThickness="1">
+
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="14" />
+        </Border.StrokeShape>
+
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Command, Source={x:Reference self}}" CommandParameter="{Binding CommandParameter, Source={x:Reference self}}" />
+        </Border.GestureRecognizers>
+
+        <Grid ColumnDefinitions="100,*,27" ColumnSpacing="12">
+
+            <media:MediaView
+                x:Name="StylistImageView"
+                BorderWidth="2"
+                CornerRadius="60"
+                FillBrush="#aad2b48c"
+                HeightRequest="130"
+                ImageAspect="AspectFit"
+                ImageBorderBrush="White"
+                ImageBorderWidth="2"
+                ImageMargin="0,5,0,0"
+                ImageSource="arayeshgar.png"
+                Shape="RoundedRectangle"
+                VerticalOptions="Center" />
+
+            <!--  Information  -->
+            <VerticalStackLayout
+                Grid.Column="1"
+                Spacing="4"
+                VerticalOptions="Center">
+
+
+                <Label
+                    x:Name="StylistNameLabel"
+                    FontAttributes="Bold"
+                    FontSize="14"
+                    TextColor="#292329" />
+
+                <Label
+                    x:Name="StylistTitleLabel"
+                    FontSize="9"
+                    TextColor="#8F858A" />
+
+                <!--  Rating  -->
+                <HorizontalStackLayout Spacing="4">
+
+                    <HorizontalStackLayout x:Name="RatingStarsLayout" Spacing="1">
+
+                        <Label FontSize="11" Text="★" />
+
+                        <Label FontSize="11" Text="★" />
+
+                        <Label FontSize="11" Text="★" />
+
+                        <Label FontSize="11" Text="★" />
+
+                        <Label FontSize="11" Text="★" />
+
+                    </HorizontalStackLayout>
+                    <Label
+                        x:Name="RatingLabel"
+                        FontSize="10"
+                        TextColor="Black"
+                        VerticalOptions="Center" />
+
+                </HorizontalStackLayout>
+
+                <!--  Duration / Price  -->
+                <HorizontalStackLayout Spacing="12">
+
+                    <HorizontalStackLayout Spacing="4">
+
+                        <Label
+                            FontSize="12"
+                            Style="{x:StaticResource GlyphLable}"
+                            Text="{x:Static icon:IconFont.Timer}"
+                            TextColor="#F05C80" />
+
+                        <Label
+                            x:Name="DurationLabel"
+                            FontSize="9"
+                            TextColor="#6F666B" />
+
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="4">
+
+                        <Label
+                            FontSize="10"
+                            Style="{x:StaticResource GlyphLable}"
+                            Text="{x:Static icon:IconFont.Sell}" />
+                        <Label
+                            x:Name="PriceLabel"
+                            FontSize="9"
+                            TextColor="#6F666B" />
+                        <Label
+                            FontSize="9"
+                            Text="تومان"
+                            TextColor="#6F666B" />
+
+                    </HorizontalStackLayout>
+
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="5">
+
+                    <Label
+                        FontSize="9"
+                        Text="اولین تایم آزاد:"
+                        TextColor="Black" />
+
+                    <Label
+                        x:Name="FirstAvailableTimeLabel"
+                        FontSize="9"
+                        TextColor="#F05C80" />
+
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+
+            <!--  Selection  -->
+            <shared:ActionIconView
+                Grid.Column="2"
+                CornerRadius="50"
+                FillBrush="#F05C80"
+                HeightRequest="24"
+                Icon="❯"
+                IconColor="White"
+                IconSize="13"
+                WidthRequest="24" />
+        </Grid>
+    </Border>
+</ContentView>

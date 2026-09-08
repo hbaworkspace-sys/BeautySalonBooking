@@ -1,55 +1,53 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeautySalonBooking.Maui.UserControls.TextEntry"
-             x:Name="self">
+<ContentView
+    x:Class="BeautySalonBooking.Maui.UserControls.TextEntry"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="self">
 
     <Border
         x:Name="border"
-        BackgroundColor="{x:StaticResource White}"
         Margin="10,0,10,0"
-        StrokeThickness="1"
+        BackgroundColor="{x:StaticResource White}"
+        HeightRequest="60"
         Stroke="{StaticResource StrokeColor}"
-        HeightRequest="60">
+        StrokeThickness="1">
 
         <Border.Shadow>
-            <Shadow
-                Brush="{StaticResource ShadowColor}"
-                Offset="0,0.5"/>
+            <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
         </Border.Shadow>
 
         <Border.StrokeShape>
-            <RoundRectangle CornerRadius="10"/>
+            <RoundRectangle CornerRadius="10" />
         </Border.StrokeShape>
 
-        <Grid
-            ColumnDefinitions="30,*">
+        <Grid ColumnDefinitions="30,*">
 
             <Label
-                Margin="10,0,0,0"
                 Grid.Column="0"
+                Margin="10,0,0,0"
                 Style="{x:StaticResource GlyphLable}"
-                Text="{Binding Glyph,Source={x:Reference self}}"/>
+                Text="{Binding Glyph, Source={x:Reference self}}" />
 
             <Entry
                 x:Name="mainEntry"
                 Grid.Column="1"
-                ReturnType="{Binding ReturnTypeValue, Source={x:Reference self}}"
-                TextColor="{x:StaticResource PrimaryText}"
-                TextChanged="mainEntry_TextChanged"
                 Completed="mainEntry_Completed"
                 Focused="mainEntry_Focused"
-                Unfocused="mainEntry_Unfocused"
-                Text="{Binding Text,Source={x:Reference self}}" />
+                ReturnType="{Binding ReturnTypeValue, Source={x:Reference self}}"
+                Text="{Binding Text, Source={x:Reference self}}"
+                TextChanged="mainEntry_TextChanged"
+                TextColor="{x:StaticResource PrimaryText}"
+                Unfocused="mainEntry_Unfocused" />
 
             <Label
                 x:Name="lblPalceHolder"
                 Grid.Column="1"
                 BackgroundColor="{x:StaticResource White}"
                 HeightRequest="60"
-                HorizontalTextAlignment="Center"
                 HorizontalOptions="FillAndExpand"
-                Text="{Binding PlaceHolder, Source={x:Reference self}}"/>
+                HorizontalTextAlignment="Center"
+                Text="{Binding PlaceHolder, Source={x:Reference self}}" />
         </Grid>
     </Border>
 </ContentView>

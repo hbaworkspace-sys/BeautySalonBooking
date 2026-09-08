@@ -7,7 +7,7 @@ using BeautySalonBooking.Maui.Features.Auth.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace BeautySalonBooking.Maui.Features.Auth
+namespace BeautySalonBooking.Maui.Features.Auth.ViewModels
 {
     public partial class RegisterViewModel : ObservableObject
     {
@@ -89,6 +89,11 @@ namespace BeautySalonBooking.Maui.Features.Auth
         private Task GoToLoginAsync()
         {
             return _navigationService.GoToLoginAsync();
+        }
+        [RelayCommand]
+        private Task GoBackAsync()
+        {
+            return _navigationService.GoBackAsync();
         }
         private async Task<bool> ValidateInputAsync()
         {

@@ -3,15 +3,16 @@
     x:Class="BeautySalonBooking.Maui.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:view_splash="clr-namespace:BeautySalonBooking.Maui.Features.Splash"
-    xmlns:view="clr-namespace:BeautySalonBooking.Maui.Features.Auth"
-    Shell.NavBarIsVisible="False"
-    FlowDirection="RightToLeft">
+    xmlns:main="clr-namespace:BeautySalonBooking.Maui.Features.Main.Views"
+    xmlns:splash="clr-namespace:BeautySalonBooking.Maui.Features.Splash.Views"
+    xmlns:view="clr-namespace:BeautySalonBooking.Maui.Features.Booking.Views"
+    FlowDirection="RightToLeft"
+    Shell.NavBarIsVisible="False">
 
-    <ShellContent
-        Route="Splash"
-        ContentTemplate="{DataTemplate view_splash:SplashPage}" />
+    <ShellContent ContentTemplate="{DataTemplate splash:SplashPage}" Route="Splash" />
 
-    <!--<ShellContent
-    ContentTemplate="{DataTemplate view:OtpPage}" />-->
+    <ShellContent ContentTemplate="{DataTemplate main:MainPage}" Route="main" />
+
+    <!--<ShellContent ContentTemplate="{DataTemplate view:ServiceSelectionPage}" />-->
+
 </Shell>

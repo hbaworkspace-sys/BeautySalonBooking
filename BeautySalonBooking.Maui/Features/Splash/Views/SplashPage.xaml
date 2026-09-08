@@ -1,133 +1,125 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeautySalonBooking.Maui.Features.Splash.SplashPage"
-             NavigationPage.HasNavigationBar="False"
-             Background="#fee0f5"
-             xmlns:ucInd="clr-namespace:BeautySalonBooking.Maui.UserControls.Indicators"
-             xmlns:ucImg="clr-namespace:BeautySalonBooking.Maui.UserControls.Images"
-             xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Splash"
-             x:DataType="vm:SplashViewModel">
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Splash.Views.SplashPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
+    xmlns:ucInd="clr-namespace:BeautySalonBooking.Maui.UserControls.Indicators"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Splash.ViewModels"
+    x:DataType="vm:SplashViewModel"
+    Background="#fee0f5"
+    NavigationPage.HasNavigationBar="False">
 
-    <Grid
-        RowDefinitions="*,1.5*,*">
+    <Grid RowDefinitions="*,1.5*,*">
 
         <Ellipse
             Margin="0,0,0,0"
-            WidthRequest="700"
             HeightRequest="800"
             HorizontalOptions="Center"
-            VerticalOptions="Start">
+            VerticalOptions="Start"
+            WidthRequest="700">
             <Ellipse.Fill>
-                <RadialGradientBrush
-                    Center="0.5,0.5"
-                    Radius="0.50">
-                    <GradientStop
-                        Offset="0"
-                        Color="#FFFFFFFF"/>
-                    <GradientStop
-                        Offset="0.25"
-                        Color="#F8FFFFFF"/>
-                    <GradientStop
-                        Offset="0.60"
-                        Color="#60FFFFFF"/>
-                    <GradientStop
-                        Offset="1"
-                        Color="#00FFFFFF"/>
+                <RadialGradientBrush Center="0.5,0.5" Radius="0.50">
+                    <GradientStop Offset="0" Color="#FFFFFFFF" />
+                    <GradientStop Offset="0.25" Color="#F8FFFFFF" />
+                    <GradientStop Offset="0.60" Color="#60FFFFFF" />
+                    <GradientStop Offset="1" Color="#00FFFFFF" />
                 </RadialGradientBrush>
             </Ellipse.Fill>
         </Ellipse>
 
-        <AbsoluteLayout
-            Grid.Row="0"
-            Grid.RowSpan="2">
+        <AbsoluteLayout Grid.Row="0" Grid.RowSpan="2">
             <AbsoluteLayout.Resources>
-                <Style TargetType="Label" >
-                    <Setter Property="TextColor" Value="{x:StaticResource White}"/>
-                    <Setter Property="Text" Value="✦"/>
+                <Style TargetType="Label">
+                    <Setter Property="TextColor" Value="{x:StaticResource White}" />
+                    <Setter Property="Text" Value="✦" />
                 </Style>
             </AbsoluteLayout.Resources>
             <Label
-                FontSize="11"
                 AbsoluteLayout.LayoutBounds="0.5,0.10,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                FontSize="11" />
             <Label
-                FontSize="7"
                 AbsoluteLayout.LayoutBounds="0.70,0.15,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                FontSize="7" />
             <Label
-                FontSize="13"
                 AbsoluteLayout.LayoutBounds="0.35,0.17,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                FontSize="13" />
             <Label
-                FontSize="13"
                 AbsoluteLayout.LayoutBounds="0.79,0.21,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                FontSize="13" />
             <Label
-                FontSize="16"
                 AbsoluteLayout.LayoutBounds="0.55,0.25,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                FontSize="16" />
             <Label
-                FontSize="12"
                 AbsoluteLayout.LayoutBounds="0.70,0.35,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                FontSize="12" />
             <Label
-                FontSize="12"
                 AbsoluteLayout.LayoutBounds="0.85,0.30,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                FontSize="12" />
             <Label
-                FontSize="10"
                 AbsoluteLayout.LayoutBounds="0.28,0.35,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                FontSize="10" />
             <Label
-                FontSize="10"
                 AbsoluteLayout.LayoutBounds="0.18,0.25,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                FontSize="10" />
             <Label
-                TextColor="#f5f5f5"
-                FontSize="10"
                 AbsoluteLayout.LayoutBounds="0.35,0.70,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
-            <Label
+                AbsoluteLayout.LayoutFlags="PositionProportional"
                 FontSize="10"
-                TextColor="#f5f5f5"
+                TextColor="#f5f5f5" />
+            <Label
                 AbsoluteLayout.LayoutBounds="0.75,0.70,-1,-1"
-                AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                FontSize="10"
+                TextColor="#f5f5f5" />
         </AbsoluteLayout>
 
-        <ucImg:CircularContentView
+        <media:MediaView
             Grid.Row="1"
+            BorderBrush="White"
+            BorderWidth="4"
+            GlowPadding="25"
+            HeightRequest="170"
+            ImageMargin="15"
+            ImageSource="logo_beauty.png"
+            IsGlowVisible="False"
+            Shape="Circle"
             VerticalOptions="Start"
-            Size="Large"
-            IsGolwEffectVisible="True"
-            ImageSource="logo_beauty.png"/>
+            WidthRequest="170">
+            <media:MediaView.FillBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0" Color="#ccFFBB80" />
+                    <GradientStop Offset="1" Color="#ccEA6A96" />
+                </LinearGradientBrush>
+            </media:MediaView.FillBrush>
+            <media:MediaView.Shadow>
+                <Shadow Brush="White" Offset="0,20" />
+            </media:MediaView.Shadow>
+        </media:MediaView>
 
         <Grid
-            Margin="0,220,0,0"
             Grid.Row="1"
             Grid.RowSpan="2"
-            RowDefinitions="60,40,*,*,*">
+            Margin="0,220,0,0"
+            RowDefinitions="100,*,*,*">
 
-            <Label
+            <shared:TitleDescriptionView
+                Title="به دنیای زیبایی خوش آمدید"
                 Grid.Row="0"
-                FontAttributes="Bold"
-                FontSize="20"
-                TextColor="#242124"
-                HorizontalOptions="Center"
-                Text="به دنیای زیبایی خوش آمدید"/>
+                Description="تجربه ای متفاوت در مدیریت و رزرو خدمات زیبایی" />
 
-            <Label
-                Grid.Row="1"
-                FontAttributes="Bold"
-                FontSize="12"
-                TextColor="#8f8c8c"
-                HorizontalOptions="Center"
-                Text="تجربه ای متفاوت در مدیریت و رزرو خدمات زیبایی"/>
 
-            <ucInd:SimpleIndicator
-                x:Name="Indicator"
-                Grid.Row="2"/>
+            <ucInd:SimpleIndicator x:Name="Indicator" Grid.Row="1" />
         </Grid>
     </Grid>
-
 </ContentPage>

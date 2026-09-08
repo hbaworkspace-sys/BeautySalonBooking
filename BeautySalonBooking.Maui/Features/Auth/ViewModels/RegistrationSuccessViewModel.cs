@@ -1,4 +1,5 @@
 ﻿using BeautySalonBooking.Maui.Common.Interfaces;
+using BeautySalonBooking.Maui.Features.Main.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -13,8 +14,8 @@ public partial class RegistrationSuccessViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public Task GoToDashbordPage()
+    public Task GoToMainPage()
     {
-        return _navigationService.GoToDashboardAsync();
+        return _navigationService.GoToMainAsync(MainTab.Dashboard);
     }
 }

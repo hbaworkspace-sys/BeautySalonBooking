@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Booking.Views.ServiceSelectionPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:dto_cat="clr-namespace:BeautySalonBooking.Contracts.Category.Dtos;assembly=BeautySalonBooking.Contracts"
+    xmlns:dto_ser="clr-namespace:BeautySalonBooking.Contracts.Service.Dtos;assembly=BeautySalonBooking.Contracts"
+    xmlns:headers="clr-namespace:BeautySalonBooking.Maui.Components.Header"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
+    x:DataType="vm:ServiceSelectionViewModel"
+    BackgroundColor="{x:StaticResource White}"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,*" RowSpacing="0">
+
+        <nav:NavigationHeaderView
+            x:Name="HeaderView"
+            Title="انتخاب سرویس"
+            Grid.Row="0"
+            BackCommand="{Binding GoBackCommand}"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+
+        <ScrollView
+            Grid.Row="1"
+            Margin="10"
+            Padding="15"
+            VerticalScrollBarVisibility="Never">
+
+            <VerticalStackLayout Spacing="20">
+
+                <Border
+                    BackgroundColor="#FFFFFF"
+                    HeightRequest="43"
+                    Stroke="Pink"
+                    StrokeThickness="1"
+                    WidthRequest="340">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
+
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <Label
+                            Grid.Column="0"
+                            FontSize="11"
+                            Text="جستجو در خدمات ..."
+                            TextColor="#B5B5B5"
+                            VerticalOptions="Center" />
+
+                        <Label
+                            Grid.Column="1"
+                            FontSize="27"
+                            Text="⌕"
+                            TextColor="#D5C8CD"
+                            VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <headers:SectionTitleView Title="دسته بندی خدمات" ShowDivider="False" />
+
+                <CollectionView
+                    HorizontalScrollBarVisibility="Never"
+                    ItemsSource="{Binding Categories}"
+                    SelectionMode="None"
+                    VerticalScrollBarVisibility="Never">
+
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="20"
+                            Orientation="Vertical"
+                            Span="5"
+                            VerticalItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto_cat:CategoryDto">
+                            <media:MediaItemView
+                                Title="{Binding Title}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectCategoryCommand}"
+                                CommandParameter="{Binding}"
+                                ImageSource="bahar.png"
+                                Style="{StaticResource ServiceCategoryItemStyle}" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <headers:SectionTitleView
+                    Title="{Binding SelectedCategory.Title}"
+                    IsVisible="{Binding IsSubCategoriesVisible, Mode=TwoWay}"
+                    ShowDivider="True" />
+
+                <CollectionView
+                    HorizontalScrollBarVisibility="Never"
+                    IsVisible="{Binding IsSubCategoriesVisible, Mode=TwoWay}"
+                    ItemsSource="{Binding SubCategories}"
+                    SelectionMode="None"
+                    VerticalScrollBarVisibility="Never">
+
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            HorizontalItemSpacing="20"
+                            Orientation="Vertical"
+                            Span="5"
+                            VerticalItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto_cat:CategoryDto">
+                            <media:MediaItemView
+                                Title="{Binding Title}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectSubCategoryCommand}"
+                                CommandParameter="{Binding .}"
+                                ImageSource="makup.png"
+                                Style="{StaticResource ServiceCategoryItemStyle}" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <headers:SectionTitleView
+                    Title="{Binding SelectedCategory.Description}"
+                    IsVisible="{Binding IsServicesVisible}"
+                    ShowDivider="True" />
+
+                <CollectionView
+                    IsVisible="{Binding IsServicesVisible}"
+                    ItemsSource="{Binding Services}"
+                    SelectionMode="None">
+
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="0" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="dto_ser:ServiceDto">
+                            <card:InfoCardView
+                                Title="{Binding Title}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectServiceCommand}"
+                                CommandParameter="{Binding .}"
+                                ImageSource="serv_mo.png"
+                                Style="{StaticResource ServiceCardStyle}"
+                                Subtitle="{Binding Description}"
+                                ThirdRowText="{Binding BasePrice, StringFormat='از {0:N0} تومان'}" />
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>

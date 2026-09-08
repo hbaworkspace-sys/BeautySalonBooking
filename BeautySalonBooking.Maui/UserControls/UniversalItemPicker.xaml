@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BeautySalonBooking.Maui.UserControls.UniversalItemPicker"
-             x:Name="self"
-             Background="Transparent">
+<ContentView
+    x:Class="BeautySalonBooking.Maui.UserControls.UniversalItemPicker"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="self"
+    Background="Transparent">
 
     <Border
         x:Name="border"
         Background="{x:StaticResource SecondaryBackground}"
-        StrokeThickness="0"
-        HeightRequest="45">
+        HeightRequest="45"
+        StrokeThickness="0">
 
         <Border.StrokeShape>
-            <RoundRectangle CornerRadius="50"/>
+            <RoundRectangle CornerRadius="50" />
         </Border.StrokeShape>
 
-        <Grid
-            ColumnDefinitions="30,*">
+        <Grid ColumnDefinitions="30,*">
 
             <Label
-                Margin="10,0,0,0"
                 Grid.Column="0"
+                Margin="10,0,0,0"
                 Style="{x:StaticResource GlyphLable}"
-                Text="{Binding Glyph,Source={x:Reference self}}"/>
+                Text="{Binding Glyph, Source={x:Reference self}}" />
 
             <Label
                 x:Name="lblPalceHolder"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
-                Text="{Binding PlaceHolder, Source={x:Reference self}}"
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center"
+                Text="{Binding PlaceHolder, Source={x:Reference self}}" />
 
             <Picker
                 x:Name="cmbcombo"
                 Grid.Column="1"
-                HeightRequest="55"
-                FontSize="13"
-                FontFamily="BHoma"
                 Margin="0,5"
-                TextColor="Black"
                 Background="Transparent"
+                FontFamily="BHoma"
+                FontSize="13"
+                HeightRequest="55"
                 ItemDisplayBinding="{Binding Name}"
-                SelectedIndexChanged="cmbcombo_SelectedIndexChanged"
                 ItemsSource="{Binding List, Source={Reference self}}"
-                SelectedItem="{Binding Selected,Source={Reference self},Mode=TwoWay}"/>
+                SelectedIndexChanged="cmbcombo_SelectedIndexChanged"
+                SelectedItem="{Binding Selected, Source={Reference self}, Mode=TwoWay}"
+                TextColor="Black" />
         </Grid>
     </Border>
 </ContentView>

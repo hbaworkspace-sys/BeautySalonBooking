@@ -1,57 +1,298 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <?xaml-comp compile="true" ?>
+
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources">
+    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared">
 
-    <Style TargetType="Label" x:Key="PageTitleStyle">
-        <Setter Property="FontFamily" Value="Sans"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="FontSize" Value="25"/>
-        <Setter Property="TextColor" Value="{x:StaticResource PrimaryText}"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+    <Style x:Key="PageTitleStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="Sans" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="25" />
+        <Setter Property="TextColor" Value="{x:StaticResource PrimaryText}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
     </Style>
 
-    <!--"#808080"-->
-    <Style TargetType="Label" x:Key="PageSubtitleStyle">
-        <Setter Property="FontFamily" Value="Sans"/>
-        <Setter Property="FontSize" Value="12"/>
-        <Setter Property="TextColor" Value="#a9a9a9"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="HorizontalTextAlignment" Value="Center"/>
-        <Setter Property="LineHeight" Value="1"/>
+    <Style x:Key="PageSubtitleStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="Sans" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextColor" Value="#a9a9a9" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="LineHeight" Value="1" />
     </Style>
 
-    <Style TargetType="Label" x:Key="GlyphLable">
-        <Setter Property="FontFamily" Value="MaterialIconsOut"/>
-        <Setter Property="FontSize" Value="25"/>
-        <Setter Property="TextColor" Value="#ED7F89"/>
-        <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+    <Style x:Key="GlyphLable" TargetType="Label">
+        <Setter Property="FontFamily" Value="MaterialIconsOut" />
+        <Setter Property="FontSize" Value="25" />
+        <Setter Property="TextColor" Value="#ED7F89" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
     </Style>
 
     <Style TargetType="Label">
-        <Setter Property="TextColor" Value="{x:StaticResource PrimaryText}"/>
+        <Setter Property="TextColor" Value="{x:StaticResource PrimaryText}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="FontFamily" Value="Sans" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="VerticalTextAlignment" Value="Center"/>
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
     <Style TargetType="Entry">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="FontFamily" Value="Sans"/>
+        <Setter Property="FontFamily" Value="Sans" />
         <Setter Property="FontSize" Value="15" />
         <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" />
-        <Setter Property="MinimumHeightRequest" Value="44"/>
-        <Setter Property="MinimumWidthRequest" Value="44"/>
-        <Setter Property="Margin" Value="5,6,0,-9"/>
+        <Setter Property="MinimumHeightRequest" Value="44" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
+        <Setter Property="Margin" Value="5,6,0,-9" />
     </Style>
 
+    <Style x:Key="CardBorderStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{x:StaticResource White}" />
+        <Setter Property="StrokeThickness" Value="1.5" />
+        <Setter Property="Stroke" Value="#22f99bd3" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="10" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Brush="#aafff0f6" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ShowcaseCardStyle" TargetType="card:ShowcaseCardView">
+        <Setter Property="FillBrush" Value="White" />
+        <Setter Property="HeightRequest" Value="200" />
+        <Setter Property="WidthRequest" Value="125" />
+        <Setter Property="BadgeFillBrush">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Offset="0" Color="#FFBB80" />
+                    <GradientStop Offset="1" Color="#EA6A96" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+                    <GradientStop Offset="0" Color="White" />
+                    <GradientStop Offset="0.4" Color="White" />
+                    <GradientStop Offset="1" Color="#aaf99bd3" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="StoryStyle" TargetType="media:MediaItemView">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="DisplayMode" Value="Image" />
+        <Setter Property="ImageMargin" Value="3" />
+        <Setter Property="Shape" Value="Circle" />
+        <Setter Property="CornerRadius" Value="100" />
+        <Setter Property="ImageBorderBrush" Value="Transparent" />
+        <Setter Property="ImageBorderWidth" Value="2" />
+        <Setter Property="MediaHeightRequest" Value="60" />
+        <Setter Property="MediaWidthRequest" Value="60" />
+        <Setter Property="Spacing" Value="5" />
+        <Setter Property="TitleFontFamily" Value="Sans" />
+        <Setter Property="TitleFontSize" Value="10" />
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Offset="0.0" Color="#FFBB80" />
+                    <GradientStop Offset="1.1" Color="#EA6A96" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="IconLabelStyle" TargetType="media:MediaItemView">
+        <Setter Property="FillBrush" Value="White" />
+        <Setter Property="DisplayMode" Value="Image" />
+        <Setter Property="ImageMargin" Value="10" />
+        <Setter Property="Shape" Value="Circle" />
+        <Setter Property="CornerRadius" Value="100" />
+        <Setter Property="MediaWidthRequest" Value="60" />
+        <Setter Property="MediaHeightRequest" Value="60" />
+        <Setter Property="Spacing" Value="0" />
+        <Setter Property="TitleFontFamily" Value="Sans" />
+        <Setter Property="TitleFontSize" Value="10" />
+    </Style>
+
+    <Style x:Key="DiscountBadgeStyle" TargetType="shared:BadgeView">
+        <Setter Property="BorderPadding" Value="3" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="FillBrush">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Offset="0.0" Color="#FFBB80" />
+                    <GradientStop Offset="1.1" Color="#EA6A96" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="BottomTabItemStyle" TargetType="nav:TabItemView">
+
+        <!--  Size  -->
+        <Setter Property="HeightRequest" Value="58" />
+        <Setter Property="WidthRequest" Value="60" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="ContentVerticalOptions" Value="Center" />
+
+        <!--  Icon  -->
+        <Setter Property="IsIconVisible" Value="True" />
+        <Setter Property="IconSize" Value="30" />
+
+        <!--  Text  -->
+        <Setter Property="IsTextVisible" Value="True" />
+        <Setter Property="TextFontAttributes" Value="Bold" />
+        <Setter Property="TextSize" Value="10" />
+
+        <!--  Normal  -->
+        <Setter Property="NormalIconColor" Value="#ACACAC" />
+        <Setter Property="NormalTextColor" Value="#ACACAC" />
+
+        <!--  Selected  -->
+        <Setter Property="SelectedIconColor" Value="#E9687E" />
+        <Setter Property="SelectedTextColor" Value="#E9687E" />
+
+        <!--  Indicator  -->
+        <Setter Property="SelectedIndicatorBrush" Value="#E9687E" />
+        <Setter Property="ShowSelectedIndicator" Value="False" />
+
+        <!--  Layout  -->
+        <Setter Property="Spacing" Value="0" />
+        <Setter Property="TabOrientation" Value="Vertical" />
+
+        <!--  Shadow  -->
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow
+                    Brush="Pink"
+                    Opacity="100"
+                    Radius="0" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="TopTabItemStyle" TargetType="nav:TabItemView">
+
+        <Setter Property="ContentHorizontalOptions" Value="Center" />
+        <Setter Property="ContentPadding" Value="10" />
+        <Setter Property="ContentVerticalOptions" Value="Fill" />
+
+        <Setter Property="CornerRadius" Value="8" />
+
+        <Setter Property="NormalBackground" Value="#44eeeeee" />
+        <Setter Property="NormalIndicatorBrush" Value="#EA6A96" />
+        <Setter Property="NormalTextColor" Value="#EA6A96" />
+
+        <Setter Property="SelectedBackground" Value="#EA6A96" />
+        <Setter Property="SelectedIndicatorBrush" Value="#EA6A96" />
+        <Setter Property="SelectedTextColor" Value="White" />
+
+        <Setter Property="ShowSelectedIndicator" Value="True" />
+
+        <Setter Property="Spacing" Value="0" />
+        <Setter Property="TabOrientation" Value="Horizontal" />
+
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="TextSize" Value="14" />
+
+    </Style>
+
+    <Style x:Key="ServiceCardStyle" TargetType="card:InfoCardView">
+        <Setter Property="Margin" Value="0,5" />
+        <Setter Property="BorderBrush" Value="#F5E2E8" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="FillBrush" Value="#fefcfe" />
+        <Setter Property="ImageAspect" Value="Center" />
+        <Setter Property="ImageCornerRadius" Value="10" />
+        <Setter Property="IsArrowVisible" Value="True" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow
+                    Brush="#fff0f6"
+                    Opacity="0.1"
+                    Offset="1,1" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ServiceCategoryItemStyle" TargetType="media:MediaItemView">
+
+        <Setter Property="BorderBrush" Value="#FCE9EF" />
+        <Setter Property="FillBrush" Value="White" />
+        <Setter Property="BorderWidth" Value="1" />
+
+        <Setter Property="DisplayMode" Value="Image" />
+        <Setter Property="ImageAspect" Value="AspectFill" />
+
+        <Setter Property="ImageMargin" Value="10" />
+
+        <Setter Property="Shape" Value="RoundedRectangle" />
+        <Setter Property="CornerRadius" Value="9" />
+
+        <Setter Property="MediaWidthRequest" Value="60" />
+        <Setter Property="MediaHeightRequest" Value="60" />
+        <Setter Property="Spacing" Value="4" />
+        <Setter Property="TitleFontFamily" Value="Sans" />
+        <Setter Property="TitleFontSize" Value="10" />
+
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow
+                    Brush="Pink"
+                    Opacity="0.4"
+                    Offset="1,1" />
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+    <!--<Style x:Key="ItemCardViewStyle" TargetType="card:CardView">
+        <Setter Property="BackgroundColor" Value="{x:StaticResource White}" />
+        <Setter Property="StrokeThickness" Value="1.5" />
+        <Setter Property="Stroke">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Offset="0.0" Color="#aafabaac" />
+                    <GradientStop Offset="1.0" Color="#aaf99bd3" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow
+                    Brush="#33f99bd3"
+                    Opacity="0.8"
+                    Radius="7"
+                    Offset="0,0" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="10" />
+            </Setter.Value>
+        </Setter>
+    </Style>-->
 
     <!--<Style TargetType="ActivityIndicator">
     <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
@@ -160,9 +401,8 @@
     </Style>
 
     -->
-    <!---->
-    <!--
 
+    <!--
     <Style TargetType="ImageButton">
     <Setter Property="Opacity" Value="1" />
     <Setter Property="BorderColor" Value="Transparent"/>
@@ -416,6 +656,7 @@
     </Style>
 
     -->
+
     <!--
     <Style TargetType="TitleBar">
     <Setter Property="MinimumHeightRequest" Value="32"/>
@@ -439,8 +680,8 @@
     </Setter>
     </Style>
     -->
-    <!--
 
+    <!--
     <Style TargetType="Page" ApplyToDerivedTypes="True">
     <Setter Property="Padding" Value="0"/>
     <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />

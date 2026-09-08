@@ -5,10 +5,11 @@ using BeautySalonBooking.Maui.Common.Enums;
 using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Features.Auth.Models;
 using BeautySalonBooking.Maui.Features.Auth.Services;
+using BeautySalonBooking.Maui.Features.Main.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace BeautySalonBooking.Maui.Features.Auth;
+namespace BeautySalonBooking.Maui.Features.Auth.ViewModels;
 
 public partial class OtpViewModel : ObservableObject, IQueryAttributable
 {
@@ -96,10 +97,9 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
                     await _navigationService.GoToRegistrationSuccessAsync();
                     break;
                 case OtpPurpose.Login:
-                    await _navigationService.GoToDashboardAsync();
+                    await _navigationService.GoToMainAsync(MainTab.Dashboard);
                     break;
             }
-           
         }
         catch (Exception)
         {
@@ -198,5 +198,11 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
 
         CountdownSeconds = timeSecond;
         IsCountdownRunning = true;
+    }
+
+    [RelayCommand]
+    private Task GoBackAsync()
+    {
+        return _navigationService.GoBackAsync();
     }
 }

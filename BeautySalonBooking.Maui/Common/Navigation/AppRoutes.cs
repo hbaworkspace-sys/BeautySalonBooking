@@ -11,6 +11,14 @@ public static class AppRoutes
     public const string Otp = "auth/otp";
     public const string RegistrationSuccess = "auth/registration-success";
 
-    //Dashboard
-    public const string Dashboard = "dashboard";
+    //Main
+    public const string Main = "main";
+
+    // Booking
+    public const string ServiceSelection = "booking/service-selection";
+    public const string OrganizationSelection = "booking/organization-selection";
+    public const string StylistSelection = "booking/stylist-selection";
+    public const string BookingConfirmation = "booking/confirmation";
+    public const string BookingDateTimeSelection = "booking/date-time-selection";
+    public const string BookingSuccess = "booking/success";
 }

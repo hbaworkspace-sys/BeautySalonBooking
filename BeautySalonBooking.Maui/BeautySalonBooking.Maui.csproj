@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;</TargetFrameworks>
@@ -8,11 +8,13 @@
 		<RootNamespace>BeautySalonBooking.Maui</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
+		<AotAssemblies>true</AotAssemblies>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<AndroidPackageFormats>apk</AndroidPackageFormats>
 
 		<!-- Display name -->
-		<ApplicationTitle>BeautySalonBooking.Maui</ApplicationTitle>
+		<ApplicationTitle>Noura</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.beautysalonbooking.maui</ApplicationId>
@@ -72,24 +74,130 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="UserControls\ImagesControl\CircularContentView.xaml.cs">
-	    <DependentUpon>CircularContentView.xaml</DependentUpon>
-	  </Compile>
+		<MauiXaml Update="Components\Button\PrimaryButtonView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Card\AppointmentCardView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Card\FeatureCardView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Card\InfoCardView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Card\OrganizationCardView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Card\SelectedStylistCardView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Card\ShowcaseCardView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Card\StylistSelectionCardView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\DateAndTime\DateItemView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\DateAndTime\DateSelectionView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\DateAndTime\TimeItemView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\DateAndTime\TimeSelectionView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Header\SectionHeaderView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Header\SectionTitleView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Information\InfoSummaryItemView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Information\InfoSummaryView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Media\MediaItemView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Media\MediaView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Navigation\NavigationHeaderView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Navigation\TabBar.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Navigation\TabItemView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Shared\ActionIconView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Shared\BadgeView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Shared\TitleDescriptionView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Appointment\Views\AppointmentsView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Auth\Views\RegistrationSuccessPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Booking\Views\ConfirmationPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Booking\Views\DateTimeSelectionPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Booking\Views\SuccessPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Home\Views\HomView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Main\Views\MainPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Booking\Views\ServiceSelectionPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Booking\Views\BranchSelectionPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Features\Booking\Views\StylistSelectionPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="UserControls\CountdownView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="UserControls\IndicatorsControl\SimpleIndicator.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Features\Auth\Views\RegistrationSuccessPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Features\Dashboard\Views\DashboardPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="UserControls\CountdownView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="UserControls\IndicatorsControl\SimpleIndicator.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<Compile Update="Features\Appointment\Views\AppointmentsView.xaml.cs">
+			<DependentUpon>AppointmentsView.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Features\Booking\Views\BranchSelectionPage.xaml.cs">
+			<DependentUpon>BranchSelectionPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Features\Home\Views\HomView.xaml.cs">
+			<DependentUpon>HomView.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Features\Scheduling\Services\" />
 	</ItemGroup>
 
 </Project>

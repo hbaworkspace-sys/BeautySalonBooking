@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Media.MediaView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="self">
+
+    <Grid>
+        <Border
+            x:Name="GlowBorder"
+            IsVisible="False"
+            StrokeThickness="0" />
+        <Border x:Name="ContainerBorder">
+            <Grid>
+                <Border x:Name="ImageBorder" IsVisible="False">
+                    <Image x:Name="ImageView" />
+                </Border>
+                <Label
+                    x:Name="GlyphLabel"
+                    HorizontalOptions="Center"
+                    IsVisible="False"
+                    TextColor="Red"
+                    VerticalOptions="Center" />
+                <Label
+                    x:Name="TextLabel"
+                    HorizontalOptions="Center"
+                    IsVisible="False"
+                    VerticalOptions="Start"
+                    VerticalTextAlignment="Start" />
+            </Grid>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding Command, Source={x:Reference self}}" CommandParameter="{Binding CommandParameter, Source={x:Reference self}}" />
+            </Border.GestureRecognizers>
+        </Border>
+    </Grid>
+</ContentView>

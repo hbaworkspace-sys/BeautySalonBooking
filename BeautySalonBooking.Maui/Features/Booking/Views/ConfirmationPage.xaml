@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Booking.Views.ConfirmationPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
+    xmlns:information="clr-namespace:BeautySalonBooking.Maui.Components.Information"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
+    x:DataType="vm:ConfirmationViewModel"
+    BackgroundColor="{x:StaticResource White}"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <nav:NavigationHeaderView
+            x:Name="HeaderView"
+            Title="تایید و خلاصه رزرو"
+            Grid.Row="0"
+            BackCommand="{Binding GoBackCommand}"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+
+        <Grid
+            Grid.Row="1"
+            Padding="16"
+            RowDefinitions="*,Auto"
+            RowSpacing="25">
+
+            <information:InfoSummaryView Grid.Row="0" Items="{Binding SummaryItems}" />
+
+            <btn:PrimaryButtonView
+                Title="ادامه و تایید"
+                Grid.Row="1"
+                Command="{Binding ConfirmBookingCommand}" />
+
+        </Grid>
+
+    </Grid>
+</ContentPage>
