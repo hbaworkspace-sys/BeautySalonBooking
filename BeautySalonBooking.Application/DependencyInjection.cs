@@ -33,6 +33,7 @@ public static class DependencyInjection
         services.AddScoped<IRoleService, RoleService>();
 
         services.AddScoped<IUserSessionService, UserSessionService>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 
         // Other Services

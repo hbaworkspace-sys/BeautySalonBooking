@@ -14,12 +14,14 @@ public sealed class PermissionService
 {
 
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ICurrentUserService _currentUserService;
 
 
     public PermissionService(
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
         _unitOfWork = unitOfWork;
+        _currentUserService = currentUserService;
     }
 
     public async Task<ApiResponse_New<PermissionTreeDto>> GetChildrenAsync(int parentId, CancellationToken cancellationToken)
@@ -283,10 +285,11 @@ public sealed class PermissionService
 
         try
         {
-
+            var curentUser = await _currentUserService.GetCurrentUserAsync();
             await _unitOfWork.PermissionRepository
-                .DeleteByIdAsync(
+                .DeletePermissiByIdAsync(
                     id,
+                    curentUser.Id,
                     cancellationToken);
 
 

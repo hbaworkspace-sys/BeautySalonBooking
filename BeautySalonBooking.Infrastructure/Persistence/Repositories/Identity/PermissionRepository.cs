@@ -1,6 +1,8 @@
 ﻿using BeautySalonBooking.Domain.Repositories;
 using BeautySalonBooking.Domain.Identity.PermissionAggregate.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 
 namespace BeautySalonBooking.Infrastructure.Persistence.Repositories;
@@ -56,7 +58,14 @@ CancellationToken cancellationToken)
     }
 
 
-
+    public async Task DeletePermissiByIdAsync(int id, long userId, CancellationToken cancellationToken = default)
+    {
+        var entity = await _context.Permissions.Where(x => x.Id == id).FirstOrDefaultAsync();
+        if (entity != null)
+        {
+            entity.Delete(userId);
+        }
+    }
 
     public async Task<Permission?> GetByIdWithChildrenAsync(
         int id,

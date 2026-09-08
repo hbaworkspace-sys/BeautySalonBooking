@@ -16,6 +16,20 @@ public class Role : AuditableSoftDeleteEntity<int>
     private Role()
     {
     }
+    public void SetPermissions(IEnumerable<int> permissionIds)
+    {
+        ArgumentNullException.ThrowIfNull(permissionIds);
+
+        _rolePermissions.Clear();
+
+        foreach (var permissionId in permissionIds.Distinct())
+        {
+            _rolePermissions.Add(
+                RolePermission.Create(
+                    Id,
+                    permissionId));
+        }
+    }
     public static Role Create(
         string title,
         RoleCode roleCode,

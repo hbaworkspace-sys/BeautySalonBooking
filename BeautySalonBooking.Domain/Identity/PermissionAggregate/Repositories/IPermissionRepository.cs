@@ -20,7 +20,7 @@ CancellationToken cancellationToken);
         CancellationToken cancellationToken = default);
 
 
-
+    Task DeletePermissiByIdAsync(int id, long userId, CancellationToken cancellationToken = default);
 
     Task<IEnumerable<Permission>> GetPermissionsByUserIdAsync(long userId, CancellationToken cancellationToken = default);
 

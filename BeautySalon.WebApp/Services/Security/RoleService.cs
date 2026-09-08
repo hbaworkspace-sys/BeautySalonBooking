@@ -1,5 +1,6 @@
 ﻿// WebApp/Services/Roles/RoleService.cs
 using BeautySalonBooking.Contracts.Authentication.Dtos;
+using BeautySalonBooking.Contracts.Permission.Dtos;
 using BeautySalonBooking.WebApp.Interfaces.Common;
 using BeautySalonBooking.WebApp.Interfaces.Roles;
 using BeautySalonBooking.WebApp.Settings;
@@ -23,6 +24,7 @@ namespace BeautySalonBooking.WebApp.Services.Roles
             _settings = settings.Value;
             _logger = logger;
         }
+
 
         public async Task<RoleListResponse> GetRolesAsync(string? searchTerm = null, int pageNumber = 1, int pageSize = 10)
         {

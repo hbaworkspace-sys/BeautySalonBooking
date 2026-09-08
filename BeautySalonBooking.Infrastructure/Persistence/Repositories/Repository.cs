@@ -138,6 +138,7 @@ public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
 
     public virtual void Delete(TEntity entity)
     {
+
         _dbSet.Remove(entity);
     }
 
