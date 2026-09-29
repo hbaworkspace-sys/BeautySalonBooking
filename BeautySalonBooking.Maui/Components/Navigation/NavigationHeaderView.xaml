@@ -7,7 +7,7 @@
     <ContentView.Resources>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="0" />
-            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="BackgroundColor" Value="White" />
             <Setter Property="BorderWidth" Value="0" />
             <Setter Property="FontFamily" Value="MaterialIconsOut" />
             <Setter Property="FontSize" Value="24" />
@@ -20,6 +20,7 @@
 
     <Grid
         Padding="15,18,15,8"
+        Background="White"
         ColumnDefinitions="40,*,40"
         HorizontalOptions="Fill"
         VerticalOptions="Center">
@@ -33,6 +34,7 @@
             VerticalOptions="Fill" />
 
         <Button x:Name="BackButton" Grid.Column="2" />
+
     </Grid>
 
 </ContentView>

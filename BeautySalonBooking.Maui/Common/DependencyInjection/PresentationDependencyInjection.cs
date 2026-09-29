@@ -1,10 +1,12 @@
-﻿using BeautySalonBooking.Maui.Common.Interfaces;
+﻿using BeautySalonBooking.Contracts.Authentication.Services;
+using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Common.Services;
 using BeautySalonBooking.Maui.Features.Appointment.ViewModels;
 using BeautySalonBooking.Maui.Features.Appointment.Views;
+using BeautySalonBooking.Maui.Features.Auth.Services;
+using BeautySalonBooking.Maui.Features.Auth.Validators;
 using BeautySalonBooking.Maui.Features.Auth.ViewModels;
 using BeautySalonBooking.Maui.Features.Auth.Views;
-using BeautySalonBooking.Maui.Features.Booking.Models;
 using BeautySalonBooking.Maui.Features.Booking.Services;
 using BeautySalonBooking.Maui.Features.Booking.ViewModels;
 using BeautySalonBooking.Maui.Features.Booking.Views;
@@ -74,6 +76,10 @@ public static class PresentationDependencyInjection
         services.AddSingleton<IServiceCache, MemoryServiceCache>();
         services.AddSingleton<IBookingSelectionState, BookingSelectionState>();
         services.AddSingleton<IBookingResultState, BookingResultState>();
+        services.AddSingleton<IAuthSessionService, AuthSessionService>();
+        services.AddSingleton<IUserContext, UserContext>();
+        services.AddSingleton<AuthValidator>();
+
         return services;
     }
 }

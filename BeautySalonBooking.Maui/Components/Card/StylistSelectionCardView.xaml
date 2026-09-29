@@ -30,13 +30,14 @@
                 CornerRadius="60"
                 FillBrush="#aad2b48c"
                 HeightRequest="130"
-                ImageAspect="AspectFit"
+                ImageAspect="Center"
                 ImageBorderBrush="White"
                 ImageBorderWidth="2"
-                ImageMargin="0,5,0,0"
+                ImageMargin="0"
                 ImageSource="arayeshgar.png"
+                InputTransparent="True"
                 Shape="RoundedRectangle"
-                VerticalOptions="Center" />
+                VerticalOptions="Start" />
 
             <!--  Information  -->
             <VerticalStackLayout

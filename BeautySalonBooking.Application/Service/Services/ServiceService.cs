@@ -1,11 +1,9 @@
-﻿
-using BeautySalonBooking.Application.Service.Interfaces;
+﻿using BeautySalonBooking.Application.Service.Interfaces;
 using BeautySalonBooking.Contracts.Common;
 using BeautySalonBooking.Contracts.Service.Dtos;
 using BeautySalonBooking.Contracts.Service.Requests;
 using BeautySalonBooking.Contracts.Service.Responses;
 using BeautySalonBooking.Domain.ServiceAggregate.Repositories;
-
 
 namespace BeautySalonBooking.Application.Service.Services;
 
@@ -37,7 +35,18 @@ public sealed class ServiceService : IServiceService
                     Code = serviceItem.Code,
                     Description = serviceItem.Description,
                     BasePrice = serviceItem.BasePrice,
-                    BaseDuration = serviceItem.BaseDuration
+                    BaseDuration = serviceItem.BaseDuration,
+                    Media = serviceItem.Media
+                        .OrderBy(media => media.DisplayOrder)
+                        .Select(media => new ServiceMediaDto
+                        {
+                            FileName = media.FileName,
+                            ContentType = media.ContentType,
+                            FileSize = media.FileSize,
+                            Content = media.Content,
+                            DisplayOrder = media.DisplayOrder
+                        })
+                        .ToList()
                 })
                 .ToList()
         };

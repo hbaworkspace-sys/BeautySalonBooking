@@ -1,5 +1,7 @@
-﻿using BeautySalonBooking.Contracts.Appointment.Enums;
-using BeautySalonBooking.Maui.Common.Enums;
+﻿using System.Windows.Input;
+using BeautySalonBooking.Contracts.Appointment.Enums;
+using BeautySalonBooking.Maui.Common.Helpers;
+
 namespace BeautySalonBooking.Maui.Components.Card;
 
 public partial class AppointmentCardView : ContentView
@@ -11,11 +13,13 @@ public partial class AppointmentCardView : ContentView
     }
 
     #region Organization
+
     public string? Organization
     {
         get => (string?)GetValue(OrganizationProperty);
         set => SetValue(OrganizationProperty, value);
     }
+
     public static readonly BindableProperty OrganizationProperty =
         BindableProperty.Create(
             nameof(Organization),
@@ -32,8 +36,49 @@ public partial class AppointmentCardView : ContentView
         if (bindable is not AppointmentCardView control)
             return;
 
-        control.OrganizationLabel.Text = newValue as string;
+        control.UpdateOrganization();
     }
+
+    private void UpdateOrganization()
+    {
+        OrganizationLabel.Text = Organization;
+    }
+
+    #endregion
+
+
+    #region Branch
+
+    public string? BranchByLocation
+    {
+        get => (string?)GetValue(BranchProperty);
+        set => SetValue(BranchProperty, value);
+    }
+
+    public static readonly BindableProperty BranchProperty =
+        BindableProperty.Create(
+            nameof(BranchByLocation),
+            typeof(string),
+            typeof(AppointmentCardView),
+            default(string),
+            propertyChanged: OnBranchChanged);
+
+    private static void OnBranchChanged(
+        BindableObject bindable,
+        object oldValue,
+        object newValue)
+    {
+        if (bindable is not AppointmentCardView control)
+            return;
+
+        control.UpdateBranch();
+    }
+
+    private void UpdateBranch()
+    {
+        BranchByLocationLabel.Text = BranchByLocation;
+    }
+
     #endregion
 
 
@@ -61,25 +106,65 @@ public partial class AppointmentCardView : ContentView
         if (bindable is not AppointmentCardView control)
             return;
 
-        control.ServicesLabel.Text = newValue as string;
+        control.UpdateServices();
+    }
+
+    private void UpdateServices()
+    {
+        ServicesLabel.Text = Services;
+    }
+
+    #endregion
+
+
+    #region Stylist
+
+    public string? Stylist
+    {
+        get => (string?)GetValue(StylistProperty);
+        set => SetValue(StylistProperty, value);
+    }
+
+    public static readonly BindableProperty StylistProperty =
+        BindableProperty.Create(
+            nameof(Stylist),
+            typeof(string),
+            typeof(AppointmentCardView),
+            default(string),
+            propertyChanged: OnStylistChanged);
+
+    private static void OnStylistChanged(
+        BindableObject bindable,
+        object oldValue,
+        object newValue)
+    {
+        if (bindable is not AppointmentCardView control)
+            return;
+
+        control.UpdateStylist();
+    }
+
+    private void UpdateStylist()
+    {
+        StylistLabel.Text = Stylist;
     }
 
     #endregion
 
 
     #region Date
-    public string? Date
+    public DateOnly Date
     {
-        get => (string?)GetValue(DateProperty);
+        get => (DateOnly)GetValue(DateProperty);
         set => SetValue(DateProperty, value);
     }
 
     public static readonly BindableProperty DateProperty =
         BindableProperty.Create(
             nameof(Date),
-            typeof(string),
+            typeof(DateOnly),
             typeof(AppointmentCardView),
-            default(string),
+            default(DateOnly),
             propertyChanged: OnDateChanged);
 
     private static void OnDateChanged(
@@ -90,26 +175,31 @@ public partial class AppointmentCardView : ContentView
         if (bindable is not AppointmentCardView control)
             return;
 
-        control.DateLabel.Text = newValue as string;
+        control.UpdateDate();
     }
 
+    private void UpdateDate()
+    {
+        DateLabel.Text =
+            PersianDateHelper.FormatDate(Date);
+    }
     #endregion
 
 
     #region Time
 
-    public string? Time
+    public TimeOnly Time
     {
-        get => (string?)GetValue(TimeProperty);
+        get => (TimeOnly)GetValue(TimeProperty);
         set => SetValue(TimeProperty, value);
     }
 
     public static readonly BindableProperty TimeProperty =
         BindableProperty.Create(
             nameof(Time),
-            typeof(string),
+            typeof(TimeOnly),
             typeof(AppointmentCardView),
-            default(string),
+            default(TimeOnly),
             propertyChanged: OnTimeChanged);
 
     private static void OnTimeChanged(
@@ -120,7 +210,50 @@ public partial class AppointmentCardView : ContentView
         if (bindable is not AppointmentCardView control)
             return;
 
-        control.TimeLabel.Text = newValue as string;
+        control.UpdateTime();
+    }
+
+    private void UpdateTime()
+    {
+        TimeLabel.Text =
+            PersianDateHelper.FormatTime(
+                Time);
+    }
+
+    #endregion
+
+
+    #region Price
+
+    public decimal Price
+    {
+        get => (decimal)GetValue(PriceProperty);
+        set => SetValue(PriceProperty, value);
+    }
+
+    public static readonly BindableProperty PriceProperty =
+        BindableProperty.Create(
+            nameof(Price),
+            typeof(decimal),
+            typeof(AppointmentCardView),
+            default(decimal),
+            propertyChanged: OnPriceChanged);
+
+    private static void OnPriceChanged(
+        BindableObject bindable,
+        object oldValue,
+        object newValue)
+    {
+        if (bindable is not AppointmentCardView control)
+            return;
+
+        control.UpdatePrice();
+    }
+
+    private void UpdatePrice()
+    {
+        PriceLabel.Text =
+            PersianDateHelper.FormatPrice(Price);
     }
 
     #endregion
@@ -150,11 +283,52 @@ public partial class AppointmentCardView : ContentView
         if (bindable is not AppointmentCardView control)
             return;
 
-        control.OrganizationMediaView.ImageSource =
-            newValue as ImageSource;
+        control.UpdateOrganizationImage();
+    }
+
+    private void UpdateOrganizationImage()
+    {
+        OrganizationMediaView.ImageSource = OrganizationImage;
     }
 
     #endregion
+
+
+    #region Stylist Image
+
+    public ImageSource? StylistImage
+    {
+        get => (ImageSource?)GetValue(StylistImageProperty);
+        set => SetValue(StylistImageProperty, value);
+    }
+
+    public static readonly BindableProperty StylistImageProperty =
+        BindableProperty.Create(
+            nameof(StylistImage),
+            typeof(ImageSource),
+            typeof(AppointmentCardView),
+            default(ImageSource),
+            propertyChanged: OnStylistImageChanged);
+
+    private static void OnStylistImageChanged(
+        BindableObject bindable,
+        object oldValue,
+        object newValue)
+    {
+        if (bindable is not AppointmentCardView control)
+            return;
+
+        control.UpdateStylistImage();
+    }
+
+    private void UpdateStylistImage()
+    {
+        StylistMediaView.ImageSource = StylistImage;
+    }
+
+    #endregion
+
+
     #region Status
 
     public AppointmentStatus Status
@@ -186,6 +360,18 @@ public partial class AppointmentCardView : ContentView
     {
         switch (Status)
         {
+            case AppointmentStatus.Pending:
+
+                StatusLabel.Text = "در انتظار تایید";
+                StatusLabel.TextColor =
+                    (Color)Resources["AppointmentPendingTextColor"];
+
+                StatusBorder.BackgroundColor =
+                    (Color)Resources["AppointmentPendingBackgroundColor"];
+
+                break;
+
+
             case AppointmentStatus.Confirmed:
 
                 StatusLabel.Text = "تایید شده";
@@ -198,9 +384,21 @@ public partial class AppointmentCardView : ContentView
                 break;
 
 
-            case AppointmentStatus.Pending:
+            case AppointmentStatus.CheckedIn:
 
-                StatusLabel.Text = "در انتظار تایید";
+                StatusLabel.Text = "حضور ثبت شده";
+                StatusLabel.TextColor =
+                    (Color)Resources["AppointmentSuccessTextColor"];
+
+                StatusBorder.BackgroundColor =
+                    (Color)Resources["AppointmentSuccessBackgroundColor"];
+
+                break;
+
+
+            case AppointmentStatus.InProgress:
+
+                StatusLabel.Text = "در حال انجام";
                 StatusLabel.TextColor =
                     (Color)Resources["AppointmentPendingTextColor"];
 
@@ -209,22 +407,87 @@ public partial class AppointmentCardView : ContentView
 
                 break;
 
+
             case AppointmentStatus.Completed:
 
+                StatusLabel.Text = "تکمیل شده";
+                StatusLabel.TextColor =
+                    (Color)Resources["AppointmentSuccessTextColor"];
+
+                StatusBorder.BackgroundColor =
+                    (Color)Resources["AppointmentSuccessBackgroundColor"];
+
                 break;
+
 
             case AppointmentStatus.Cancelled:
 
+                StatusLabel.Text = "لغو شده";
+                StatusLabel.TextColor =
+                    (Color)Resources["AppointmentPendingTextColor"];
+
+                StatusBorder.BackgroundColor =
+                    (Color)Resources["AppointmentPendingBackgroundColor"];
+
                 break;
+
 
             case AppointmentStatus.Rejected:
 
+                StatusLabel.Text = "رد شده";
+                StatusLabel.TextColor =
+                    (Color)Resources["AppointmentPendingTextColor"];
+
+                StatusBorder.BackgroundColor =
+                    (Color)Resources["AppointmentPendingBackgroundColor"];
+
                 break;
 
+
             case AppointmentStatus.NoShow:
+
+                StatusLabel.Text = "عدم حضور";
+                StatusLabel.TextColor =
+                    (Color)Resources["AppointmentPendingTextColor"];
+
+                StatusBorder.BackgroundColor =
+                    (Color)Resources["AppointmentPendingBackgroundColor"];
 
                 break;
         }
     }
+
+    #endregion
+
+
+    #region Command
+
+    public ICommand? Command
+    {
+        get => (ICommand?)GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
+    }
+
+    public static readonly BindableProperty CommandProperty =
+        BindableProperty.Create(
+            nameof(Command),
+            typeof(ICommand),
+            typeof(AppointmentCardView),
+            default(ICommand));
+
+
+    public object? CommandParameter
+    {
+        get => GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
+    }
+
+    public static readonly BindableProperty CommandParameterProperty =
+        BindableProperty.Create(
+            nameof(CommandParameter),
+            typeof(object),
+            typeof(AppointmentCardView),
+            default(object));
+
     #endregion
 }

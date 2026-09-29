@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.TextEntryTestPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:input="clr-namespace:BeautySalonBooking.Maui.Components.Input"
+    Title="TextEntry Test">
+
+    <VerticalStackLayout>
+        <input:PhoneNumberEntry x:Name="PhoneEntry" PhoneType="Mobile" />
+        <input:PhoneNumberEntry x:Name="PhoneEnt" PhoneType="Landline" />
+    </VerticalStackLayout>
+
+</ContentPage>

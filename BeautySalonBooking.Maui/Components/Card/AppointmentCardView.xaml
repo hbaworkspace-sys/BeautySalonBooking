@@ -4,7 +4,10 @@
     x:Class="BeautySalonBooking.Maui.Components.Card.AppointmentCardView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media">
+    xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    x:Name="root">
 
     <ContentView.Resources>
 
@@ -46,98 +49,173 @@
 
     </ContentView.Resources>
 
-    <Border Padding="10,10" Style="{StaticResource CardBorderStyle}">
+    <Border
+        Margin="10"
+        Padding="5"
+        Style="{StaticResource CardBorderStyle}">
 
         <Grid
-            ColumnDefinitions="*,100"
-            ColumnSpacing="10"
-            RowDefinitions="*,Auto">
+            Padding="5,0"
+            RowDefinitions="auto,auto,auto"
+            RowSpacing="10">
 
             <Grid
-                Grid.Column="0"
-                Padding="10,0"
-                RowDefinitions="Auto,Auto,Auto,Auto,*"
-                RowSpacing="4"
-                VerticalOptions="Center">
+                Grid.Row="0"
+                ColumnDefinitions="*,.55*"
+                ColumnSpacing="10"
+                RowDefinitions="*,Auto">
+
+                <Grid
+                    Grid.Column="0"
+                    Padding="5"
+                    RowDefinitions="Auto,Auto,Auto,Auto,*"
+                    RowSpacing="4"
+                    VerticalOptions="Center">
+
+                    <Label
+                        x:Name="ServicesLabel"
+                        Grid.Row="0"
+                        FontAttributes="Bold"
+                        FontSize="13"
+                        TextColor="{StaticResource AppointmentTextPrimaryColor}" />
+
+                    <HorizontalStackLayout Grid.Row="1" Spacing="5">
+
+                        <Label Style="{DynamicResource GlyphLable}" Text="{Static icon:IconSymbols.LocationOn}" />
+
+                        <Label
+                            x:Name="OrganizationLabel"
+                            FontSize="12"
+                            TextColor="{StaticResource AppointmentTextSecondaryColor}" />
+                        <Label
+                            FontSize="12"
+                            Text="-"
+                            TextColor="{StaticResource AppointmentTextSecondaryColor}" />
+
+                        <Label
+                            x:Name="BranchByLocationLabel"
+                            FontSize="12"
+                            TextColor="{StaticResource AppointmentTextSecondaryColor}" />
+
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Grid.Row="2" Spacing="15">
+
+                        <media:MediaView
+                            x:Name="StylistMediaView"
+                            FillBrush="Tan"
+                            HeightRequest="40"
+                            HorizontalOptions="Center"
+                            ImageAspect="AspectFit"
+                            ImageSource="arayeshgar.png"
+                            Shape="Circle"
+                            VerticalOptions="Center"
+                            WidthRequest="40" />
+
+                        <Label
+                            x:Name="StylistLabel"
+                            FontSize="14"
+                            TextColor="{StaticResource AppointmentTextSecondaryColor}" />
+
+                    </HorizontalStackLayout>
+                </Grid>
+
+                <media:MediaView
+                    x:Name="OrganizationMediaView"
+                    Grid.Column="1"
+                    CornerRadius="12"
+                    HeightRequest="120"
+                    HorizontalOptions="Start"
+                    ImageAspect="AspectFill"
+                    Shape="RoundedRectangle"
+                    VerticalOptions="Center"
+                    WidthRequest="120" />
+
+                <Border
+                    x:Name="StatusBorder"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Padding="8,4"
+                    HorizontalOptions="Center"
+                    StrokeThickness="0"
+                    VerticalOptions="Start">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="5" />
+                    </Border.StrokeShape>
+
+                    <Label x:Name="StatusLabel" FontSize="10" />
+                </Border>
+            </Grid>
+
+            <BoxView
+                Grid.Row="0"
+                HeightRequest="1"
+                HorizontalOptions="Fill"
+                VerticalOptions="End"
+                Color="#22ED7F89" />
+
+            <Grid
+                Grid.Row="1"
+                ColumnDefinitions="*,*,*"
+                HeightRequest="50"
+                RowDefinitions="*,*">
 
                 <Label
-                    x:Name="OrganizationLabel"
-                    Grid.Row="0"
-                    FontAttributes="Bold"
+                    x:Name="DateLabel"
+                    Grid.Column="0"
+                    FontSize="9"
+                    HorizontalOptions="Center"
                     TextColor="{StaticResource AppointmentTextPrimaryColor}" />
 
                 <Label
-                    x:Name="ServicesLabel"
                     Grid.Row="1"
-                    Padding="20,0"
-                    Style="{StaticResource AppointmentSecondaryTextStyle}" />
+                    Grid.Column="0"
+                    FontSize="17"
+                    Style="{DynamicResource GlyphLable}"
+                    Text="{Static icon:IconSymbols.CalendarClock}" />
 
-                <Grid
-                    Grid.Row="2"
-                    Padding="20,0"
-                    ColumnDefinitions="Auto,*"
-                    ColumnSpacing="5">
 
-                    <Label
-                        Grid.Column="0"
-                        FontSize="14"
-                        Text="▣"
-                        TextColor="{StaticResource AppointmentPrimaryColor}" />
+                <Label
+                    x:Name="TimeLabel"
+                    Grid.Column="1"
+                    FontSize="9"
+                    HorizontalOptions="Center"
+                    TextColor="{StaticResource AppointmentTextPrimaryColor}" />
 
-                    <Label
-                        x:Name="DateLabel"
-                        Grid.Column="1"
-                        Style="{StaticResource AppointmentSecondaryTextStyle}" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    FontSize="17"
+                    Style="{DynamicResource GlyphLable}"
+                    Text="{Static icon:IconSymbols.Timer}" />
 
-                </Grid>
+                <Label
+                    x:Name="PriceLabel"
+                    Grid.Column="2"
+                    FontSize="9"
+                    HorizontalOptions="End"
+                    TextColor="{StaticResource AppointmentTextPrimaryColor}" />
 
-                <Grid
-                    Grid.Row="3"
-                    Padding="20,0"
-                    ColumnDefinitions="Auto,*"
-                    ColumnSpacing="5">
-
-                    <Label
-                        Grid.Column="0"
-                        FontAttributes="Bold"
-                        FontSize="25"
-                        Text="◌"
-                        TextColor="{StaticResource AppointmentPrimaryColor}" />
-
-                    <Label
-                        x:Name="TimeLabel"
-                        Grid.Column="1"
-                        Style="{StaticResource AppointmentSecondaryTextStyle}" />
-
-                </Grid>
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    FontSize="17"
+                    Style="{DynamicResource GlyphLable}"
+                    Text="{Static icon:IconSymbols.Sell}" />
 
             </Grid>
 
-            <media:MediaView
-                x:Name="OrganizationMediaView"
-                Grid.Column="1"
-                HeightRequest="100"
-                HorizontalOptions="Center"
-                ImageAspect="AspectFill"
-                Shape="Circle"
-                VerticalOptions="Center"
-                WidthRequest="100" />
+            <btn:PrimaryButtonView
+                Title="جزییات"
+                Grid.Row="2"
+                Command="{Binding Command, Source={x:Reference root}}"
+                CommandParameter="{Binding CommandParameter, Source={x:Reference root}}"
+                FillBrush="#33ED7F89"
+                HeightRequest="45"
+                HorizontalOptions="Fill"
+                TextColor="#ED7F89" />
 
-            <Border
-                x:Name="StatusBorder"
-                Grid.Row="1"
-                Grid.Column="1"
-                Padding="8,4"
-                HorizontalOptions="Center"
-                StrokeThickness="0"
-                VerticalOptions="End">
-
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="5" />
-                </Border.StrokeShape>
-
-                <Label x:Name="StatusLabel" FontSize="10" />
-            </Border>
         </Grid>
     </Border>
 </ContentView>

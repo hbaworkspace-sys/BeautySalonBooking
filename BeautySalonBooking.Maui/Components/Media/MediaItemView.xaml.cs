@@ -382,8 +382,6 @@ public partial class MediaItemView : ContentView
 
     private void UpdateAppearance()
     {
-        Media.BorderBrush = BorderBrush;
-        Media.BorderWidth = BorderWidth;
         Media.FillBrush = FillBrush;
     }
 
@@ -651,5 +649,32 @@ public partial class MediaItemView : ContentView
     {
         if (bindable is MediaItemView control)
             control.RootLayout.Spacing = (double)newValue;
+    }
+
+    public bool IsSelected
+    {
+        get => (bool)GetValue(IsSelectedProperty);
+        set => SetValue(IsSelectedProperty, value);
+    }
+
+    public static readonly BindableProperty IsSelectedProperty =
+        BindableProperty.Create(
+            nameof(IsSelected),
+            typeof(bool),
+            typeof(MediaItemView),
+            false,
+            propertyChanged: OnIsSelectedChanged);
+
+    private static void OnIsSelectedChanged(
+        BindableObject bindable,
+        object oldValue,
+        object newValue)
+    {
+        if (bindable is not MediaItemView control)
+            return;
+
+        control.FillBrush = (bool)newValue
+            ? new SolidColorBrush(Color.FromArgb("#eee"))
+            : new SolidColorBrush(Color.FromArgb("#FFFFFF"));
     }
 }

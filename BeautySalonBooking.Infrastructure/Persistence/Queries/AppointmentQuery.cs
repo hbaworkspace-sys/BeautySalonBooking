@@ -110,6 +110,20 @@ public sealed class AppointmentQuery : IAppointmentQuery
                         .Person
                         .LastName,
 
+                BranchImage =
+                    a.BranchMemberService
+                        .BranchService
+                        .Branch
+                        .Media
+                        .Where(x => x.DisplayOrder == 1)
+                        .Select(x => x.Content)
+                        .FirstOrDefault(),
+                StylistImage =
+                    a.BranchMemberService.BranchMember.Person.Users.SelectMany(h => h.Media)
+                        .Where(x => x.DisplayOrder == 1)
+                        .Select(x => x.Content)
+                        .FirstOrDefault(),
+
                 Date = a.Date,
                 StartTime = a.StartTime,
                 EndTime = a.EndTime,

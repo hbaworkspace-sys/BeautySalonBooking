@@ -132,6 +132,10 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("Glyph")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -161,6 +165,64 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("BRANCHES", "GT");
+                });
+
+            modelBuilder.Entity("BeautySalonBooking.Domain.BranchAggregate.Entities.BranchMedia", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("BranchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("BRANCH_MEDIAS", "GT");
                 });
 
             modelBuilder.Entity("BeautySalonBooking.Domain.BranchAggregate.Entities.BranchMember", b =>
@@ -454,6 +516,10 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.Property<int>("DisplayOrder")
                         .HasColumnType("int");
 
+                    b.Property<string>("Glyph")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -492,6 +558,64 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("CATEGORIES", "BT");
+                });
+
+            modelBuilder.Entity("BeautySalonBooking.Domain.CategoryAggregate.Entities.CategoryMedia", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("CATEGORY_MEDIAS", "BT");
                 });
 
             modelBuilder.Entity("BeautySalonBooking.Domain.CommonAggregate.Entities.Color", b =>
@@ -1074,6 +1198,64 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.ToTable("USERS", "GT");
                 });
 
+            modelBuilder.Entity("BeautySalonBooking.Domain.Identity.UserAggregate.Entities.UserMedia", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("USER_MEDIAS", "GT");
+                });
+
             modelBuilder.Entity("BeautySalonBooking.Domain.Identity.UserAggregate.Entities.UserRole", b =>
                 {
                     b.Property<long>("Id")
@@ -1148,6 +1330,10 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
 
                     b.Property<long?>("DeletedBy")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Glyph")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
@@ -1266,8 +1452,8 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("ContentType")
                         .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -2614,6 +2800,10 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("Glyph")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -2643,6 +2833,64 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("SERVICES", "GT");
+                });
+
+            modelBuilder.Entity("BeautySalonBooking.Domain.ServiceAggregate.Entities.ServiceMedia", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<long>("ServiceId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("SERVICE_MEDIAS", "GT");
                 });
 
             modelBuilder.Entity("BeautySalonBooking.Domain.AppointmentAggregate.Entities.Appointment", b =>
@@ -2680,6 +2928,17 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("BeautySalonBooking.Domain.BranchAggregate.Entities.BranchMedia", b =>
+                {
+                    b.HasOne("BeautySalonBooking.Domain.BranchAggregate.Entities.Branch", "Branch")
+                        .WithMany("Media")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
                 });
 
             modelBuilder.Entity("BeautySalonBooking.Domain.BranchAggregate.Entities.BranchMember", b =>
@@ -2763,6 +3022,17 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("BeautySalonBooking.Domain.CategoryAggregate.Entities.CategoryMedia", b =>
+                {
+                    b.HasOne("BeautySalonBooking.Domain.CategoryAggregate.Entities.Category", "Category")
+                        .WithMany("Media")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("BeautySalonBooking.Domain.GeographyAggregate.Entities.Address", b =>
@@ -2873,6 +3143,17 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.Navigation("Person");
 
                     b.Navigation("PhoneNumbers");
+                });
+
+            modelBuilder.Entity("BeautySalonBooking.Domain.Identity.UserAggregate.Entities.UserMedia", b =>
+                {
+                    b.HasOne("BeautySalonBooking.Domain.Identity.UserAggregate.Entities.User", "User")
+                        .WithMany("Media")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BeautySalonBooking.Domain.Identity.UserAggregate.Entities.UserRole", b =>
@@ -3188,8 +3469,21 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("BeautySalonBooking.Domain.ServiceAggregate.Entities.ServiceMedia", b =>
+                {
+                    b.HasOne("BeautySalonBooking.Domain.ServiceAggregate.Entities.Service", "Service")
+                        .WithMany("Media")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("BeautySalonBooking.Domain.BranchAggregate.Entities.Branch", b =>
                 {
+                    b.Navigation("Media");
+
                     b.Navigation("Members");
 
                     b.Navigation("Services");
@@ -3214,6 +3508,8 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("Children");
 
+                    b.Navigation("Media");
+
                     b.Navigation("Services");
                 });
 
@@ -3236,6 +3532,8 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("BeautySalonBooking.Domain.Identity.UserAggregate.Entities.User", b =>
                 {
+                    b.Navigation("Media");
+
                     b.Navigation("OrganizationOwners");
 
                     b.Navigation("UserRole")
@@ -3310,6 +3608,8 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("BeautySalonBooking.Domain.ServiceAggregate.Entities.Service", b =>
                 {
                     b.Navigation("BranchServices");
+
+                    b.Navigation("Media");
                 });
 #pragma warning restore 612, 618
         }

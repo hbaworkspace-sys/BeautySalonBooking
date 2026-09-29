@@ -1,4 +1,5 @@
-﻿using BeautySalonBooking.Domain.OrganizationAggregate.Enums;
+﻿using BeautySalonBooking.Domain.BranchAggregate.Entities;
+using BeautySalonBooking.Domain.OrganizationAggregate.Enums;
 
 namespace BeautySalonBooking.Domain.BranchAggregate.ReadModels;
 
@@ -17,4 +18,6 @@ public sealed class BranchServiceOrganizationReadModel
     public decimal Price { get; init; }
     public TimeSpan Duration { get; init; }
     public int DisplayOrder { get; init; }
+
+    public IReadOnlyList<BranchMedia> Media { get; init; } = [];
 }

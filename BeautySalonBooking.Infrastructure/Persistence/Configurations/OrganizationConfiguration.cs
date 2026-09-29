@@ -29,6 +29,9 @@ public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organiz
         builder.Property(x => x.Slogan)
             .HasMaxLength(150);
 
+        builder.Property(x => x.Glyph)
+          .HasMaxLength(100);
+
         builder.Metadata
             .FindNavigation(nameof(Organization.Owners))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);

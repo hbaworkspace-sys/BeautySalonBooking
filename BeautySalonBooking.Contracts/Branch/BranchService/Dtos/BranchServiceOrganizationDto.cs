@@ -17,4 +17,6 @@ public sealed class BranchServiceOrganizationDto
     public decimal Price { get; init; }
     public TimeSpan Duration { get; init; }
     public int DisplayOrder { get; init; }
+
+    public IReadOnlyList<BranchMediaDto> Media { get; init; } = [];
 }

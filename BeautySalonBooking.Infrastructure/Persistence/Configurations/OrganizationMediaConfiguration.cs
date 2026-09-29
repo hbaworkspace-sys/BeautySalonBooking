@@ -19,7 +19,7 @@ public sealed class OrganizationMediaConfiguration : IEntityTypeConfiguration<Or
 
         builder.Property(x => x.ContentType)
             .IsRequired()
-            .HasMaxLength(5);
+            .HasMaxLength(100);
 
         builder.Property(x => x.FileSize)
             .IsRequired();

@@ -47,7 +47,18 @@ public sealed class CategoryService : ICategoryService
                     Title = category.Title,
                     Code = category.Code,
                     Description = category.Description,
-                    DisplayOrder = category.DisplayOrder
+                    DisplayOrder = category.DisplayOrder,
+                    Media = category.Media
+                        .OrderBy(media => media.DisplayOrder)
+                        .Select(media => new CategoryMediaDto
+                        {
+                            FileName = media.FileName,
+                            ContentType = media.ContentType,
+                            FileSize = media.FileSize,
+                            Content = media.Content,
+                            DisplayOrder = media.DisplayOrder
+                        })
+                        .ToList()
                 })
                 .ToList()
         };

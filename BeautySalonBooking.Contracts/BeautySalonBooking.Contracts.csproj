@@ -8,6 +8,8 @@
 
 	<ItemGroup>
 	  <Folder Include="Booking\CreateBooking\Dtos\" />
+	  <Folder Include="Branch\Branch\Requests\" />
+	  <Folder Include="Organization\Requests\" />
 	</ItemGroup>
 
 </Project>

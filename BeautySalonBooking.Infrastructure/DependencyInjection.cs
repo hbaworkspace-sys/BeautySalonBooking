@@ -5,6 +5,7 @@ using BeautySalonBooking.Domain.Base.UnitOfWork;
 using BeautySalonBooking.Domain.BranchAggregate.Repositories;
 using BeautySalonBooking.Domain.CategoryAggregate.Repositories;
 using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Repositories;
+using BeautySalonBooking.Domain.OrganizationAggregate.Repositories;
 using BeautySalonBooking.Domain.PersonAggregate.Repositories;
 using BeautySalonBooking.Domain.Repositories;
 using BeautySalonBooking.Domain.SchedulingAggregate.Queries;
@@ -13,6 +14,7 @@ using BeautySalonBooking.Infrastructure.Persistence.Queries;
 using BeautySalonBooking.Infrastructure.Persistence.Repositories;
 using BeautySalonBooking.Infrastructure.Persistence.Repositories.Identity;
 using Microsoft.Extensions.DependencyInjection;
+
 
 namespace BeautySalonBooking.Infrastructure;
 
@@ -33,11 +35,11 @@ public static class DependencyInjection
         services.AddScoped<IServiceRepository, ServiceRepository>();
         services.AddScoped<IBranchServiceRepository, BranchServiceRepository>();
         services.AddScoped<IBranchMemberRepository, BranchMemberRepository>();
+        services.AddScoped<IOrganizationRepository, OrganizationRepository>();
 
         services.AddScoped<IBookingAvailabilityQuery, BookingAvailabilityQuery>();
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         services.AddScoped<IAppointmentQuery, AppointmentQuery>();
-
         return services;
     }
 }

@@ -1,8 +1,8 @@
-﻿using BeautySalonBooking.Contracts.Branch.BranchService.Dtos;
-using BeautySalonBooking.Contracts.Service.Dtos;
-using BeautySalonBooking.Maui.Common.Interfaces;
+﻿using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Features.Booking.Services;
 using BeautySalonBooking.Maui.Features.Branch.BranchService.Services;
+using BeautySalonBooking.Maui.Features.Branch.Models;
+using BeautySalonBooking.Maui.Features.Service.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -26,27 +26,26 @@ public partial class BranchSelectionViewModel :
     }
 
     #region Selected Service
-
-    public ServiceDto? SelectedService =>
+    public ServiceModel? SelectedService =>
         _bookingSelectionState.Current.Service;
     #endregion
 
     #region Branches
 
     [ObservableProperty]
-    private IReadOnlyList<BranchServiceOrganizationDto> branches = [];
+    private IReadOnlyList<BranchServiceOrganizationModel> branches = [];
 
     [ObservableProperty]
     private bool isBranchesVisible;
 
     [ObservableProperty]
-    private bool isLoading;
+    private bool isBusy;
 
     #endregion
 
     #region Selected Branch
 
-    public BranchServiceOrganizationDto? SelectedBranch =>
+    public BranchServiceOrganizationModel? SelectedBranch =>
         _bookingSelectionState.Current.Branch;
 
     #endregion
@@ -56,6 +55,9 @@ public partial class BranchSelectionViewModel :
     public async Task LoadOrganizationsAsync(
         CancellationToken cancellationToken = default)
     {
+        if (IsBusy)
+            return;
+
         var service = _bookingSelectionState.Current.Service;
 
         if (service is null)
@@ -64,7 +66,7 @@ public partial class BranchSelectionViewModel :
         if (service.Id <= 0)
             return;
 
-        IsLoading = true;
+        IsBusy = true;
         IsBranchesVisible = false;
 
         try
@@ -82,14 +84,17 @@ public partial class BranchSelectionViewModel :
                 return;
             }
 
-            Branches = result.Payload.Organizations;
+            var organizations = result.Payload.Organizations;
 
-            IsBranchesVisible =
-                Branches.Count > 0;
+            Branches = organizations
+                .Select(x => new BranchServiceOrganizationModel(x))
+                .ToList();
+
+            IsBranchesVisible = Branches.Count > 0;
         }
         finally
         {
-            IsLoading = false;
+            IsBusy = false;
         }
     }
 
@@ -99,7 +104,7 @@ public partial class BranchSelectionViewModel :
 
     [RelayCommand]
     private async Task SelectBranchAsync(
-        BranchServiceOrganizationDto branch)
+        BranchServiceOrganizationModel branch)
     {
         if (branch is null)
             return;

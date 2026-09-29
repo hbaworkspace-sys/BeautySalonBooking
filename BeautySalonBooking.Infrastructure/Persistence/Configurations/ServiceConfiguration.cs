@@ -33,6 +33,9 @@ public sealed class ServiceConfiguration : IEntityTypeConfiguration<Service>
         builder.HasIndex(x => x.Code)
             .IsUnique();
 
+        builder.Property(x => x.Glyph)
+    .HasMaxLength(100);
+
         builder.HasOne(x => x.Category)
             .WithMany(x => x.Services)
             .HasForeignKey(x => x.CategoryId)

@@ -1,5 +1,4 @@
-﻿using BeautySalonBooking.Domain.BranchAggregate.Constants;
-using BeautySalonBooking.Domain.BranchAggregate.Entities;
+﻿using BeautySalonBooking.Domain.BranchAggregate.Entities;
 using BeautySalonBooking.Domain.BranchAggregate.ReadModels;
 using BeautySalonBooking.Domain.BranchAggregate.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -32,14 +31,22 @@ public sealed class BranchMemberRepository
                 !member.IsDeleted &&
                 member.BranchRole.IsActive &&
                 !member.BranchRole.IsDeleted &&
-                member.BranchRole.Code == BranchRoleCodes.Stylist &&
+                // member.BranchRole.Code == BranchRoleCodes.Stylist &&
                 member.Services.Any(memberService =>
                     memberService.IsActive &&
                     !memberService.IsDeleted &&
                     memberService.BranchService.BranchId == branchId &&
                     memberService.BranchService.ServiceId == serviceId &&
                     memberService.BranchService.IsActive &&
-                    !memberService.BranchService.IsDeleted))
+                    !memberService.BranchService.IsDeleted) &&
+                     _context.BranchMemberSchedules.Any(schedule =>
+                    schedule.BranchMemberId == member.Id &&
+                    schedule.IsActive &&
+                    !schedule.IsDeleted &&
+                    _context.WorkingShifts.Any(shift =>
+                        shift.BranchMemberScheduleId == schedule.Id &&
+                        shift.IsActive &&
+                        !shift.IsDeleted)))
             .OrderBy(member => member.Person.FirstName)
             .ThenBy(member => member.Person.LastName)
 .Select(member => new BranchMemberServiceReadModel
@@ -58,6 +65,9 @@ public sealed class BranchMemberRepository
         .First(),
 
     PersonId = member.PersonId,
+
+    Medias = member.Person.Users
+    .SelectMany(user => user.Media).ToList(),
 
     FirstName = member.Person.FirstName,
 

@@ -1,11 +1,12 @@
 ﻿using System.Collections.ObjectModel;
-using BeautySalonBooking.Contracts.Appointment.Dtos;
 using BeautySalonBooking.Contracts.Appointment.Enums;
 using BeautySalonBooking.Contracts.Appointment.Requests;
 using BeautySalonBooking.Maui.Common.Interfaces;
+using BeautySalonBooking.Maui.Features.Appointment.Models;
 using BeautySalonBooking.Maui.Features.Appointment.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 namespace BeautySalonBooking.Maui.Features.Appointment.ViewModels;
 
 public partial class AppointmentsViewModel : ObservableObject
@@ -24,10 +25,10 @@ public partial class AppointmentsViewModel : ObservableObject
         _appointmentApiService = appointmentApiService;
     }
 
-    public ObservableCollection<AppointmentDto> VisibleAppointments { get; } = [];
+    public ObservableCollection<AppointmentModel> VisibleAppointments { get; } = [];
 
     [ObservableProperty]
-    private bool isLoading;
+    private bool isBusy;
 
     [ObservableProperty]
     private string? errorMessage;
@@ -49,10 +50,10 @@ public partial class AppointmentsViewModel : ObservableObject
     public async Task LoadAppointmentsAsync(
         AppointmentListType listType)
     {
-        if (IsLoading)
+        if (IsBusy)
             return;
 
-        IsLoading = true;
+        IsBusy = true;
         ErrorMessage = null;
 
         try
@@ -83,7 +84,8 @@ public partial class AppointmentsViewModel : ObservableObject
 
             foreach (var appointment in result.Payload.Appointments)
             {
-                VisibleAppointments.Add(appointment);
+                VisibleAppointments.Add(
+                    AppointmentModel.FromDto(appointment));
             }
         }
         catch (Exception ex)
@@ -97,7 +99,7 @@ public partial class AppointmentsViewModel : ObservableObject
         }
         finally
         {
-            IsLoading = false;
+            IsBusy = false;
         }
     }
 

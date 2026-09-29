@@ -1,4 +1,7 @@
-﻿using BeautySalonBooking.Application;
+using BeautySalonBooking.API.Common.Exceptions;
+using BeautySalonBooking.API.Common.Services;
+using BeautySalonBooking.Application;
+using BeautySalonBooking.Application.Common.Interfaces;
 using BeautySalonBooking.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +9,19 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+
+#region EF Core Migration Command
+//Add-Migration InitialCreate -Context BeautyDbContext -Project BeautySalonBooking.Infrastructure -StartupProject BeautySalonBooking.Api -OutputDir Persistence\Migrations
+//$migration = (Get-Migration | Select-Object -Last 1).id
+//$migration
+//$path = ".\BeautySalonBooking.Infrastructure\Persistence\SqlScripts\$migration.sql"
+//$path
+//if (!(Test-Path (Split-Path $path))) { New-Item -ItemType Directory -Path (Split-Path $path) -Force } 
+//Script-Migration -Idempotent
+//Script-Migration -Idempotent | Out-File $path -Encoding utf8
+//Remove-Migration
+//Update-Database
+#endregion
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +34,13 @@ builder.Services.AddDbContext<BeautyDbContext>(options =>
 
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
+
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddEndpointsApiExplorer();
 
 // =============== تنظیمات Authentication ===============
@@ -75,7 +98,27 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
-// =============== تنظیمات Swagger ===============
+//    options.Events = new JwtBearerEvents
+//    {
+//        OnAuthenticationFailed = context =>
+//        {
+//            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+//            logger.LogWarning("Authentication failed: {Error}", context.Exception.Message);
+//            return Task.CompletedTask;
+//        },
+//        OnChallenge = context =>
+//        {
+//            // این خط مهم است - اجازه بده ExceptionHandlerMiddleware ما مدیریت کند
+//            context.HandleResponse();
+//            return Task.CompletedTask;
+//        }
+//    };
+//});
+builder.Services.AddHttpClient("SmsService", client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(30);
+    client.BaseAddress = new Uri("https://api.kavenegar.com/v1/");
+});
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -151,14 +194,33 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// =============== Middleware Pipeline ===============
+app.UseExceptionHandler();
 
-// Exception Handling
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/error");
+    //توسط خانم نوری موقتا کامنت شد بعد
+    //app.UseExceptionHandler("/error");
     app.UseHsts();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "BeautySalonBooking API v1");
+    c.RoutePrefix = "swagger";
+});
+
+// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI(c =>
+//    {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Onion API V1");
+//        c.RoutePrefix = "swagger";
+//    });
+//    //app.MapOpenApi();
+//}
 
 // ✅ فعال کردن Swagger در همه محیط‌ها (هم Development هم Production)
 app.UseSwagger();

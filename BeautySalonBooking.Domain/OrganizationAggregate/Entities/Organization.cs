@@ -24,4 +24,7 @@ public class Organization : AuditableSoftDeleteEntity<long>
 
     public string? Signature { get; private set; }
     public string? Slogan { get; private set; }
+
+
+    public string? Glyph { get; private set; }
 }

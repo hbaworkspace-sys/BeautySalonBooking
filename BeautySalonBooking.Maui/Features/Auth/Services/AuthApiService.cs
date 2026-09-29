@@ -1,4 +1,5 @@
-﻿using BeautySalonBooking.Contracts.Authentication.Requests;
+﻿using BeautySalonBooking.Contracts.Authentication.Dtos;
+using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
 using BeautySalonBooking.Maui.Common.Services;
@@ -26,13 +27,10 @@ public class AuthApiService : BaseApiService, IAuthApiService
     public Task<ApiResponse_New<AuthResult>> ConfirmRegistrationAsync(
         VerifyOtpRequest request,
         CancellationToken cancellationToken = default)
-    {
-        return PostAsync<VerifyOtpRequest, AuthResult>(
+        => PostAsync<VerifyOtpRequest, AuthResult>(
             AuthRoutes.RegisterVerifyOtp,
             request,
             cancellationToken);
-       
-    }
 
     public Task<ApiResponse_New<AuthResult>> RequestOtpForLoginAsync(
         LoginInitiateRequest request,
@@ -49,4 +47,21 @@ public class AuthApiService : BaseApiService, IAuthApiService
             AuthRoutes.LoginVerifyOtp,
             request,
             cancellationToken);
+
+    public Task<ApiResponse_New<AuthResult>> RefreshTokenAsync(
+        RefreshTokenRequest request,
+        string accessToken,
+        CancellationToken cancellationToken = default)
+        => PostAsync<RefreshTokenRequest, AuthResult>(
+            AuthRoutes.RefreshToken,
+            request,
+            cancellationToken,
+            accessToken);
+
+
+    public Task<ApiResponse_New<UserDto>> GetCurrentUserAsync(
+    CancellationToken cancellationToken = default)
+    => GetAsync<UserDto>(
+        AuthRoutes.Me,
+        cancellationToken);
 }

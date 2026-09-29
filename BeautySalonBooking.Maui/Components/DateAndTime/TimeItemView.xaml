@@ -15,6 +15,7 @@
 
             <Label
                 x:Name="TimeLabel"
+                FontSize="12"
                 HorizontalTextAlignment="Center"
                 TextColor="#292329"
                 VerticalTextAlignment="Center" />

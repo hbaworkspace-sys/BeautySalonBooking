@@ -1,11 +1,13 @@
 ﻿using BeautySalonBooking.Application.Appointment.Interfaces;
 using BeautySalonBooking.Contracts.Appointment.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySalonBooking.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public sealed class AppointmentController : ControllerBase
 {
     private readonly IAppointmentService _appointmentService;
@@ -15,6 +17,7 @@ public sealed class AppointmentController : ControllerBase
     {
         _appointmentService = appointmentService;
     }
+
 
     [HttpGet]
     public async Task<IActionResult> GetAppointments(

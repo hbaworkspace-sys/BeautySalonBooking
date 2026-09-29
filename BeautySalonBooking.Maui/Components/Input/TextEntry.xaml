@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Input.TextEntry"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <VerticalStackLayout Spacing="4">
+
+        <Border
+            x:Name="EntryBorder"
+            Margin="10,0"
+            BackgroundColor="{x:StaticResource White}"
+            HeightRequest="60"
+            Stroke="{x:StaticResource StrokeColor}"
+            StrokeThickness="1">
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10" />
+            </Border.StrokeShape>
+
+            <Border.Shadow>
+                <Shadow Brush="{x:StaticResource ShadowColor}" Offset="0,0.5" />
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="30,*">
+
+                <Label
+                    x:Name="GlyphLabel"
+                    Grid.Column="0"
+                    Margin="10,0,0,0"
+                    Style="{x:StaticResource GlyphLable}" />
+
+                <Entry
+                    x:Name="MainEntry"
+                    Grid.Column="1"
+                    Completed="MainEntry_Completed"
+                    FlowDirection="RightToLeft"
+                    Focused="MainEntry_Focused"
+                    TextChanged="MainEntry_TextChanged"
+                    TextColor="{x:StaticResource PrimaryText}" />
+
+            </Grid>
+
+        </Border>
+
+        <Label
+            x:Name="ErrorLabel"
+            Margin="15,0"
+            FontSize="12"
+            IsVisible="False" />
+
+    </VerticalStackLayout>
+
+</ContentView>

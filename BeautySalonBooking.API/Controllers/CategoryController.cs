@@ -1,11 +1,14 @@
 ﻿using BeautySalonBooking.Application.Category.Interfaces;
 using BeautySalonBooking.Contracts.Category.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySalonBooking.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+
 public sealed class CategoryController : ControllerBase
 {
     private readonly ICategoryService _categoryService;

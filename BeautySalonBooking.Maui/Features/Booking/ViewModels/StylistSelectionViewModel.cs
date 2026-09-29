@@ -1,9 +1,8 @@
-﻿using BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;
-using BeautySalonBooking.Contracts.Branch.BranchMemberService.Requests;
-using BeautySalonBooking.Contracts.Branch.BranchService.Dtos;
+﻿using BeautySalonBooking.Contracts.Branch.BranchMemberService.Requests;
 using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Features.Booking.Services;
 using BeautySalonBooking.Maui.Features.Branch.BranchMemberService.Services;
+using BeautySalonBooking.Maui.Features.Branch.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -35,7 +34,7 @@ public partial class StylistSelectionViewModel :
 
     #region Selected Branch
 
-    public BranchServiceOrganizationDto? SelectedBranch =>
+    public BranchServiceOrganizationModel? SelectedBranch =>
         _bookingSelectionState.Current.Branch;
 
     #endregion
@@ -43,7 +42,7 @@ public partial class StylistSelectionViewModel :
     #region Members
 
     [ObservableProperty]
-    private IReadOnlyList<BranchMemberServiceDto> members = [];
+    private IReadOnlyList<BranchMemberServiceModel> members = [];
 
     [ObservableProperty]
     private bool isMembersVisible;
@@ -55,7 +54,7 @@ public partial class StylistSelectionViewModel :
 
     #region Selected Member
 
-    public BranchMemberServiceDto? SelectedMember =>
+    public BranchMemberServiceModel? SelectedMember =>
         _bookingSelectionState.Current.Stylist;
 
     #endregion
@@ -103,7 +102,9 @@ public partial class StylistSelectionViewModel :
                 return;
             }
 
-            Members = result.Payload.Members;
+            Members = result.Payload.Members
+                .Select(x => new BranchMemberServiceModel(x))
+                .ToList();
 
             IsMembersVisible =
                 Members.Count > 0;
@@ -120,7 +121,7 @@ public partial class StylistSelectionViewModel :
 
     [RelayCommand]
     private async Task SelectMemberAsync(
-        BranchMemberServiceDto member)
+        BranchMemberServiceModel member)
     {
         if (member is null)
             return;

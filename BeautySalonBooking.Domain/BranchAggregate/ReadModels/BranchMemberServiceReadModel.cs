@@ -1,4 +1,6 @@
-﻿namespace BeautySalonBooking.Domain.BranchAggregate.ReadModels;
+﻿using BeautySalonBooking.Domain.Identity.UserAggregate.Entities;
+
+namespace BeautySalonBooking.Domain.BranchAggregate.ReadModels;
 
 public sealed class BranchMemberServiceReadModel
 {
@@ -15,4 +17,6 @@ public sealed class BranchMemberServiceReadModel
     public decimal Price { get; init; }
 
     public TimeSpan Duration { get; init; }
+
+    public IReadOnlyList<UserMedia> Medias { get; set; } = [];
 }

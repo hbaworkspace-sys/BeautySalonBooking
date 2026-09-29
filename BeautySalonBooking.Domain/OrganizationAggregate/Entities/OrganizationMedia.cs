@@ -1,5 +1,5 @@
 ﻿using BeautySalonBooking.Domain.Base.Entities;
-using BeautySalonBooking.Domain.OrganizationAggregate.Enums;
+using BeautySalonBooking.Domain.Base.Enums;
 
 namespace BeautySalonBooking.Domain.OrganizationAggregate.Entities;
 
@@ -12,6 +12,6 @@ public class OrganizationMedia : AuditableEntity<long>
     public string ContentType { get; private set; } = null!;
     public long FileSize { get; private set; }
     public byte[] Content { get; private set; } = null!;
-    public OrganizationMediaType Type { get; private set; }
+    public MediaType Type { get; private set; }
     public int DisplayOrder { get; private set; }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Shared.TextLink"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="self">
+
+    <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="5">
+
+        <Label
+            Grid.Column="0"
+            FontSize="12"
+            Text="{Binding QuestionText, Source={x:Reference self}}" />
+
+        <Grid Grid.Column="1">
+
+            <Label
+                x:Name="LinkLabel"
+                FontSize="12"
+                Text="{Binding Text, Source={x:Reference self}}"
+                TextColor="{Binding TextColor, Source={x:Reference self}}">
+
+                <Label.GestureRecognizers>
+
+                    <TapGestureRecognizer Tapped="LinkLabel_Tapped" />
+
+                </Label.GestureRecognizers>
+
+            </Label>
+
+            <BoxView
+                x:Name="UnderLineBox"
+                Margin="0,12,0,0"
+                BackgroundColor="{Binding TextColor, Source={x:Reference self}}"
+                HeightRequest="1.5"
+                HorizontalOptions="Fill"
+                IsVisible="False"
+                VerticalOptions="Start" />
+
+        </Grid>
+
+    </Grid>
+
+</ContentView>

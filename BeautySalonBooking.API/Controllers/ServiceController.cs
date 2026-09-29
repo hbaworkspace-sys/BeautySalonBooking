@@ -1,11 +1,14 @@
 ﻿using BeautySalonBooking.Application.Service.Interfaces;
 using BeautySalonBooking.Contracts.Service.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySalonBooking.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+
 public sealed class ServiceController : ControllerBase
 {
     private readonly IServiceService _serviceService;

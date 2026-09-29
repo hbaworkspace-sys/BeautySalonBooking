@@ -1,11 +1,13 @@
 ﻿using BeautySalonBooking.Application.Branch.BranchMemberService.Interfaces;
 using BeautySalonBooking.Contracts.Branch.BranchMemberService.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BeautySalonBooking.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public sealed class BranchMemberServiceController : ControllerBase
 {
     private readonly IBranchMemberServiceService _branchMemberService;

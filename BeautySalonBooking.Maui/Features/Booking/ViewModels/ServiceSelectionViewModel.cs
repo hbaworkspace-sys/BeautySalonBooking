@@ -1,11 +1,11 @@
-﻿using BeautySalonBooking.Contracts.Category.Dtos;
-using BeautySalonBooking.Contracts.Service.Dtos;
-using BeautySalonBooking.Maui.Common.Interfaces;
+﻿using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Features.Booking.Services;
 using BeautySalonBooking.Maui.Features.Category.Cache;
 using BeautySalonBooking.Maui.Features.Category.Constants;
+using BeautySalonBooking.Maui.Features.Category.Models;
 using BeautySalonBooking.Maui.Features.Category.Services;
 using BeautySalonBooking.Maui.Features.Service.Cache;
+using BeautySalonBooking.Maui.Features.Service.Models;
 using BeautySalonBooking.Maui.Features.Service.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -40,29 +40,28 @@ public partial class ServiceSelectionViewModel : ObservableObject
     #region Categories
 
     [ObservableProperty]
-    private IReadOnlyList<CategoryDto> categories = [];
+    private IReadOnlyList<CategoryModel> categories = [];
 
     [ObservableProperty]
-    private IReadOnlyList<CategoryDto> subCategories = [];
-
-    [ObservableProperty]
-    private bool isLoading;
-
-    [ObservableProperty]
-    private bool isSubCategoriesLoading;
+    private IReadOnlyList<CategoryModel> subCategories = [];
 
     [ObservableProperty]
     private bool isSubCategoriesVisible;
 
     [ObservableProperty]
-    private CategoryDto? selectedCategory;
+    private CategoryModel? selectedCategory;
 
+    [ObservableProperty]
+    private CategoryModel? selectedSubCategory;
+
+    [ObservableProperty]
+    private bool isBusy;
     #endregion
 
     #region Services
 
     [ObservableProperty]
-    private IReadOnlyList<ServiceDto> services = [];
+    private IReadOnlyList<ServiceModel> services = [];
 
     [ObservableProperty]
     private bool isServicesVisible;
@@ -74,15 +73,20 @@ public partial class ServiceSelectionViewModel : ObservableObject
     public async Task LoadCategoriesAsync(
         CancellationToken cancellationToken = default)
     {
+        if (IsBusy)
+            return;
+
         if (_categoryCache.TryGet(
                 CategoryCodes.Service,
                 out var cachedCategories))
         {
-            Categories = cachedCategories;
+            Categories = cachedCategories
+                .Select(x => new CategoryModel(x))
+                .ToList();
+
             return;
         }
-
-        IsLoading = true;
+        IsBusy = true;
 
         try
         {
@@ -97,15 +101,20 @@ public partial class ServiceSelectionViewModel : ObservableObject
                 return;
             }
 
-            Categories = result.Payload.Categories;
+            var categoryDtos = result.Payload.Categories;
 
+            Categories = categoryDtos
+                .Select(x => new CategoryModel(x))
+                .ToList();
+
+            // Cache با DTO کار می‌کند، نه CategoryModel
             _categoryCache.Set(
                 CategoryCodes.Service,
-                Categories);
+                categoryDtos);
         }
         finally
         {
-            IsLoading = false;
+            IsBusy = false;
         }
     }
 
@@ -115,9 +124,9 @@ public partial class ServiceSelectionViewModel : ObservableObject
 
     [RelayCommand]
     private async Task SelectCategoryAsync(
-        CategoryDto category)
+        CategoryModel category)
     {
-        if (IsSubCategoriesLoading)
+        if (IsBusy)
             return;
 
         if (category is null)
@@ -126,6 +135,13 @@ public partial class ServiceSelectionViewModel : ObservableObject
         if (SelectedCategory?.Id == category.Id)
             return;
 
+        IsBusy = true;
+        // قبلی را از حالت انتخاب خارج کن
+        if (SelectedCategory is not null)
+            SelectedCategory.IsSelected = false;
+
+        // جدید را انتخاب کن
+        category.IsSelected = true;
         SelectedCategory = category;
 
         SubCategories = [];
@@ -133,7 +149,6 @@ public partial class ServiceSelectionViewModel : ObservableObject
 
         IsSubCategoriesVisible = false;
         IsServicesVisible = false;
-        IsSubCategoriesLoading = true;
 
         try
         {
@@ -143,43 +158,32 @@ public partial class ServiceSelectionViewModel : ObservableObject
                     CancellationToken.None);
 
             if (!result.IsSuccess)
-            {
-                System.Diagnostics.Debug.WriteLine(
-                    $"Failed to load sub categories for: {category.Code}");
-
                 return;
-            }
 
-            var subCategories = result.Payload?.Categories;
+            var subCategoryDtos = result.Payload?.Categories;
 
-            // =====================================================
             // Category دارای زیرمجموعه است
-            // =====================================================
-
-            if (subCategories is { Count: > 0 })
+            if (subCategoryDtos is { Count: > 0 })
             {
-                IsSubCategoriesVisible = true;
-                SubCategories = subCategories;
+                SubCategories = subCategoryDtos
+                    .Select(x => new CategoryModel(x))
+                    .ToList();
 
-                System.Diagnostics.Debug.WriteLine(
-                    $"SubCategories Count: {SubCategories.Count}");
+                IsSubCategoriesVisible = true;
 
                 return;
             }
 
-            // =====================================================
-            // زیرمجموعه ندارد
+            // Category زیرمجموعه ندارد
             // مستقیماً Services را می‌خوانیم
-            // =====================================================
-
-            System.Diagnostics.Debug.WriteLine(
-                $"No sub categories found for: {category.Code}");
 
             if (_serviceCache.TryGet(
                     category.Id,
                     out var cachedServices))
             {
-                Services = cachedServices;
+                Services = cachedServices
+                    .Select(x => new ServiceModel(x))
+                    .ToList();
                 IsServicesVisible = true;
 
                 return;
@@ -193,54 +197,58 @@ public partial class ServiceSelectionViewModel : ObservableObject
             if (!servicesResult.IsSuccess ||
                 servicesResult.Payload?.Services is null)
             {
-                System.Diagnostics.Debug.WriteLine(
-                    $"Failed to load services for category: {category.Id}");
-
                 return;
             }
 
-            Services = servicesResult.Payload.Services;
+            var serviceDtos = servicesResult.Payload.Services;
+
+            Services = serviceDtos
+                .Select(x => new ServiceModel(x))
+                .ToList();
 
             _serviceCache.Set(
                 category.Id,
-                Services);
+                serviceDtos);
 
             IsServicesVisible = true;
-
-            System.Diagnostics.Debug.WriteLine(
-                $"Services Count: {Services.Count}");
         }
         finally
         {
-            IsSubCategoriesLoading = false;
+            IsBusy = false;
         }
     }
 
     #endregion
 
     #region SubCategory Selection
-
     [RelayCommand]
     private async Task SelectSubCategoryAsync(
-        CategoryDto category)
+        CategoryModel category)
     {
-        if (IsSubCategoriesLoading)
+        if (IsBusy)
             return;
 
         if (category is null)
             return;
 
+        if (SelectedSubCategory is not null)
+            SelectedSubCategory.IsSelected = false;
+
+        IsBusy = true;
+        category.IsSelected = true;
+        SelectedSubCategory = category;
+
         Services = [];
         IsServicesVisible = false;
-        IsSubCategoriesLoading = true;
-
         try
         {
             if (_serviceCache.TryGet(
                     category.Id,
                     out var cachedServices))
             {
-                Services = cachedServices;
+                Services = cachedServices
+                     .Select(x => new ServiceModel(x))
+                     .ToList();
                 IsServicesVisible = true;
 
                 return;
@@ -257,17 +265,21 @@ public partial class ServiceSelectionViewModel : ObservableObject
                 return;
             }
 
-            Services = result.Payload.Services;
+            var serviceDtos = result.Payload.Services;
+
+            Services = serviceDtos
+                .Select(x => new ServiceModel(x))
+                .ToList();
 
             _serviceCache.Set(
                 category.Id,
-                Services);
+                serviceDtos);
 
             IsServicesVisible = true;
         }
         finally
         {
-            IsSubCategoriesLoading = false;
+            IsBusy = false;
         }
     }
 
@@ -276,17 +288,14 @@ public partial class ServiceSelectionViewModel : ObservableObject
     #region Service Selection
 
     [RelayCommand]
-    private Task SelectServiceAsync(
-        ServiceDto service)
+    private Task SelectServiceAsync(ServiceModel service)
     {
         if (service is null)
             return Task.CompletedTask;
 
-        // ذخیره سرویس انتخاب‌شده در Booking State
         _bookingSelectionState.Current.Service = service;
 
-        return _navigationService
-            .GoToBranchSelectionAsync();
+        return _navigationService.GoToBranchSelectionAsync();
     }
 
     #endregion

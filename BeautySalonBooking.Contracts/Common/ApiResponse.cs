@@ -1,2 +1,0 @@
-﻿namespace BeautySalonBooking.Contracts.Common;
-
