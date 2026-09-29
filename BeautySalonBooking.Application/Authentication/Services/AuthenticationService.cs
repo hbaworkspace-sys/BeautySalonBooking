@@ -459,8 +459,7 @@ public class AuthenticationService : IAuthenticationService
                 result.Add(
                     AuthResult.Success(
                         token,
-                        dto,
-                        null));
+                        dto));
 
             }
 
@@ -527,8 +526,7 @@ public class AuthenticationService : IAuthenticationService
             Payload =
                 AuthResult.Success(
                     tokenResponse,
-                    userDto,
-                    null)
+                    userDto)
         };
 
     }
@@ -684,7 +682,6 @@ public class AuthenticationService : IAuthenticationService
                 Payload =
                     AuthResult.Success(
                         result,
-                        null,
                         null)
             };
 

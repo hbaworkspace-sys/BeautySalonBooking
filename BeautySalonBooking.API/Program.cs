@@ -1,4 +1,4 @@
-﻿using BeautySalonBooking.API.Common.Exceptions;
+using BeautySalonBooking.API.Common.Exceptions;
 using BeautySalonBooking.API.Common.Services;
 using BeautySalonBooking.Application;
 using BeautySalonBooking.Application.Common.Interfaces;
@@ -26,7 +26,6 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<BeautyDbContext>(options =>
@@ -43,6 +42,8 @@ builder.Services.AddProblemDetails();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddEndpointsApiExplorer();
+
+// =============== تنظیمات Authentication ===============
 builder.Services
     .AddAuthentication(options =>
     {
@@ -53,27 +54,19 @@ builder.Services
     .AddJwtBearer(options =>
     {
         options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
-
         options.SaveToken = true;
         var secret = builder.Configuration["Jwt:Secret"]
-  ?? throw new InvalidOperationException("Jwt:Secret is missing.");
+            ?? throw new InvalidOperationException("Jwt:Secret is missing.");
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-
-            //IssuerSigningKey = new SymmetricSecurityKey(
-            //    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"])),
-
-
             IssuerSigningKey = new SymmetricSecurityKey(
-    Encoding.UTF8.GetBytes(secret)),
-
+                Encoding.UTF8.GetBytes(secret)),
             ClockSkew = TimeSpan.Zero
         };
 
@@ -83,28 +76,18 @@ builder.Services
             {
                 var logger = context.HttpContext.RequestServices
                     .GetRequiredService<ILogger<Program>>();
-
-                logger.LogWarning(context.Exception,
-                    "JWT Authentication Failed");
-
+                logger.LogWarning(context.Exception, "JWT Authentication Failed");
                 return Task.CompletedTask;
             },
-
-            OnTokenValidated = context =>
-            {
-                return Task.CompletedTask;
-            },
-
+            OnTokenValidated = context => Task.CompletedTask,
             OnChallenge = context =>
             {
                 if (!context.Response.HasStarted)
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 }
-
                 return Task.CompletedTask;
             },
-
             OnForbidden = context =>
             {
                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
@@ -112,37 +95,8 @@ builder.Services
             },
         };
     });
+
 builder.Services.AddAuthorization();
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.FallbackPolicy = options.DefaultPolicy;
-//});
-builder.Services.AddHsts(options =>
-{
-    options.Preload = true;
-    options.IncludeSubDomains = true;
-    options.MaxAge = TimeSpan.FromDays(365);
-});
-
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-
-//.AddJwtBearer(options =>
-//{
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//        ValidAudience = builder.Configuration["Jwt:Audience"],
-//        IssuerSigningKey = new SymmetricSecurityKey(
-//            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]))
-//    };
 
 //    options.Events = new JwtBearerEvents
 //    {
@@ -200,7 +154,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // اضافه کردن comments (اگر می‌خواهید)
+    // اضافه کردن XML comments
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     if (File.Exists(xmlPath))
@@ -209,7 +163,7 @@ builder.Services.AddSwaggerGen(options =>
     }
 });
 
-// اضافه کردن CORS
+// =============== تنظیمات CORS ===============
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyPolicy", policy =>
@@ -220,27 +174,28 @@ builder.Services.AddCors(options =>
                 "https://localhost:7210")
             .AllowAnyHeader()
             .AllowAnyMethod();
-
-        // اگر بعداً از Cookie استفاده کردیم،
-        // AllowCredentials را اضافه می‌کنیم.
     });
 });
-//builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-//{
-//    builder.AllowAnyOrigin()
-//     .SetIsOriginAllowedToAllowWildcardSubdomains()
-//                        .AllowAnyHeader()
-//                        .AllowAnyMethod();
-//}));
-//builder.Services.AddSwaggerGen();
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-//builder.Services.AddOpenApi();
+builder.Services.AddHsts(options =>
+{
+    options.Preload = true;
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(365);
+});
+
+builder.Services.AddHttpClient("SmsService", client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(30);
+    client.BaseAddress = new Uri("https://api.kavenegar.com/v1/");
+});
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-
 app.UseExceptionHandler();
+
 if (!app.Environment.IsDevelopment())
 {
     //توسط خانم نوری موقتا کامنت شد بعد
@@ -267,43 +222,40 @@ app.UseSwaggerUI(c =>
 //    //app.MapOpenApi();
 //}
 
-//app.UseDeveloperExceptionPage();
+// ✅ فعال کردن Swagger در همه محیط‌ها (هم Development هم Production)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "BeautySalonBooking API v1");
+    c.RoutePrefix = "swagger";
 
+    // اگر در Production هستید و می‌خواهید عنوان متفاوت باشد
+    if (!app.Environment.IsDevelopment())
+    {
+        c.DocumentTitle = "BeautySalonBooking API - Production";
+    }
+});
 
-//app.UseHttpsRedirection();
-//app.UseAuthorization();
-//app.MapControllers();
-//app.MapGet("/", () => Results.Redirect("/swagger"));
 app.UseHttpsRedirection();
-
 app.UseRouting();
-
 app.UseCors("MyPolicy");
-
 app.UseAuthentication();
-
 app.UseAuthorization();
+
+// Security Headers
 app.Use(async (context, next) =>
 {
     context.Response.Headers["X-Content-Type-Options"] = "nosniff";
-
     context.Response.Headers["X-Frame-Options"] = "DENY";
-
-    context.Response.Headers["Referrer-Policy"] =
-        "strict-origin-when-cross-origin";
-
+    context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
     context.Response.Headers["X-XSS-Protection"] = "0";
-
-    context.Response.Headers["Permissions-Policy"] =
-        "camera=(), microphone=(), geolocation=()";
-
+    context.Response.Headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
     await next();
 });
-app.MapControllers();
-//app.MapGet("/", () => Results.Redirect("/swagger"));
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapGet("/", () => Results.Redirect("/swagger"));
-}
+app.MapControllers();
+
+// ✅ ریدایرکت ریشه به Swagger در همه محیط‌ها
+app.MapGet("/", () => Results.Redirect("/swagger"));
+
 app.Run();

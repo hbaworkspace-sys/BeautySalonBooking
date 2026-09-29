@@ -1,5 +1,6 @@
 ﻿using BeautySalonBooking.Application.Authentication.Interfaces;
 using BeautySalonBooking.Contracts.Authentication.Dtos;
+using BeautySalonBooking.Contracts.Permission.Dtos;
 using BeautySalonBooking.Domain.Base.UnitOfWork;
 using BeautySalonBooking.Domain.Identity.RoleAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.RoleAggregate.Enums;
@@ -18,6 +19,83 @@ public sealed class RoleService : IRoleService
         IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
+    }
+
+    public async Task<List<RolePermissionDto>> GetRolePermissionsAsync(int roleId, CancellationToken cancellationToken)
+    {
+
+        var role =
+            await _unitOfWork.RoleRepository
+            .GetRoleWithPermissionsAsync(
+                roleId,
+                cancellationToken);
+
+
+
+        if (role == null)
+            throw new Exception(
+                "Role not found");
+
+
+
+        var permissions =
+            await _unitOfWork.PermissionRepository
+            .GetAllAsync(cancellationToken);
+
+
+
+        var selectedIds =
+            role.RolePermissions
+            .Select(x => x.PermissionId)
+            .ToHashSet();
+
+
+
+        return permissions
+            .Select(x => new RolePermissionDto
+            {
+                Id = x.Id,
+
+                Title = x.Title,
+
+                Code = x.Code,
+
+                Type = (int)x.Type,
+
+
+                IsSelected =
+                    selectedIds.Contains(x.Id)
+
+            })
+            .ToList();
+
+    }
+    public async Task AssignPermissionsAsync(AssignRolePermissionsRequest request, CancellationToken cancellationToken)
+    {
+
+        var role =
+            await _unitOfWork.RoleRepository.GetRoleWithPermissionsAsync(request.RoleId, cancellationToken);
+
+
+
+        if (role == null)
+            throw new Exception("Role not found");
+
+
+
+
+        role.SetPermissions(request.PermissionIds);
+
+
+
+        _unitOfWork.RoleRepository
+            .Update(role);
+
+
+
+        await _unitOfWork
+            .CommitAsync(cancellationToken);
+
     }
 
     public async Task<Role> GetDefaultCustomerRoleAsync(CancellationToken cancellationToken)

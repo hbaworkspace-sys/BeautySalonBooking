@@ -1,5 +1,6 @@
 ﻿using BeautySalonBooking.Application.Authentication.Interfaces;
 using BeautySalonBooking.Contracts.Authentication.Dtos;
+using BeautySalonBooking.Contracts.Permission.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -132,6 +133,41 @@ namespace BeautySalonBooking.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+
+        [HttpGet("{id}/permissions")]
+        public async Task<IActionResult> GetPermissions(int id, CancellationToken cancellationToken)
+        {
+
+            var result =
+                await _roleService
+                .GetRolePermissionsAsync(
+                    id,
+                    cancellationToken);
+
+
+            return Ok(result);
+
+        }
+
+        [HttpPost("permissions")]
+        public async Task<IActionResult> AssignPermissions(
+        AssignRolePermissionsRequest request,
+        CancellationToken cancellationToken)
+        {
+
+            await _roleService
+                .AssignPermissionsAsync(
+                    request,
+                    cancellationToken);
+
+
+            return Ok();
+
+        }
+
+
+
     }
 }
 

@@ -40,6 +40,7 @@ public static class DependencyInjection
         services.AddScoped<IOtpService, OtpService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUserSessionService, UserSessionService>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         // Other Services
         services.AddScoped<IEmailService, EmailService>();

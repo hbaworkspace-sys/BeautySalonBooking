@@ -30,9 +30,18 @@ public class RoleRepository
     int roleId,
     CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
-    }
 
+        return await _context.Roles
+
+            .Include(x => x.RolePermissions)
+
+            .ThenInclude(x => x.Permission)
+
+            .FirstOrDefaultAsync(
+                x => x.Id == roleId,
+                cancellationToken);
+
+    }
     public async Task<IEnumerable<Role>> GetRolesByUserIdAsync(
         long userId,
         CancellationToken cancellationToken = default)

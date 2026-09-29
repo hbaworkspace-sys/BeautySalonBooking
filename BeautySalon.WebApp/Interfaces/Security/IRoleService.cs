@@ -1,10 +1,12 @@
 ﻿// WebApp/Interfaces/Roles/IRoleService.cs
 using BeautySalonBooking.Contracts.Authentication.Dtos;
+using BeautySalonBooking.Contracts.Permission.Dtos;
 
 namespace BeautySalonBooking.WebApp.Interfaces.Roles
 {
     public interface IRoleService
     {
+
         Task<RoleListResponse> GetRolesAsync(string? searchTerm = null, int pageNumber = 1, int pageSize = 10);
         Task<RoleDto> GetRoleByIdAsync(int id);
         Task<RoleDto> CreateRoleAsync(CreateRoleRequest request);
