@@ -9,9 +9,13 @@ public partial class OtpPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
-    protected override void OnAppearing()
+
+    private async void txtOtp_OnCompleted(object sender, EventArgs e)
     {
-        base.OnAppearing();
-        txtOtp.FocusMe();
+        if (BindingContext is OtpViewModel vm)
+        {
+            if (vm.VerifyOtpCommand.CanExecute(null))
+                await vm.VerifyOtpCommand.ExecuteAsync(null);
+        }
     }
 }

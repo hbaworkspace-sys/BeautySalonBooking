@@ -1,8 +1,12 @@
 ﻿using BeautySalonBooking.Application.Appointment.Interfaces;
+using BeautySalonBooking.Application.Common.Interfaces;
 using BeautySalonBooking.Contracts.Appointment.Dtos;
 using BeautySalonBooking.Contracts.Appointment.Enums;
 using BeautySalonBooking.Contracts.Appointment.Requests;
 using BeautySalonBooking.Contracts.Appointment.Responses;
+using BeautySalonBooking.Contracts.Authentication.Dtos;
+using BeautySalonBooking.Contracts.Booking.CreateBooking.Responses;
+using BeautySalonBooking.Contracts.Branch.BranchService.Dtos;
 using BeautySalonBooking.Contracts.Common;
 using BeautySalonBooking.Domain.AppointmentAggregate.Queries;
 
@@ -18,11 +22,14 @@ public sealed class AppointmentService
     : IAppointmentService
 {
     private readonly IAppointmentQuery _appointmentQuery;
+    private readonly ICurrentUserService _currentUserService;
 
     public AppointmentService(
+        ICurrentUserService currentUserService,
         IAppointmentQuery appointmentQuery)
     {
         _appointmentQuery = appointmentQuery;
+        _currentUserService = currentUserService;
     }
 
     public async Task<ApiResponse_New<GetAppointmentsResponse>>
@@ -30,7 +37,7 @@ public sealed class AppointmentService
             GetAppointmentsRequest request,
             CancellationToken cancellationToken = default)
     {
-        if (request.CustomerUserId <= 0)
+        if (_currentUserService.UserId <= 0)
         {
             return new ApiResponse_New<GetAppointmentsResponse>
             {
@@ -45,19 +52,18 @@ public sealed class AppointmentService
             {
                 AppointmentListType.All =>
                     await _appointmentQuery.GetAllAsync(
-                        request.CustomerUserId,
+                        _currentUserService.UserId,
                         cancellationToken),
 
                 AppointmentListType.Upcoming =>
                     await _appointmentQuery.GetUpcomingAsync(
-                        request.CustomerUserId,
+                        _currentUserService.UserId,
                         cancellationToken),
 
                 AppointmentListType.History =>
                     await _appointmentQuery.GetHistoryAsync(
-                        request.CustomerUserId,
+                       _currentUserService.UserId,
                         cancellationToken),
-
                 _ => null
             };
 
@@ -82,16 +88,27 @@ public sealed class AppointmentService
                         OrganizationTitle = x.OrganizationTitle,
                         BranchTitle = x.BranchTitle,
                         StylistName = x.StylistName,
+
+                        BranchImage = x.BranchImage is null
+                        ? null
+                        : new BranchMediaDto
+                        {
+                            Content = x.BranchImage
+                        },
+
+                        StylistImage = x.StylistImage is null
+                        ? null
+                        : new UserMediaDto
+                        {
+                            Content = x.StylistImage
+                        },
                         Date = x.Date,
                         StartTime = x.StartTime,
                         EndTime = x.EndTime,
                         TotalPrice = x.TotalPrice,
 
-                        Status =
-                            (ContractAppointmentStatus)x.Status,
-
-                        PaymentStatus =
-                            (ContractPaymentStatus)x.PaymentStatus
+                        Status = (ContractAppointmentStatus)x.Status,
+                        PaymentStatus = (ContractPaymentStatus)x.PaymentStatus
                     })
                     .ToList()
         };

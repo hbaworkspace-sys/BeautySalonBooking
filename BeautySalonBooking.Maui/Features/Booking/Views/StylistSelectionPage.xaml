@@ -4,9 +4,10 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
-    xmlns:dto_bms="clr-namespace:BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;assembly=BeautySalonBooking.Contracts"
     xmlns:headers="clr-namespace:BeautySalonBooking.Maui.Components.Header"
+    xmlns:indicator="clr-namespace:BeautySalonBooking.Maui.Components.Indicator"
     xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:model_bms="clr-namespace:BeautySalonBooking.Maui.Features.Branch.Models"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
     xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
@@ -31,21 +32,16 @@
             Margin="20,10,0,10"
             ShowDivider="False" />
 
-        <card:InfoCardView
-            Title="{Binding SelectedBranch.OrganizationTitle}"
+        <card:OrganizationCardView
             Grid.Row="2"
             Margin="15,5"
-            BorderBrush="#aaF5E2E8"
-            BorderWidth="1"
-            CornerRadius="20"
-            FillBrush="#fffdfd"
-            ImageAspect="Center"
-            ImageShape="RoundedRectangle"
-            ImageSource="salon_q1r2.png"
-            IsArrowVisible="False"
-            IsThirdRowVisible="True"
-            Subtitle="{Binding SelectedBranch.BranchTitle}"
-            ThirdRowText="{Binding SelectedBranch.OrganizationType}" />
+            AvailableTimes="19"
+            BadgeType="None"
+            BeauticianCount="25"
+            BranchTitle="{Binding SelectedBranch.BranchTitle}"
+            ImageSource="{Binding SelectedBranch.ImageSource}"
+            OrganizationName="{Binding SelectedBranch.OrganizationTitle}"
+            Rating="4.5" />
 
         <headers:SectionTitleView
             Title="استایلیست های این سالن"
@@ -65,13 +61,13 @@
             </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="dto_bms:BranchMemberServiceDto">
+                <DataTemplate x:DataType="model_bms:BranchMemberServiceModel">
 
                     <card:StylistSelectionCardView
                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectMemberCommand}"
                         CommandParameter="{Binding .}"
                         FirstAvailableTime="15:30"
-                        ImageSource="arayeshgar.png"
+                        ImageSource="{Binding ImageSource}"
                         Price="{Binding Price}"
                         Rating="0"
                         StylistName="{Binding FullName}"
@@ -82,5 +78,14 @@
             </CollectionView.ItemTemplate>
 
         </CollectionView>
+
+        <indicator:LoadingIndicator
+            Grid.Row="3"
+            Grid.RowSpan="2"
+            IsLoading="{Binding IsLoading}"
+            Message="لطفاً صبر کنید..."
+            OverlayColor="#CCFFFFFF"
+            SpinnerColor="#7d0a26"
+            SpinnerSize="50" />
     </Grid>
 </ContentPage>

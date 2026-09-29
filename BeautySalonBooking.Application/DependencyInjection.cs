@@ -2,6 +2,7 @@
 using BeautySalonBooking.Application.Appointment.Services;
 using BeautySalonBooking.Application.Authentication.Interfaces;
 using BeautySalonBooking.Application.Authentication.Services;
+using BeautySalonBooking.Application.Authentication.Validations;
 using BeautySalonBooking.Application.Booking.Interfaces;
 using BeautySalonBooking.Application.Booking.Services;
 using BeautySalonBooking.Application.Branch.BranchMemberService.Interfaces;
@@ -12,9 +13,13 @@ using BeautySalonBooking.Application.Category.Interfaces;
 using BeautySalonBooking.Application.Category.Services;
 using BeautySalonBooking.Application.Common.Interfaces;
 using BeautySalonBooking.Application.Common.Services;
+using BeautySalonBooking.Application.Organization.Interfaces;
+using BeautySalonBooking.Application.Organization.Services;
 using BeautySalonBooking.Application.Service.Interfaces;
 using BeautySalonBooking.Application.Service.Services;
+using BeautySalonBooking.Domain.OrganizationAggregate.Repositories;
 using BeautySalonBooking.Domain.SchedulingAggregate.Services;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BeautySalonBooking.Application;
@@ -26,8 +31,6 @@ public static class DependencyInjection
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddMemoryCache();
 
-
-        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
         // Authentication
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IRefreshTokenService, RefreshTokenService>();
@@ -56,7 +59,15 @@ public static class DependencyInjection
         services.AddScoped<IBookingService, BookingService>();
         services.AddScoped<AvailabilityCalculator>();
         services.AddScoped<IAppointmentService, AppointmentService>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+        // Validation
+        services.AddValidatorsFromAssemblyContaining<LoginInitiateRequestValidator>();
+        services.AddScoped<IValidationService, ValidationService>();
+
+
+        //Organizition
+        services.AddScoped<IOrganizationService, OrganizationService>();
         return services;
     }
 }

@@ -9,6 +9,7 @@
     xmlns:dto_bms="clr-namespace:BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;assembly=BeautySalonBooking.Contracts"
     xmlns:header="clr-namespace:BeautySalonBooking.Maui.Components.Header"
     xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:indicator="clr-namespace:BeautySalonBooking.Maui.Components.Indicator"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
     x:DataType="vm:DateTimeSelectionViewModel"
@@ -54,7 +55,7 @@
                 <card:StylistSelectionCardView
                     Grid.Row="3"
                     FirstAvailableTime="15:30"
-                    ImageSource="arayeshgar.png"
+                    ImageSource="{Binding SelectedMember.ImageSource}"
                     Price="{Binding SelectedMember.Price}"
                     StylistName="{Binding SelectedMember.FullName}"
                     StylistTitle="استایلیست ارشد"
@@ -70,5 +71,15 @@
             </Grid>
 
         </ScrollView>
+
+        <indicator:LoadingIndicator
+            Grid.Row="1"
+            IsLoading="{Binding IsBusy}"
+            Message="لطفاً صبر کنید..."
+            OverlayColor="#CCFFFFFF"
+            SpinnerColor="#7d0a26"
+            SpinnerSize="50" />
+
+
     </Grid>
 </ContentPage>

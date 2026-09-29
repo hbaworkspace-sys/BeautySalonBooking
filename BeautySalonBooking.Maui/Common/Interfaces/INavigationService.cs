@@ -13,12 +13,10 @@ public interface INavigationService
 
     //Login-Register
     Task GoToLoginAsync();
+    Task GoToLoginAsRootAsync();
     Task GoToRegisterAsync();
     Task GoToOtpAsync(OtpNavigationModel model);
-    Task GoToRegistrationSuccessAsync();
 
-    //Main
-    Task GoToMainAsync(MainTab tab);
 
     //Booking
     Task GoToServiceSelectionAsync();
@@ -26,5 +24,10 @@ public interface INavigationService
     Task GoToBranchSelectionAsync();
     Task GoToBookingDateTimeSelectionAsync();
     Task GoToBookingConfirmationAsync();
+
+
+    //shell root
+    Task GoToRegistrationSuccessAsync();
+    Task GoToMainAsync(MainTab tab);
     Task GoToBookingSuccessAsync();
 }

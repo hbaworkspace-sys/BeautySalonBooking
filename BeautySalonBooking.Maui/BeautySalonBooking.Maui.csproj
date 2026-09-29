@@ -14,7 +14,7 @@
 		<AndroidPackageFormats>apk</AndroidPackageFormats>
 
 		<!-- Display name -->
-		<ApplicationTitle>Noura</ApplicationTitle>
+		<ApplicationTitle>Beauty</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.beautysalonbooking.maui</ApplicationId>
@@ -32,10 +32,11 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appiconnew.svg" />
+		<MauiIcon Include="Resources\Splash\splashnew.svg" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splashnew.svg" Color="#FFFFFF" BaseSize="256,256" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -70,6 +71,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\BeautySalonBooking.Common\BeautySalonBooking.Common.csproj" />
 		<ProjectReference Include="..\BeautySalonBooking.Contracts\BeautySalonBooking.Contracts.csproj" />
 	</ItemGroup>
 
@@ -116,10 +118,19 @@
 		<MauiXaml Update="Components\Header\SectionTitleView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Components\Indicator\LoadingIndicator.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Components\Information\InfoSummaryItemView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Components\Information\InfoSummaryView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Input\ComboBox.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Components\Input\RadioButtonGroup.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Components\Media\MediaItemView.xaml">
@@ -176,6 +187,9 @@
 		<MauiXaml Update="Features\Booking\Views\StylistSelectionPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="TextEntryTestPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="UserControls\CountdownView.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -193,6 +207,9 @@
 		</Compile>
 		<Compile Update="Features\Home\Views\HomView.xaml.cs">
 			<DependentUpon>HomView.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="TextEntryTestPage.xaml.cs">
+			<DependentUpon>TextEntryTestPage.xaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 

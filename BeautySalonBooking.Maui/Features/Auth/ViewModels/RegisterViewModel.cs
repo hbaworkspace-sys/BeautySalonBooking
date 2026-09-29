@@ -1,11 +1,13 @@
-﻿using BeautySalonBooking.Contracts.Authentication.Enums;
-using BeautySalonBooking.Contracts.Authentication.Requests;
+﻿using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Maui.Common.Enums;
 using BeautySalonBooking.Maui.Common.Interfaces;
+using BeautySalonBooking.Maui.Components.Input;
 using BeautySalonBooking.Maui.Features.Auth.Models;
 using BeautySalonBooking.Maui.Features.Auth.Services;
+using BeautySalonBooking.Maui.Features.Auth.Validators;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GenderEnum = BeautySalonBooking.Contracts.Authentication.Enums.Gender;
 
 namespace BeautySalonBooking.Maui.Features.Auth.ViewModels
 {
@@ -14,12 +16,18 @@ namespace BeautySalonBooking.Maui.Features.Auth.ViewModels
         private readonly IAuthApiService _authApiService;
         private readonly INavigationService _navigationService;
         private readonly IDialogService _dialogService;
+        private readonly AuthValidator _authValidator;
 
-        public RegisterViewModel(IAuthApiService authApiService, INavigationService navigationService, IDialogService dialogService)
+        public RegisterViewModel(
+            IAuthApiService authApiService,
+            INavigationService navigationService,
+            IDialogService dialogService,
+            AuthValidator authValidator)
         {
             _authApiService = authApiService;
             _navigationService = navigationService;
             _dialogService = dialogService;
+            _authValidator = authValidator;
         }
 
         [ObservableProperty]
@@ -36,6 +44,15 @@ namespace BeautySalonBooking.Maui.Features.Auth.ViewModels
 
         [ObservableProperty]
         private bool isBusy = false;
+
+        [ObservableProperty]
+        private GenderEnum gender;
+
+        public RadioButtonOption[] GenderOptions { get; } =
+        {
+            new(GenderEnum.Male, "مرد"),
+            new(GenderEnum.Female, "زن")
+        };
 
         [RelayCommand]
         private async Task RegisterAsync()
@@ -57,7 +74,7 @@ namespace BeautySalonBooking.Maui.Features.Auth.ViewModels
                         LastName = LastName,
                         MobileNumber = PhoneNumber,
                         NationalCode = NationalCode,
-                        Gender = Gender.Female
+                        Gender = Gender
                     });
                 if (result.IsSuccess)
                 {
@@ -97,53 +114,18 @@ namespace BeautySalonBooking.Maui.Features.Auth.ViewModels
         }
         private async Task<bool> ValidateInputAsync()
         {
-            if (string.IsNullOrWhiteSpace(FirstName))
-            {
-                await _dialogService.ShowErrorAsync("نام را وارد کنید.");
-                return false;
-            }
+            var error = _authValidator.ValidateRegister(
+                FirstName,
+                LastName,
+                PhoneNumber,
+                NationalCode,
+                Gender);
 
-            if (FirstName.Length > 50)
-            {
-                await _dialogService.ShowErrorAsync("نام نباید بیشتر از 50 کاراکتر باشد.");
-                return false;
-            }
+            if (error is null)
+                return true;
 
-            if (string.IsNullOrWhiteSpace(LastName))
-            {
-                await _dialogService.ShowErrorAsync("نام خانوادگی را وارد کنید.");
-                return false;
-            }
-
-            if (LastName.Length > 50)
-            {
-                await _dialogService.ShowErrorAsync("نام خانوادگی نباید بیشتر از 50 کاراکتر باشد.");
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(PhoneNumber))
-            {
-                await _dialogService.ShowErrorAsync("شماره موبایل را وارد کنید.");
-                return false;
-            }
-
-            if (PhoneNumber.Length != 10)
-            {
-                await _dialogService.ShowErrorAsync("شماره موبایل باید ۱۰ رقم باشد.");
-                return false;
-            }
-
-            if (NationalCode.Length != 10)
-            {
-                await _dialogService.ShowErrorAsync("کد ملی باید ۱۰ رقم باشد.");
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(NationalCode))
-            {
-                await _dialogService.ShowErrorAsync("کد ملی را وارد کنید.");
-                return false;
-            }
-            return true;
+            await _dialogService.ShowErrorAsync(error);
+            return false;
         }
     }
 }

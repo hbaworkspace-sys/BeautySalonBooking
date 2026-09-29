@@ -1,7 +1,4 @@
-﻿using BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;
-using BeautySalonBooking.Contracts.Branch.BranchService.Dtos;
-using BeautySalonBooking.Contracts.Service.Dtos;
-using BeautySalonBooking.Maui.Common.Interfaces;
+﻿using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Common.Navigation;
 using BeautySalonBooking.Maui.Features.Auth.Models;
 using BeautySalonBooking.Maui.Features.Main.Models;
@@ -29,7 +26,17 @@ public sealed class NavigationService : INavigationService
     {
         return Shell.Current.GoToAsync(AppRoutes.Login);
     }
+    public async Task GoToLoginAsRootAsync()
+    {
+        await Shell.Current.GoToAsync(AppRoutes.Login);
 
+        var navigationStack = Shell.Current.Navigation.NavigationStack;
+
+        if (navigationStack.Count > 1)
+        {
+            await Shell.Current.Navigation.PopToRootAsync();
+        }
+    }
     public Task GoToRegisterAsync()
     {
         return Shell.Current.GoToAsync(AppRoutes.Register);
@@ -41,26 +48,8 @@ public sealed class NavigationService : INavigationService
         {
             ["OtpNavigation"] = model
         });
-    }
-
-    public Task GoToRegistrationSuccessAsync()
-    {
-        return Shell.Current.GoToAsync(AppRoutes.RegistrationSuccess);
-    }
+    }    
     #endregion
-
-    #region Main
-    public Task GoToMainAsync(MainTab tab)
-    {
-        return Shell.Current.GoToAsync(
-            $"//{AppRoutes.Main}",
-            new Dictionary<string, object>
-            {
-                ["SelectedTab"] = tab
-            });
-    }
-    #endregion
-
 
     #region Booking
     public Task GoToServiceSelectionAsync()
@@ -87,10 +76,27 @@ public sealed class NavigationService : INavigationService
     {
         return Shell.Current.GoToAsync(AppRoutes.BookingConfirmation);
     }
+    #endregion
+
+    #region Main
+    public Task GoToRegistrationSuccessAsync()
+    {
+        return Shell.Current.GoToAsync($"//{AppRoutes.RegistrationSuccess}");
+    }
+
+    public Task GoToMainAsync(MainTab tab)
+    {
+        return Shell.Current.GoToAsync(
+            $"//{AppRoutes.Main}",
+            new Dictionary<string, object>
+            {
+                ["SelectedTab"] = tab
+            });
+    }
 
     public Task GoToBookingSuccessAsync()
     {
-        return Shell.Current.GoToAsync(AppRoutes.BookingSuccess);
+        return Shell.Current.GoToAsync($"//{AppRoutes.BookingSuccess}");
     }
     #endregion
 }

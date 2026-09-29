@@ -38,12 +38,12 @@
         <uc:TitleSubtitleView
             Title="تبریک می گوییم !"
             Grid.Row="2"
-            Subtitle="حساب کاربری شما با موفقیت ایجاد شد&#10;حالا می توانید از امکانات آپ استفاده کنید" />
+            Subtitle="حساب کاربری شما با موفقیت ایجاد شد&#10;پس از ورود به حساب کاربری تان می توانید از امکانات اپلیکیشن استفاده کنید" />
 
         <btn:PrimaryButtonView
-            Title="شروع کنید"
+            Title="ورود به حساب کاربری"
             Grid.Row="3"
-            Command="{Binding GoToMainPageCommand}">
+            Command="{Binding GoToLoginCommand}">
             <btn:PrimaryButtonView.FillBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Offset="0.0" Color="#ccFFBB80" />

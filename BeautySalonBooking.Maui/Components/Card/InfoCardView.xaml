@@ -28,6 +28,7 @@
                 CornerRadius="16"
                 FillBrush="#55D6C1B7"
                 HorizontalOptions="Center"
+                InputTransparent="True"
                 VerticalOptions="Center" />
 
             <Grid

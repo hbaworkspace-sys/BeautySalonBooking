@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Input.OtpCodeEntry"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="self"
+    HeightRequest="50">
+
+    <ContentView.Resources>
+        <Style x:Key="OtpBorderStyle" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="{x:StaticResource White}" />
+            <Setter Property="StrokeThickness" Value="2" />
+            <Setter Property="Stroke" Value="{x:StaticResource StrokeColor}" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="WidthRequest" Value="40" />
+            <Setter Property="Margin" Value="10,0" />
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="10" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow
+                        Brush="{x:StaticResource ShadowColor}"
+                        Opacity="0.3"
+                        Radius="5"
+                        Offset="0,0.5" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="OtpEntryStyle" TargetType="Entry">
+            <Setter Property="HorizontalOptions" Value="Fill" />
+            <Setter Property="VerticalOptions" Value="Fill" />
+            <Setter Property="Keyboard" Value="Numeric" />
+            <Setter Property="MaxLength" Value="1" />
+            <Setter Property="ReturnType" Value="Next" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="TextColor" Value="{x:StaticResource PrimaryText}" />
+            <Setter Property="FontFamily" Value="Sans" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="HorizontalTextAlignment" Value="Center" />
+            <Setter Property="VerticalTextAlignment" Value="Center" />
+            <Setter Property="FlowDirection" Value="LeftToRight" />
+        </Style>
+    </ContentView.Resources>
+    <VerticalStackLayout Spacing="10">
+
+        <Grid ColumnDefinitions="*,*,*,*,*,*" FlowDirection="LeftToRight">
+
+            <Border Grid.Column="0" Style="{StaticResource OtpBorderStyle}">
+                <Entry x:Name="txtDigit_1" Style="{StaticResource OtpEntryStyle}" />
+            </Border>
+
+            <Border Grid.Column="1" Style="{StaticResource OtpBorderStyle}">
+                <Entry x:Name="txtDigit_2" Style="{StaticResource OtpEntryStyle}" />
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource OtpBorderStyle}">
+                <Entry x:Name="txtDigit_3" Style="{StaticResource OtpEntryStyle}" />
+            </Border>
+
+            <Border Grid.Column="3" Style="{StaticResource OtpBorderStyle}">
+
+                <Entry x:Name="txtDigit_4" Style="{StaticResource OtpEntryStyle}" />
+
+            </Border>
+
+            <Border Grid.Column="4" Style="{StaticResource OtpBorderStyle}">
+
+                <Entry x:Name="txtDigit_5" Style="{StaticResource OtpEntryStyle}" />
+
+            </Border>
+
+            <Border Grid.Column="5" Style="{StaticResource OtpBorderStyle}">
+
+                <Entry
+                    x:Name="txtDigit_6"
+                    ReturnType="Done"
+                    Style="{StaticResource OtpEntryStyle}" />
+
+            </Border>
+
+        </Grid>
+
+        <Label
+            x:Name="ErrorLabel"
+            Margin="15,0"
+            FontSize="12"
+            IsVisible="False" />
+
+    </VerticalStackLayout>
+
+</ContentView>

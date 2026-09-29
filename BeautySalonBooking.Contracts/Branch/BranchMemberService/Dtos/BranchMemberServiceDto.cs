@@ -1,4 +1,6 @@
-﻿namespace BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;
+﻿using BeautySalonBooking.Contracts.Authentication.Dtos;
+
+namespace BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;
 
 public sealed class BranchMemberServiceDto
 {
@@ -18,4 +20,6 @@ public sealed class BranchMemberServiceDto
     public decimal Price { get; init; }
 
     public TimeSpan Duration { get; init; }
+
+    public IReadOnlyList<UserMediaDto> Media { get; init; } = [];
 }

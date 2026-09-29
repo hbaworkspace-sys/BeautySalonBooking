@@ -1,10 +1,12 @@
 ﻿using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Contracts.Authentication.Responses;
+using BeautySalonBooking.Contracts.Authentication.Services;
 using BeautySalonBooking.Contracts.Common;
 using BeautySalonBooking.Maui.Common.Enums;
 using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Features.Auth.Models;
 using BeautySalonBooking.Maui.Features.Auth.Services;
+using BeautySalonBooking.Maui.Features.Auth.Validators;
 using BeautySalonBooking.Maui.Features.Main.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -16,15 +18,31 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
     private readonly IAuthApiService _authApiService;
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
-    private OtpNavigationModel? _navigationModel;
+    private readonly IAuthSessionService _authSessionService;
+    private readonly IUserContext _userContext;
+    private readonly AuthValidator _authValidator;
+
+
+    [ObservableProperty]
+    private OtpNavigationModel? navigationModel;
     const int timeSecond = 120;
 
-    public OtpViewModel(IAuthApiService authApiService, IDialogService dialogService, INavigationService navigationService)
+    public OtpViewModel(
+        IAuthApiService authApiService,
+        IDialogService dialogService,
+        INavigationService navigationService,
+        IAuthSessionService authSessionService,
+        IUserContext userContext,
+        AuthValidator authValidator)
     {
         _authApiService = authApiService;
         _dialogService = dialogService;
         _navigationService = navigationService;
+        _authSessionService = authSessionService;
+        _userContext = userContext;
+        _authValidator = authValidator;
     }
+
     [ObservableProperty]
     private string otpCode = string.Empty;
 
@@ -43,7 +61,7 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
         if (IsBusy)
             return;
 
-        if (_navigationModel == null)
+        if (NavigationModel == null)
         {
             await _dialogService.ShowErrorAsync("اطلاعات درخواست نامعتبر است.");
             return;
@@ -55,13 +73,13 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
             IsBusy = true;
             var request = new VerifyOtpRequest
             {
-                MobileNumber = _navigationModel.MobileNumber,
+                MobileNumber = NavigationModel.MobileNumber,
                 OtpCode = OtpCode
             };
 
             ApiResponse_New<AuthResult>? response = null;
 
-            switch (_navigationModel.Purpose)
+            switch (NavigationModel.Purpose)
             {
                 case OtpPurpose.Register:
                     response =
@@ -84,14 +102,40 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
                 await _dialogService.ShowErrorAsync(response.Message);
                 return;
             }
-
-            var data = response.Payload;
-            if (data != null)
+            if (NavigationModel.Purpose == OtpPurpose.Login)
             {
-                // ذخیره Token ها در SecureStorage
-                // await SecureStorage.SetAsync(...)
+                var tokens = response.Payload?.Tokens;
+                var user = response.Payload?.User;
+
+                if (tokens is null ||
+                    string.IsNullOrWhiteSpace(tokens.AccessToken) ||
+                    string.IsNullOrWhiteSpace(tokens.RefreshToken))
+                {
+                    await _dialogService.ShowErrorAsync(
+                        "اطلاعات احراز هویت از سرور کامل دریافت نشد.");
+
+                    return;
+                }
+
+                if (user is null)
+                {
+                    await _dialogService.ShowErrorAsync(
+                        "اطلاعات کاربر از سرور دریافت نشد.");
+
+                    return;
+                }
+
+                await _authSessionService.SaveAsync(
+                    new AuthSession
+                    {
+                        AccessToken = tokens.AccessToken,
+                        RefreshToken = tokens.RefreshToken,
+                        ExpiresAt = tokens.ExpiresAt
+                    });
+
+                _userContext.SetUser(user);
             }
-            switch (_navigationModel.Purpose)
+            switch (NavigationModel.Purpose)
             {
                 case OtpPurpose.Register:
                     await _navigationService.GoToRegistrationSuccessAsync();
@@ -117,7 +161,7 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
         if (IsBusy)
             return;
 
-        if (_navigationModel == null)
+        if (NavigationModel == null)
         {
             await _dialogService.ShowErrorAsync("اطلاعات درخواست نامعتبر است.");
             return;
@@ -129,14 +173,14 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
 
             bool isSuccess = false;
 
-            switch (_navigationModel.Purpose)
+            switch (NavigationModel.Purpose)
             {
                 case OtpPurpose.Login:
                     var loginResult =
                         await _authApiService.RequestOtpForLoginAsync(
                             new LoginInitiateRequest
                             {
-                                MobileNumber = _navigationModel.MobileNumber
+                                MobileNumber = NavigationModel.MobileNumber
                             });
                     isSuccess = loginResult.IsSuccess;
                     break;
@@ -146,10 +190,10 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
                         await _authApiService.RequestOtpForRegisterAsync(
                             new RegisterInitiateRequest
                             {
-                                FirstName = _navigationModel.FirstName,
-                                LastName = _navigationModel.LastName,
-                                MobileNumber = _navigationModel.MobileNumber,
-                                NationalCode = _navigationModel.NationalCode
+                                FirstName = NavigationModel.FirstName,
+                                LastName = NavigationModel.LastName,
+                                MobileNumber = NavigationModel.MobileNumber,
+                                NationalCode = NavigationModel.NationalCode
                             });
                     isSuccess = registerResult.IsSuccess;
                     break;
@@ -176,24 +220,20 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
 
     private async Task<bool> ValidateInputAsync()
     {
-        if (string.IsNullOrWhiteSpace(OtpCode))
-        {
-            await _dialogService.ShowErrorAsync("کد تأیید را وارد کنید.");
-            return false;
-        }
-        if (OtpCode.Length != 6)
-        {
-            await _dialogService.ShowErrorAsync("کد تأیید باید ۶ رقم باشد.");
-            return false;
-        }
-        return true;
+        var error = _authValidator.ValidateOtp(OtpCode);
+
+        if (error is null)
+            return true;
+
+        await _dialogService.ShowErrorAsync(error);
+        return false;
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.TryGetValue("OtpNavigation", out var value))
         {
-            _navigationModel = value as OtpNavigationModel;
+            NavigationModel = value as OtpNavigationModel;
         }
 
         CountdownSeconds = timeSecond;

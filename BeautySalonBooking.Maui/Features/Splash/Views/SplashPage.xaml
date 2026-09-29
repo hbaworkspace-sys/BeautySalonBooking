@@ -118,7 +118,6 @@
                 Grid.Row="0"
                 Description="تجربه ای متفاوت در مدیریت و رزرو خدمات زیبایی" />
 
-
             <ucInd:SimpleIndicator x:Name="Indicator" Grid.Row="1" />
         </Grid>
     </Grid>

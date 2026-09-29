@@ -1,5 +1,5 @@
 
-﻿using BeautySalonBooking.Domain.Base.Entities;
+using BeautySalonBooking.Domain.Base.Entities;
 using BeautySalonBooking.Domain.Base.Enums;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Repositories;

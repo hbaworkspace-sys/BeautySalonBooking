@@ -15,7 +15,10 @@ public class Service : AuditableSoftDeleteEntity<long>
     public decimal BasePrice { get; private set; }
     public TimeSpan BaseDuration { get; private set; }
 
-
+    public string? Glyph { get; private set; }
     private readonly List<BranchService> _branchServices = new();
     public IReadOnlyCollection<BranchService> BranchServices => _branchServices;
+
+    public ICollection<ServiceMedia> Media { get; private set; }
+    = new List<ServiceMedia>();
 }

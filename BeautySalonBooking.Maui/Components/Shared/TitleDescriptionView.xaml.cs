@@ -98,7 +98,7 @@ public partial class TitleDescriptionView : ContentView
             nameof(TitleFontSize),
             typeof(double),
             typeof(TitleDescriptionView),
-            20d,
+            21d,
             propertyChanged: OnAppearanceChanged);
 
     public double DescriptionFontSize
@@ -112,7 +112,7 @@ public partial class TitleDescriptionView : ContentView
             nameof(DescriptionFontSize),
             typeof(double),
             typeof(TitleDescriptionView),
-            11d,
+            12d,
             propertyChanged: OnAppearanceChanged);
 
     public string? TitleFontFamily

@@ -5,7 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
     xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:indicator="clr-namespace:BeautySalonBooking.Maui.Components.Indicator"
+    xmlns:input="clr-namespace:BeautySalonBooking.Maui.Components.Input"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
     xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth.ViewModels"
     x:DataType="vm:OtpViewModel"
@@ -28,14 +31,23 @@
             <uc:TitleSubtitleView
                 Title="کد تایید"
                 Grid.Row="0"
-                Subtitle="کد 4 رقمی ارسال شده را وارد کنید" />
+                Subtitle="{Binding NavigationModel.MobileNumber, StringFormat='کد 6 رقمی برای شماره 0{0} ارسال شد، لطفا آن را وارد کنید'}" />
 
             <VerticalStackLayout
                 Grid.Row="1"
-                Spacing="30"
+                Spacing="10"
                 VerticalOptions="Center">
 
-                <uc:OtpCodeEntry x:Name="txtOtp" OtpCode="{Binding OtpCode, Mode=OneWayToSource}" />
+                <input:OtpCodeEntry
+                    x:Name="txtOtp"
+                    OnCompleted="txtOtp_OnCompleted"
+                    OtpCode="{Binding OtpCode, Mode=OneWayToSource}" />
+
+                <shared:TextLink
+                    Margin="15,0"
+                    Command="{Binding GoBackCommand}"
+                    HorizontalOptions="End"
+                    Text="ویرایش شماره" />
 
                 <uc:CountdownView
                     Title="ارسال مجدد تا"
@@ -57,6 +69,16 @@
                     </btn:PrimaryButtonView.FillBrush>
                 </btn:PrimaryButtonView>
             </VerticalStackLayout>
+
+            <indicator:LoadingIndicator
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                IsLoading="{Binding IsBusy}"
+                Message="لطفاً صبر کنید..."
+                OverlayColor="#CCFFFFFF"
+                SpinnerColor="#7d0a26"
+                SpinnerSize="50" />
+
         </Grid>
     </Grid>
 </ContentPage>

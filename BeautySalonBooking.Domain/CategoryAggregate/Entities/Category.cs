@@ -16,10 +16,14 @@ public class Category : AuditableSoftDeleteEntity<int>
     public string? Description { get; private set; }
     public int DisplayOrder { get; private set; }
 
+    public string? Glyph { get; private set; }
 
     private readonly List<Category> _children = new();
     public IReadOnlyCollection<Category> Children => _children;
 
     private readonly List<Service> _services = new();
     public IReadOnlyCollection<Service> Services => _services;
+
+    public ICollection<CategoryMedia> Media { get; private set; }
+    = new List<CategoryMedia>();
 }

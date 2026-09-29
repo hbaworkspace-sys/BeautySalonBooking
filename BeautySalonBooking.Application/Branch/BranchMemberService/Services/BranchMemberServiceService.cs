@@ -1,4 +1,5 @@
 ﻿using BeautySalonBooking.Application.Branch.BranchMemberService.Interfaces;
+using BeautySalonBooking.Contracts.Authentication.Dtos;
 using BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;
 using BeautySalonBooking.Contracts.Branch.BranchMemberService.Requests;
 using BeautySalonBooking.Contracts.Branch.BranchMemberService.Responses;
@@ -51,7 +52,16 @@ public sealed class BranchMemberServiceService
                     FirstName = member.FirstName,
                     LastName = member.LastName,
                     Price = member.Price,
-                    Duration = member.Duration
+                    Duration = member.Duration,
+                    Media = member.Medias
+                    .Select(m => new UserMediaDto
+                    {
+                        FileName = m.FileName,
+                        FileSize = m.FileSize,
+                        ContentType = m.ContentType,
+                        Content = m.Content,
+                        DisplayOrder = m.DisplayOrder
+                    }).ToList()
                 })
                 .ToList()
         };

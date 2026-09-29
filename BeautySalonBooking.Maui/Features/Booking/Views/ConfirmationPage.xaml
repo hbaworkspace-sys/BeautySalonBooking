@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
+    xmlns:indicator="clr-namespace:BeautySalonBooking.Maui.Components.Indicator"
     xmlns:information="clr-namespace:BeautySalonBooking.Maui.Components.Information"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
@@ -34,8 +35,15 @@
                 Title="ادامه و تایید"
                 Grid.Row="1"
                 Command="{Binding ConfirmBookingCommand}" />
-
         </Grid>
+
+        <indicator:LoadingIndicator
+            Grid.Row="1"
+            IsLoading="{Binding IsBusy}"
+            Message="لطفاً صبر کنید..."
+            OverlayColor="#CCFFFFFF"
+            SpinnerColor="#7d0a26"
+            SpinnerSize="50" />
 
     </Grid>
 </ContentPage>

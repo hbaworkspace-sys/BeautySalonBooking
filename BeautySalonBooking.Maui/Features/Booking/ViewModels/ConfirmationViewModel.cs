@@ -107,12 +107,12 @@ public partial class ConfirmationViewModel : ObservableObject
     #region Booking
 
     [ObservableProperty]
-    private bool isSubmitting;
+    private bool isBusy;
 
     [RelayCommand]
     private async Task ConfirmBookingAsync()
     {
-        if (IsSubmitting)
+        if (IsBusy)
             return;
 
         var selection = _bookingSelectionState.Current;
@@ -132,15 +132,12 @@ public partial class ConfirmationViewModel : ObservableObject
         if (branchMemberServiceId <= 0)
             return;
 
-        IsSubmitting = true;
+        IsBusy = true;
 
         try
         {
             var request = new CreateBookingRequest
             {
-                // موقت تا زمان پیاده‌سازی Authentication
-                CustomerUserId = 1,
-
                 BranchMemberServiceId =
                     branchMemberServiceId,
 
@@ -174,7 +171,7 @@ public partial class ConfirmationViewModel : ObservableObject
         }
         finally
         {
-            IsSubmitting = false;
+            IsBusy = false;
         }
     }
 

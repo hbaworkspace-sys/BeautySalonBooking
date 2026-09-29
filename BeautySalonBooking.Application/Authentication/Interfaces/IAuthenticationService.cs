@@ -1,4 +1,5 @@
-﻿using BeautySalonBooking.Contracts.Authentication.Requests;
+﻿using BeautySalonBooking.Contracts.Authentication.Dtos;
+using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
 
@@ -66,6 +67,14 @@ public interface IAuthenticationService
     /// خروج از تمام دستگاه‌ها
     /// </summary>
     Task<bool> LogoutAllDevicesAsync(
+        long userId,
+        CancellationToken cancellationToken);
+
+
+    /// <summary>
+    /// گرفتن کاربر جاری
+    /// </summary>
+    Task<ApiResponse_New<UserDto>> GetCurrentUserAsync(
         long userId,
         CancellationToken cancellationToken);
 

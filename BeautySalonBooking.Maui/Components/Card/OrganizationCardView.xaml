@@ -96,6 +96,7 @@
                 HeightRequest="150"
                 HorizontalOptions="Center"
                 ImageAspect="AspectFill"
+                InputTransparent="True"
                 MediaHeightRequest="150"
                 MediaWidthRequest="150"
                 Shape="RoundedRectangle"

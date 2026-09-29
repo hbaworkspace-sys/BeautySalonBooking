@@ -1,18 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
     x:Class="BeautySalonBooking.Maui.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:auth="clr-namespace:BeautySalonBooking.Maui.Features.Auth.Views"
+    xmlns:booking="clr-namespace:BeautySalonBooking.Maui.Features.Booking.Views"
     xmlns:main="clr-namespace:BeautySalonBooking.Maui.Features.Main.Views"
     xmlns:splash="clr-namespace:BeautySalonBooking.Maui.Features.Splash.Views"
-    xmlns:view="clr-namespace:BeautySalonBooking.Maui.Features.Booking.Views"
     FlowDirection="RightToLeft"
     Shell.NavBarIsVisible="False">
 
-    <ShellContent ContentTemplate="{DataTemplate splash:SplashPage}" Route="Splash" />
+    <!--  Startup  -->
+    <ShellContent ContentTemplate="{DataTemplate splash:SplashPage}" Route="splash" />
 
+    <ShellContent ContentTemplate="{DataTemplate auth:RegistrationSuccessPage}" Route="registration-success" />
+
+    <!--  Main  -->
     <ShellContent ContentTemplate="{DataTemplate main:MainPage}" Route="main" />
 
-    <!--<ShellContent ContentTemplate="{DataTemplate view:ServiceSelectionPage}" />-->
-
+    <ShellContent ContentTemplate="{DataTemplate booking:SuccessPage}" Route="booking-success" />
 </Shell>

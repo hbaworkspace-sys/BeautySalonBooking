@@ -14,6 +14,10 @@ public sealed class AppointmentReadModel
 
     public string StylistName { get; init; } = string.Empty;
 
+    public byte[]? BranchImage { get; init; }
+
+    public byte[]? StylistImage { get; init; }
+
     public DateOnly Date { get; init; }
 
     public TimeOnly StartTime { get; init; }

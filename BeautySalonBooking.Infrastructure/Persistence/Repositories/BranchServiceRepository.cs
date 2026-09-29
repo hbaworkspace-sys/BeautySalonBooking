@@ -31,7 +31,27 @@ public sealed class BranchServiceRepository
                 x.Branch.IsActive &&
                 !x.Branch.IsDeleted &&
                 x.Branch.Organization.IsActive &&
-                !x.Branch.Organization.IsDeleted)
+                !x.Branch.Organization.IsDeleted
+                && _context.BranchMemberServices.Any(bms =>
+                bms.BranchServiceId == x.Id &&
+                bms.IsActive &&
+                !bms.IsDeleted &&
+                bms.BranchMember.IsActive &&
+                !bms.BranchMember.IsDeleted &&
+                     _context.BranchMemberServices.Any(bms =>
+                        bms.BranchServiceId == x.Id &&
+                        bms.IsActive &&
+                        !bms.IsDeleted &&
+                        bms.BranchMember.IsActive &&
+                        !bms.BranchMember.IsDeleted &&
+                        _context.BranchMemberSchedules.Any(schedule =>
+                            schedule.BranchMemberId == bms.BranchMemberId &&
+                            schedule.IsActive &&
+                            !schedule.IsDeleted &&
+                            _context.WorkingShifts.Any(shift =>
+                                shift.BranchMemberScheduleId == schedule.Id &&
+                                shift.IsActive &&
+                                !shift.IsDeleted)))))
             .OrderBy(x => x.DisplayOrder)
             .Select(x => new BranchServiceOrganizationReadModel
             {
@@ -47,7 +67,10 @@ public sealed class BranchServiceRepository
 
                 Price = x.Price,
                 Duration = x.Duration,
-                DisplayOrder = x.DisplayOrder
+                DisplayOrder = x.DisplayOrder,
+                Media = x.Branch.Media
+                    .OrderBy(m => m.DisplayOrder)
+                    .ToList()
             })
             .ToListAsync(cancellationToken);
     }

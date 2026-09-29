@@ -1,4 +1,5 @@
-﻿using BeautySalonBooking.Contracts.Authentication.Requests;
+﻿using BeautySalonBooking.Contracts.Authentication.Dtos;
+using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
 
@@ -21,4 +22,12 @@ public interface IAuthApiService
     Task<ApiResponse_New<AuthResult>> ConfirmLoginAsync(
         VerifyOtpRequest request,
         CancellationToken cancellationToken = default);
+
+    Task<ApiResponse_New<AuthResult>> RefreshTokenAsync(
+        RefreshTokenRequest request,
+        string accessToken,
+        CancellationToken cancellationToken = default);
+
+    Task<ApiResponse_New<UserDto>> GetCurrentUserAsync(
+    CancellationToken cancellationToken = default);
 }

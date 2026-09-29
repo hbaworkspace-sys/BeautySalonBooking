@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Input.ComboBox"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Grid>
+
+        <!--  Main ComboBox  -->
+        <Border
+            x:Name="MainBorder"
+            BackgroundColor="White"
+            Stroke="Gray">
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
+
+            <Grid Padding="12,10" ColumnDefinitions="*,Auto">
+
+                <Label
+                    x:Name="SelectedItemLabel"
+                    Grid.Column="0"
+                    LineBreakMode="TailTruncation"
+                    VerticalOptions="Center" />
+
+                <Label
+                    x:Name="ArrowLabel"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    VerticalOptions="Center" />
+
+            </Grid>
+
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="MainBorder_Tapped" />
+            </Border.GestureRecognizers>
+
+        </Border>
+
+        <!--  Dropdown Overlay  -->
+        <Border
+            x:Name="DropdownBorder"
+            BackgroundColor="White"
+            HeightRequest="250"
+            IsVisible="False"
+            Stroke="LightGray"
+            TranslationY="0"
+            ZIndex="1000">
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
+
+            <Grid RowDefinitions="Auto,*">
+
+                <!--  Search  -->
+                <Border
+                    x:Name="SearchBorder"
+                    Grid.Row="0"
+                    Margin="8"
+                    BackgroundColor="#F5F5F5"
+                    StrokeThickness="0">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="6" />
+                    </Border.StrokeShape>
+
+                    <Entry
+                        x:Name="SearchEntry"
+                        BackgroundColor="Transparent"
+                        Placeholder="جستجو..."
+                        TextChanged="SearchEntry_TextChanged" />
+
+                </Border>
+
+                <!--  Items  -->
+                <CollectionView
+                    x:Name="ItemsCollectionView"
+                    Grid.Row="1"
+                    SelectionChanged="ItemsCollectionView_SelectionChanged"
+                    SelectionMode="Single">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <Grid Padding="12" HeightRequest="45">
+
+                                <Label x:Name="ItemLabel" VerticalOptions="Center" />
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</ContentView>

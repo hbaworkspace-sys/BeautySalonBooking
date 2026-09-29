@@ -13,11 +13,10 @@ public partial class SplashPage : ContentPage
     {
         base.OnAppearing();
 
-        await Indicator.StartAnimationAsync();
-
         if (BindingContext is SplashViewModel vm)
         {
-            await vm.CheckLoginStatusAsync();
+            await vm.InitializeAsync(
+                Indicator.StartAnimationAsync());
         }
     }
 }

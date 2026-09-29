@@ -4,15 +4,16 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
-    xmlns:dto_cat="clr-namespace:BeautySalonBooking.Contracts.Category.Dtos;assembly=BeautySalonBooking.Contracts"
-    xmlns:dto_ser="clr-namespace:BeautySalonBooking.Contracts.Service.Dtos;assembly=BeautySalonBooking.Contracts"
     xmlns:headers="clr-namespace:BeautySalonBooking.Maui.Components.Header"
     xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:indicator="clr-namespace:BeautySalonBooking.Maui.Components.Indicator"
     xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:model_cat="clr-namespace:BeautySalonBooking.Maui.Features.Category.Models"
+    xmlns:model_ser="clr-namespace:BeautySalonBooking.Maui.Features.Service.Models"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Booking.ViewModels"
     x:DataType="vm:ServiceSelectionViewModel"
-    BackgroundColor="{x:StaticResource White}"
+    BackgroundColor="White"
     FlowDirection="RightToLeft"
     NavigationPage.HasNavigationBar="False">
 
@@ -27,6 +28,7 @@
             IsBackVisible="True" />
 
         <ScrollView
+            x:Name="MainScrollView"
             Grid.Row="1"
             Margin="10"
             Padding="15"
@@ -73,24 +75,29 @@
 
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout
-                            HorizontalItemSpacing="20"
+                            HorizontalItemSpacing="15"
                             Orientation="Vertical"
                             Span="5"
-                            VerticalItemSpacing="15" />
+                            VerticalItemSpacing="20" />
                     </CollectionView.ItemsLayout>
+
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="dto_cat:CategoryDto">
+
+                        <DataTemplate x:DataType="model_cat:CategoryModel">
+
                             <media:MediaItemView
                                 Title="{Binding Title}"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectCategoryCommand}"
                                 CommandParameter="{Binding}"
-                                ImageSource="bahar.png"
+                                ImageSource="{Binding ImageSource}"
+                                IsSelected="{Binding IsSelected}"
                                 Style="{StaticResource ServiceCategoryItemStyle}" />
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
                 <headers:SectionTitleView
+                    x:Name="SubCategorySectionTitle"
                     Title="{Binding SelectedCategory.Title}"
                     IsVisible="{Binding IsSubCategoriesVisible, Mode=TwoWay}"
                     ShowDivider="True" />
@@ -104,25 +111,28 @@
 
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout
-                            HorizontalItemSpacing="20"
+                            HorizontalItemSpacing="15"
                             Orientation="Vertical"
                             Span="5"
-                            VerticalItemSpacing="15" />
+                            VerticalItemSpacing="20" />
                     </CollectionView.ItemsLayout>
+
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="dto_cat:CategoryDto">
+                        <DataTemplate x:DataType="model_cat:CategoryModel">
                             <media:MediaItemView
                                 Title="{Binding Title}"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectSubCategoryCommand}"
-                                CommandParameter="{Binding .}"
-                                ImageSource="makup.png"
+                                CommandParameter="{Binding}"
+                                ImageSource="{Binding ImageSource}"
+                                IsSelected="{Binding IsSelected}"
                                 Style="{StaticResource ServiceCategoryItemStyle}" />
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
                 <headers:SectionTitleView
-                    Title="{Binding SelectedCategory.Description}"
+                    x:Name="ServicesSectionTitle"
+                    Title="{Binding SelectedCategory.Dto.Description}"
                     IsVisible="{Binding IsServicesVisible}"
                     ShowDivider="True" />
 
@@ -136,24 +146,27 @@
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="dto_ser:ServiceDto">
+                        <DataTemplate x:DataType="model_ser:ServiceModel">
                             <card:InfoCardView
                                 Title="{Binding Title}"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectServiceCommand}"
                                 CommandParameter="{Binding .}"
-                                ImageSource="serv_mo.png"
+                                ImageSource="{Binding ImageSource}"
                                 Style="{StaticResource ServiceCardStyle}"
                                 Subtitle="{Binding Description}"
                                 ThirdRowText="{Binding BasePrice, StringFormat='از {0:N0} تومان'}" />
-
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-
                 </CollectionView>
 
             </VerticalStackLayout>
         </ScrollView>
-
+        <indicator:LoadingIndicator
+            Grid.Row="1"
+            IsLoading="{Binding IsBusy}"
+            Message="لطفاً صبر کنید..."
+            OverlayColor="#CCFFFFFF"
+            SpinnerColor="#7d0a26"
+            SpinnerSize="50" />
     </Grid>
-
 </ContentPage>

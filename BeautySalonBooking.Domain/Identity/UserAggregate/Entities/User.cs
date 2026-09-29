@@ -34,6 +34,9 @@ public class User : AuditableSoftDeleteEntity<long>
     private readonly List<OrganizationOwner> _organizationOwners = new();
     public IReadOnlyCollection<OrganizationOwner> OrganizationOwners => _organizationOwners;
 
+    public ICollection<UserMedia> Media { get; private set; }
+    = new List<UserMedia>();
+
     private User()
     {
     }

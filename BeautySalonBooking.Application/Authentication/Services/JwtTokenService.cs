@@ -77,4 +77,68 @@ public class JwtTokenService : IJwtTokenService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public ClaimsPrincipal? GetPrincipalFromToken(string token, bool validateLifetime = true)
+    {
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return null;
+        }
+
+        var secret = _configuration["Jwt:Secret"] ?? throw new InvalidOperationException("");
+
+        var issuer = _configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("");
+
+        var audience = _configuration["Jwt:Audience"] ?? throw new InvalidOperationException("");
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = issuer,
+
+            ValidateAudience = true,
+            ValidAudience = audience,
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = key,
+
+            ValidateLifetime = validateLifetime,
+
+            ClockSkew = TimeSpan.Zero
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        try
+        {
+            var principal = tokenHandler.ValidateToken(
+                token,
+                tokenValidationParameters,
+                out var validatedToken);
+
+            if (validatedToken is not JwtSecurityToken jwtToken)
+            {
+                return null;
+            }
+
+            if (!jwtToken.Header.Alg.Equals(
+                    SecurityAlgorithms.HmacSha256,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            return principal;
+        }
+        catch (SecurityTokenException)
+        {
+            return null;
+        }
+        catch (ArgumentException)
+        {
+            return null;
+        }
+    }
 }

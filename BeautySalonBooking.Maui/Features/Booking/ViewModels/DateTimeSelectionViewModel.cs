@@ -1,13 +1,13 @@
 ﻿using BeautySalonBooking.Contracts.Booking.Availability.Requests;
 using BeautySalonBooking.Contracts.Booking.Availability.Responses;
-using BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos;
+using BeautySalonBooking.Maui.Common.Helpers;
 using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Components.DateAndTime.Models;
 using BeautySalonBooking.Maui.Features.Booking.Services;
+using BeautySalonBooking.Maui.Features.Branch.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.Globalization;
 
 namespace BeautySalonBooking.Maui.Features.Booking.ViewModels;
 
@@ -17,13 +17,12 @@ public partial class DateTimeSelectionViewModel : ObservableObject
     private readonly IBookingApiService _bookingAvailabilityApiService;
     private readonly IBookingSelectionState _bookingSelectionState;
 
-    // تمام Availability دریافت‌شده از سرور
     private GetBookingAvailabilityResponse? _availability;
 
     public DateTimeSelectionViewModel(
         INavigationService navigationService,
         IBookingApiService bookingAvailabilityApiService,
-      IBookingSelectionState bookingSelectionState)
+        IBookingSelectionState bookingSelectionState)
     {
         _navigationService = navigationService;
         _bookingAvailabilityApiService = bookingAvailabilityApiService;
@@ -31,14 +30,11 @@ public partial class DateTimeSelectionViewModel : ObservableObject
     }
 
     #region Selected Member
-
-    public BranchMemberServiceDto? SelectedMember =>
+    public BranchMemberServiceModel? SelectedMember =>
         _bookingSelectionState.Current.Stylist;
-
     #endregion
 
     #region Dates
-
     [ObservableProperty]
     private ObservableCollection<DateSelectionItem> availableDates = new();
 
@@ -49,7 +45,7 @@ public partial class DateTimeSelectionViewModel : ObservableObject
     private string selectedDateTitle = string.Empty;
 
     [ObservableProperty]
-    private bool isDatesLoading;
+    private bool isBusy;
 
     partial void OnSelectedDateChanged(
         DateSelectionItem? value)
@@ -82,7 +78,6 @@ public partial class DateTimeSelectionViewModel : ObservableObject
     #endregion
 
     #region Times
-
     [ObservableProperty]
     private ObservableCollection<TimeSelectionItem> availableTimes = new();
 
@@ -125,7 +120,7 @@ public partial class DateTimeSelectionViewModel : ObservableObject
             {
                 Time = slot.StartTime.ToTimeSpan(),
                 DisplayTime =
-                    $"{slot.StartTime:hh\\:mm} - {slot.EndTime:hh\\:mm}"
+                    $"{slot.StartTime:hh\\:mm} تا {slot.EndTime:hh\\:mm}"
             })
             .ToList();
 
@@ -142,6 +137,9 @@ public partial class DateTimeSelectionViewModel : ObservableObject
     private async Task LoadAvailabilityAsync(
         CancellationToken cancellationToken = default)
     {
+        if (IsBusy)
+            return;
+
         var member = _bookingSelectionState.Current.Stylist;
 
         if (member is null)
@@ -150,15 +148,12 @@ public partial class DateTimeSelectionViewModel : ObservableObject
         if (member.BranchMemberServiceId <= 0)
             return;
 
-        IsDatesLoading = true;
+        IsBusy = true;
 
         try
         {
-            var fromDate =
-                new DateOnly(2026, 9, 1);
-
-            var toDate =
-                fromDate.AddDays(6);
+            var fromDate = DateOnly.FromDateTime(DateTime.Today);
+            var toDate = fromDate.AddDays(10);
 
             var request =
                 new GetBookingAvailabilityRequest
@@ -198,9 +193,13 @@ public partial class DateTimeSelectionViewModel : ObservableObject
 
             BuildAvailableDates();
         }
+        catch (Exception ex)
+        {
+            ;
+        }
         finally
         {
-            IsDatesLoading = false;
+            IsBusy = false;
         }
     }
 
@@ -220,24 +219,20 @@ public partial class DateTimeSelectionViewModel : ObservableObject
             .Where(x => x.Slots is { Count: > 0 })
             .Select(date =>
             {
-                var dateTime =
-                    date.Date.ToDateTime(TimeOnly.MinValue);
+                var dateOnly = date.Date;
 
                 return new DateSelectionItem
                 {
-                    Date = dateTime,
+                    Date = dateOnly.ToDateTime(TimeOnly.MinValue),
 
                     DayName =
-                        GetPersianDayName(
-                            dateTime.DayOfWeek),
+                        PersianDateHelper.GetDayName(dateOnly),
 
                     DayNumber =
-                        GetPersianDayNumber(
-                            dateTime),
+                        PersianDateHelper.GetDayNumber(dateOnly),
 
                     MonthName =
-                        GetPersianMonthName(
-                            dateTime)
+                        PersianDateHelper.GetMonthName(dateOnly)
                 };
             })
             .ToList();
@@ -260,61 +255,6 @@ public partial class DateTimeSelectionViewModel : ObservableObject
 
         SelectedDate = firstAvailableDate;
     }
-    #endregion
-
-    #region Persian Date Helpers
-
-    private static readonly PersianCalendar PersianCalendar = new();
-
-    private static string GetPersianDayName(
-        DayOfWeek dayOfWeek)
-    {
-        return dayOfWeek switch
-        {
-            DayOfWeek.Saturday => "شنبه",
-            DayOfWeek.Sunday => "یکشنبه",
-            DayOfWeek.Monday => "دوشنبه",
-            DayOfWeek.Tuesday => "سه‌شنبه",
-            DayOfWeek.Wednesday => "چهارشنبه",
-            DayOfWeek.Thursday => "پنجشنبه",
-            DayOfWeek.Friday => "جمعه",
-
-            _ => string.Empty
-        };
-    }
-
-    private static string GetPersianDayNumber(
-        DateTime date)
-    {
-        return PersianCalendar
-            .GetDayOfMonth(date)
-            .ToString(
-                CultureInfo.InvariantCulture);
-    }
-
-    private static string GetPersianMonthName(
-        DateTime date)
-    {
-        return PersianCalendar
-            .GetMonth(date) switch
-        {
-            1 => "فروردین",
-            2 => "اردیبهشت",
-            3 => "خرداد",
-            4 => "تیر",
-            5 => "مرداد",
-            6 => "شهریور",
-            7 => "مهر",
-            8 => "آبان",
-            9 => "آذر",
-            10 => "دی",
-            11 => "بهمن",
-            12 => "اسفند",
-
-            _ => string.Empty
-        };
-    }
-
     #endregion
 
     #region Commands

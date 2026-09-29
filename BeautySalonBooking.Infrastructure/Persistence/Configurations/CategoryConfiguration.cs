@@ -41,6 +41,9 @@ public sealed class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasForeignKey(x => x.ParentId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Property(x => x.Glyph)
+            .HasMaxLength(100);
+
         builder.Metadata
             .FindNavigation(nameof(Category.Children))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);

@@ -1,6 +1,7 @@
 ﻿using BeautySalonBooking.Contracts.Common;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 namespace BeautySalonBooking.Maui.Common.Services;
@@ -25,11 +26,24 @@ public class BaseApiService
         HttpMethod method,
         string url,
         TRequest? body = default,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        string? accessToken = null)
     {
         try
         {
             using var request = new HttpRequestMessage(method, url);
+
+            if (!string.IsNullOrWhiteSpace(accessToken))
+            {
+                request.Headers.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue(
+                        "Bearer",
+                        accessToken);
+            }
+
+
+
+
 
             if (body is not null)
             {
@@ -121,47 +135,55 @@ public class BaseApiService
 
     protected Task<ApiResponse_New<TResponse>> GetAsync<TResponse>(
         string url,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        string? accessToken = null)
     {
         return SendAsync<object, TResponse>(
             HttpMethod.Get,
             url,
             null,
-            cancellationToken);
+            cancellationToken,
+            accessToken);
     }
 
     protected Task<ApiResponse_New<TResponse>> PostAsync<TRequest, TResponse>(
         string url,
         TRequest body,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        string? accessToken = null)
     {
         return SendAsync<TRequest, TResponse>(
             HttpMethod.Post,
             url,
             body,
-            cancellationToken);
+            cancellationToken,
+            accessToken);
     }
 
     protected Task<ApiResponse_New<TResponse>> PutAsync<TRequest, TResponse>(
         string url,
         TRequest body,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        string? accessToken = null)
     {
         return SendAsync<TRequest, TResponse>(
             HttpMethod.Put,
             url,
             body,
-            cancellationToken);
+            cancellationToken,
+            accessToken);
     }
 
     protected Task<ApiResponse_New<TResponse>> DeleteAsync<TResponse>(
         string url,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        string? accessToken = null)
     {
         return SendAsync<object, TResponse>(
             HttpMethod.Delete,
             url,
             null,
-            cancellationToken);
+            cancellationToken,
+            accessToken);
     }
 }

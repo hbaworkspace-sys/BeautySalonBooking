@@ -20,9 +20,10 @@ public sealed class CategoryRepository
         string code,
         CancellationToken cancellationToken = default)
     {
-        
+
         return await _context.Categories
             .AsNoTracking()
+            .Include(x => x.Media)
             .FirstOrDefaultAsync(
                 x =>
                     x.Code == code &&
@@ -37,6 +38,7 @@ public sealed class CategoryRepository
     {
         return await _context.Categories
             .AsNoTracking()
+            .Include(x => x.Media)
             .Where(
                 x =>
                     x.ParentId == parentId &&

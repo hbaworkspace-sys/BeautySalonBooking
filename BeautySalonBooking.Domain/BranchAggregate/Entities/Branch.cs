@@ -10,12 +10,14 @@ public class Branch : AuditableSoftDeleteEntity<long>
 
     public string Title { get; private set; } = null!;
     public string? Description { get; private set; }
-
+    public string? Glyph { get; private set; }
 
     private readonly List<BranchMember> _members = new();
     public IReadOnlyCollection<BranchMember> Members => _members;
 
-
     private readonly List<BranchService> _services = new();
     public IReadOnlyCollection<BranchService> Services => _services;
+
+    public ICollection<BranchMedia> Media { get; private set; }
+    = new List<BranchMedia>();
 }

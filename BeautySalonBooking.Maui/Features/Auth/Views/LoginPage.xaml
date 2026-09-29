@@ -4,101 +4,128 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
+    xmlns:indicator="clr-namespace:BeautySalonBooking.Maui.Components.Indicator"
+    xmlns:input="clr-namespace:BeautySalonBooking.Maui.Components.Input"
     xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
     xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
-    xmlns:uc="clr-namespace:BeautySalonBooking.Maui.UserControls"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
     xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Auth.ViewModels"
     x:DataType="vm:LoginViewModel"
     BackgroundColor="{StaticResource White}"
     NavigationPage.HasNavigationBar="False">
 
-    <Grid
-        Padding="15,85,15,10"
-        RowDefinitions="auto,*,auto,auto,60,auto"
-        RowSpacing="20">
-
-        <uc:TitleSubtitleView
-            Title="ورود به حساب کاربری"
-            Grid.Row="0"
-            Subtitle="لطفا شماره موبایل خود را وارد کنید" />
-
-        <uc:PhoneNumberEntry
-            Grid.Row="1"
-            PhoneType="Mobile"
-            ReturnTypeValue="Done"
-            Text="{Binding PhoneNumber, Mode=OneWayToSource}" />
-
-        <btn:PrimaryButtonView
-            Title="ورود"
-            Grid.Row="2"
-            Command="{Binding LoginCommand}">
-            <btn:PrimaryButtonView.FillBrush>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Offset="0.0" Color="#ccFFBB80" />
-                    <GradientStop Offset="1.1" Color="#ccEA6A96" />
-                </LinearGradientBrush>
-            </btn:PrimaryButtonView.FillBrush>
-        </btn:PrimaryButtonView>
-
-        <Label
-            Grid.Row="3"
-            Style="{StaticResource PageSubtitleStyle}"
-            Text="یا با شبکه های اجتماعی وارد شوید" />
+    <ScrollView
+        x:Name="LoginScrollView"
+        Orientation="Vertical"
+        VerticalScrollBarVisibility="Never">
 
         <Grid
-            Grid.Row="4"
-            ColumnDefinitions="*,*,*"
-            ColumnSpacing="20">
+            x:Name="MainGrid"
+            Padding="15,85,15,10"
+            RowDefinitions="auto,*,auto,auto,60,auto"
+            RowSpacing="20">
 
-            <media:MediaView
-                Grid.Column="0"
-                BorderBrush="{StaticResource StrokeColor}"
-                BorderWidth="1"
-                CornerRadius="12"
-                FillBrush="White"
-                ImageMargin="10"
-                ImageSource="geography.png"
-                Shape="RoundedRectangle">
-                <media:MediaView.Shadow>
-                    <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
-                </media:MediaView.Shadow>
-            </media:MediaView>
+            <shared:TitleDescriptionView
+                Title="ورود به حساب کاربری"
+                Grid.Row="0"
+                Description="لطفا شماره موبایل خود را وارد کنید" />
 
-            <media:MediaView
-                Grid.Column="1"
-                BorderBrush="{StaticResource StrokeColor}"
-                BorderWidth="1"
-                CornerRadius="12"
-                FillBrush="White"
-                ImageMargin="10"
-                ImageSource="google.png"
-                Shape="RoundedRectangle">
-                <media:MediaView.Shadow>
-                    <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
-                </media:MediaView.Shadow>
-            </media:MediaView>
+            <input:PhoneNumberEntry
+                x:Name="PhoneEntry"
+                Grid.Row="1"
+                Completed="PhoneEntry_Completed"
+                Focused="PhoneEntry_Focused"
+                PhoneType="Mobile"
+                ReturnType="Done"
+                Text="{Binding PhoneNumber, Mode=OneWayToSource}"
+                Unfocused="PhoneEntry_Unfocused"
+                VerticalOptions="Start" />
 
-            <media:MediaView
-                Grid.Column="2"
-                BorderBrush="{StaticResource StrokeColor}"
-                BorderWidth="1"
-                CornerRadius="12"
-                FillBrush="White"
-                ImageMargin="10"
-                ImageSource="apple_logo.png"
-                Shape="RoundedRectangle">
-                <media:MediaView.Shadow>
-                    <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
-                </media:MediaView.Shadow>
+            <btn:PrimaryButtonView
+                Title="ورود"
+                Grid.Row="2"
+                Command="{Binding LoginCommand}">
+                <btn:PrimaryButtonView.FillBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Offset="0.0" Color="#ccFFBB80" />
+                        <GradientStop Offset="1.1" Color="#ccEA6A96" />
+                    </LinearGradientBrush>
+                </btn:PrimaryButtonView.FillBrush>
+            </btn:PrimaryButtonView>
 
-            </media:MediaView>
+            <Label
+                Grid.Row="3"
+                Style="{StaticResource PageSubtitleStyle}"
+                Text="یا با شبکه های اجتماعی وارد شوید" />
+
+            <Grid
+                Grid.Row="4"
+                ColumnDefinitions="*,*,*"
+                ColumnSpacing="20">
+
+                <media:MediaView
+                    Grid.Column="0"
+                    BorderBrush="{StaticResource StrokeColor}"
+                    BorderWidth="1"
+                    CornerRadius="12"
+                    FillBrush="White"
+                    ImageMargin="10"
+                    ImageSource="geography.png"
+                    Shape="RoundedRectangle">
+                    <media:MediaView.Shadow>
+                        <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
+                    </media:MediaView.Shadow>
+
+                </media:MediaView>
+
+                <media:MediaView
+                    Grid.Column="1"
+                    BorderBrush="{StaticResource StrokeColor}"
+                    BorderWidth="1"
+                    CornerRadius="12"
+                    FillBrush="White"
+                    ImageMargin="10"
+                    ImageSource="google.png"
+                    Shape="RoundedRectangle">
+                    <media:MediaView.Shadow>
+                        <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
+                    </media:MediaView.Shadow>
+                </media:MediaView>
+
+                <media:MediaView
+                    Grid.Column="2"
+                    BorderBrush="{StaticResource StrokeColor}"
+                    BorderWidth="1"
+                    CornerRadius="12"
+                    FillBrush="White"
+                    ImageMargin="10"
+                    ImageSource="apple_logo.png"
+                    Shape="RoundedRectangle">
+                    <media:MediaView.Shadow>
+                        <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
+                    </media:MediaView.Shadow>
+
+                </media:MediaView>
+            </Grid>
+
+
+            <shared:TextLink
+                Grid.Row="5"
+                Command="{Binding GoToRegisterCommand}"
+                HorizontalOptions="Center"
+                QuestionText="حساب کاربری ندارید؟"
+                Text="ثبت نام کنید" />
+
+            <indicator:LoadingIndicator
+                Grid.Row="0"
+                Grid.RowSpan="6"
+                IsLoading="{Binding IsBusy}"
+                Message="لطفاً صبر کنید..."
+                OverlayColor="#CCFFFFFF"
+                SpinnerColor="#7d0a26"
+                SpinnerSize="50" />
+
         </Grid>
 
-        <uc:TextLink
-            Grid.Row="5"
-            HCommand="{Binding GoToRegisterCommand}"
-            HorizontalOptions="Center"
-            QuestionText="حساب کاربری ندارید؟"
-            Text="ثبت نام کنید" />
-    </Grid>
+    </ScrollView>
 </ContentPage>

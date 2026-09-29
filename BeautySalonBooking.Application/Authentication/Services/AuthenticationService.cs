@@ -3,67 +3,52 @@ using BeautySalonBooking.Contracts.Authentication.Dtos;
 using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
-
-using BeautySalonBooking.Domain.Base.Enums;
+using BeautySalonBooking.Application.Common.Interfaces;
 using BeautySalonBooking.Domain.Base.UnitOfWork;
-
 using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.AuthenticationAggregate.Enums;
-
 using BeautySalonBooking.Domain.Identity.UserAggregate.Entities;
 using BeautySalonBooking.Domain.Identity.UserAggregate.Enums;
 using BeautySalonBooking.Domain.PersonAggregate.Entities;
-
 using Microsoft.IdentityModel.Tokens;
-
 
 namespace BeautySalonBooking.Application.Authentication.Services;
 
-
 public class AuthenticationService : IAuthenticationService
 {
-
     private readonly IUnitOfWork _unitOfWork;
-
     private readonly IRefreshTokenService _refreshTokenService;
-
     private readonly IRoleService _roleService;
-
-
+    private readonly IValidationService _validationService;
     private readonly IUserSessionService _userSessionService;
-
     private readonly IUserPermissionService _userPermissionService;
-
 
     public AuthenticationService(
         IUnitOfWork unitOfWork,
         IRefreshTokenService refreshTokenService,
         IRoleService roleService,
         IUserSessionService userSessionService,
-        IUserPermissionService userPermissionService)
+        IUserPermissionService userPermissionService,
+        IValidationService validationService)
     {
         _unitOfWork = unitOfWork;
-
         _refreshTokenService = refreshTokenService;
-
         _roleService = roleService;
-
         _userSessionService = userSessionService;
-
         _userPermissionService = userPermissionService;
+        _validationService = validationService;
     }
 
-
-
     #region Register
-
-
 
     public async Task<ApiResponse>
         RequestRegisterOtpAsync(
         RegisterInitiateRequest request,
         CancellationToken cancellationToken)
     {
+        await _validationService.ValidateAsync(
+            request,
+            cancellationToken);
 
         var exists =
             await _unitOfWork
@@ -71,7 +56,6 @@ public class AuthenticationService : IAuthenticationService
                 .ExistsByMobileNumberAsync(
                     request.MobileNumber,
                     cancellationToken);
-
 
         if (exists)
         {
@@ -127,17 +111,14 @@ public class AuthenticationService : IAuthenticationService
 
     }
 
-
-
-
-
-
     public async Task<ApiResponse_New<AuthResult>>
         VerifyRegisterOtpAsync(
         VerifyOtpRequest request,
         CancellationToken cancellationToken)
     {
-
+        await _validationService.ValidateAsync(
+            request,
+            cancellationToken);
 
         var otp =
             await _unitOfWork
@@ -146,14 +127,10 @@ public class AuthenticationService : IAuthenticationService
                     request.MobileNumber,
                     cancellationToken);
 
-
-
         var validation =
             ValidateOtp(
                 otp,
                 request.OtpCode);
-
-
 
         if (validation != null)
             return validation;
@@ -280,19 +257,18 @@ public class AuthenticationService : IAuthenticationService
         };
 
     }
-
-
-
     #endregion
 
     #region Login
-
 
     public async Task<ApiResponse_New<AuthResult>>
         RequestLoginOtpAsync(
         LoginInitiateRequest request,
         CancellationToken cancellationToken)
     {
+        await _validationService.ValidateAsync(
+           request,
+           cancellationToken);
 
         var exists =
             await _unitOfWork
@@ -300,27 +276,16 @@ public class AuthenticationService : IAuthenticationService
                 .ExistsByMobileNumberAsync(
                     request.MobileNumber,
                     cancellationToken);
-
-
-
         if (!exists)
         {
-
             return new ApiResponse_New<AuthResult>
             {
                 IsSuccess = false,
-
                 Code = 401,
-
                 Message =
                 "کاربری با این شماره ثبت نشده است"
             };
-
         }
-
-
-
-
 
         var otp =
             await _unitOfWork
@@ -328,9 +293,6 @@ public class AuthenticationService : IAuthenticationService
                 .GetLatestAsync(
                     request.MobileNumber,
                     cancellationToken);
-
-
-
 
         if (otp != null && otp.CanBeUsed())
         {
@@ -372,16 +334,14 @@ public class AuthenticationService : IAuthenticationService
     }
 
 
-
-
-
-
-
     public async Task<ApiResponse_New<AuthResult>>
         VerifyLoginOtpAsync(
         VerifyOtpRequest request,
         CancellationToken cancellationToken)
     {
+        await _validationService.ValidateAsync(
+            request,
+            cancellationToken);
 
         var otp =
             await _unitOfWork
@@ -573,12 +533,6 @@ public class AuthenticationService : IAuthenticationService
 
     }
 
-
-
-
-
-
-
     private async Task<TokenResponse>
         CreateUserTokenAsync(
         UserDto user,
@@ -591,6 +545,7 @@ public class AuthenticationService : IAuthenticationService
                 cancellationToken);
 
     }
+
     private async Task<UserDto>
         BuildUserDtoAsync(
         User user,
@@ -696,7 +651,6 @@ public class AuthenticationService : IAuthenticationService
 
     #endregion
 
-
     #region Refresh Token
 
 
@@ -710,15 +664,12 @@ public class AuthenticationService : IAuthenticationService
 
         try
         {
-
             var result =
                 await _refreshTokenService
                     .RefreshAsync(
                         accessToken,
                         refreshToken,
                         cancellationToken);
-
-
 
             return new ApiResponse_New<AuthResult>
             {
@@ -773,12 +724,6 @@ public class AuthenticationService : IAuthenticationService
 
     #endregion
 
-
-
-
-
-
-
     #region Logout
 
 
@@ -825,11 +770,6 @@ public class AuthenticationService : IAuthenticationService
 
     #endregion
 
-
-
-
-
-
     #region Logout All Devices
 
 
@@ -873,9 +813,8 @@ public class AuthenticationService : IAuthenticationService
 
 
     #endregion
+
     #region Helpers
-
-
 
     private string GenerateOtp()
     {
@@ -893,11 +832,6 @@ public class AuthenticationService : IAuthenticationService
 
     }
 
-
-
-
-
-
     private async Task SendOtpAsync(
         string mobileNumber,
         OtpPurpose purpose,
@@ -906,12 +840,8 @@ public class AuthenticationService : IAuthenticationService
         CancellationToken cancellationToken,
         long? userId = null)
     {
-
         var code =
             GenerateOtp();
-
-
-
 
         var otp =
             OtpCode.Create(
@@ -922,9 +852,6 @@ public class AuthenticationService : IAuthenticationService
                 firstName,
                 lastName,
                 userId);
-
-
-
 
         await _unitOfWork
             .BeginTransactionAsync(
@@ -969,12 +896,6 @@ public class AuthenticationService : IAuthenticationService
 
     }
 
-
-
-
-
-
-
     private void SendSms(
         string mobileNumber,
         string code)
@@ -984,13 +905,6 @@ public class AuthenticationService : IAuthenticationService
             $"SMS To {mobileNumber}: {code}");
 
     }
-
-
-
-
-
-
-
 
     private ApiResponse_New<AuthResult>?
         ValidateOtp(
@@ -1062,10 +976,39 @@ public class AuthenticationService : IAuthenticationService
         return null;
 
     }
-
-
-
     #endregion
 
+    public async Task<ApiResponse_New<UserDto>>
+    GetCurrentUserAsync(
+        long userId,
+        CancellationToken cancellationToken)
+    {
+        var user =
+            await _unitOfWork
+                .UserRepository
+                .GetUserWithFullDetailsAsync(
+                    userId,
+                    cancellationToken);
+        if (user is null)
+        {
+            return new ApiResponse_New<UserDto>
+            {
+                IsSuccess = false,
+                Code = 404,
+                Message = "کاربر یافت نشد"
+            };
+        }
 
+        var userDto =
+            await BuildUserDtoAsync(
+                user,
+                cancellationToken);
+
+        return new ApiResponse_New<UserDto>
+        {
+            IsSuccess = true,
+            Code = 200,
+            Payload = userDto
+        };
+    }
 }

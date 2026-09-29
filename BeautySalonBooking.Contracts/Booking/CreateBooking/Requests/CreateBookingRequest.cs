@@ -2,8 +2,6 @@
 
 public sealed class CreateBookingRequest
 {
-    public long CustomerUserId { get; init; } = 1;
-
     public long BranchMemberServiceId { get; init; }
 
     public DateOnly Date { get; init; }

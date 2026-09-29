@@ -220,17 +220,17 @@
 
     <Style x:Key="ServiceCardStyle" TargetType="card:InfoCardView">
         <Setter Property="Margin" Value="0,5" />
-        <Setter Property="BorderBrush" Value="#F5E2E8" />
-        <Setter Property="BorderWidth" Value="1" />
-        <Setter Property="FillBrush" Value="#fefcfe" />
+        <Setter Property="BorderBrush" Value="#fff6fb" />
+        <Setter Property="BorderWidth" Value="2" />
+        <Setter Property="FillBrush" Value="#fffbfd" />
         <Setter Property="ImageAspect" Value="Center" />
-        <Setter Property="ImageCornerRadius" Value="10" />
+        <Setter Property="ImageCornerRadius" Value="12" />
         <Setter Property="IsArrowVisible" Value="True" />
         <Setter Property="Shadow">
             <Setter.Value>
                 <Shadow
-                    Brush="#fff0f6"
-                    Opacity="0.1"
+                    Brush="#fff6fb"
+                    Opacity="1"
                     Offset="1,1" />
             </Setter.Value>
         </Setter>
@@ -243,7 +243,7 @@
         <Setter Property="BorderWidth" Value="1" />
 
         <Setter Property="DisplayMode" Value="Image" />
-        <Setter Property="ImageAspect" Value="AspectFill" />
+        <Setter Property="ImageAspect" Value="AspectFit" />
 
         <Setter Property="ImageMargin" Value="10" />
 

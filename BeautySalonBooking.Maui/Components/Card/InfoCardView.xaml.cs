@@ -272,7 +272,7 @@ public partial class InfoCardView : ContentView
 
     private void UpdateImageAspect()
     {
-        ImageView.ImageAspect = ImageAspect;
+        ImageView.ImageAspect = Aspect.Fill;
     }
 
     #endregion

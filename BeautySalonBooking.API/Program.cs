@@ -1,10 +1,9 @@
-﻿using BeautySalonBooking.Application;
-//using BeautySalonBooking.Contracts.Authentication.Requests.RequestsValidations;
+﻿using BeautySalonBooking.API.Common.Exceptions;
+using BeautySalonBooking.API.Common.Services;
+using BeautySalonBooking.Application;
+using BeautySalonBooking.Application.Common.Interfaces;
 using BeautySalonBooking.Infrastructure;
-//using FluentValidation;
-//using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -12,7 +11,7 @@ using System.Reflection;
 using System.Text;
 
 #region EF Core Migration Command
-//Add-Migration Name -Context BeautyDbContext -Project BeautySalonBooking.Infrastructure -StartupProject BeautySalonBooking.Api -OutputDir Persistence\Migrations
+//Add-Migration InitialCreate -Context BeautyDbContext -Project BeautySalonBooking.Infrastructure -StartupProject BeautySalonBooking.Api -OutputDir Persistence\Migrations
 //$migration = (Get-Migration | Select-Object -Last 1).id
 //$migration
 //$path = ".\BeautySalonBooking.Infrastructure\Persistence\SqlScripts\$migration.sql"
@@ -35,9 +34,14 @@ builder.Services.AddDbContext<BeautyDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddInfrastructure();
-//builder.Services.AddFluentValidationAutoValidation();
-//builder.Services.AddValidatorsFromAssemblyContaining<LoginInitiateRequestValidation>();
 builder.Services.AddApplication();
+
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services
     .AddAuthentication(options =>
@@ -161,7 +165,6 @@ builder.Services.AddHttpClient("SmsService", client =>
     client.Timeout = TimeSpan.FromSeconds(30);
     client.BaseAddress = new Uri("https://api.kavenegar.com/v1/");
 });
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -236,20 +239,22 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+
+app.UseExceptionHandler();
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/error");
+    //توسط خانم نوری موقتا کامنت شد بعد
+    //app.UseExceptionHandler("/error");
     app.UseHsts();
 }
-else
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BeautySalonBooking API v1");
-        c.RoutePrefix = "swagger";
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "BeautySalonBooking API v1");
+    c.RoutePrefix = "swagger";
+});
+
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{

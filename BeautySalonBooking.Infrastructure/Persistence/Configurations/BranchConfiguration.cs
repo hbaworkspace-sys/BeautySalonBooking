@@ -25,6 +25,9 @@ public sealed class BranchConfiguration : IEntityTypeConfiguration<Branch>
             .HasForeignKey(x => x.OrganizationId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Property(x => x.Glyph)
+            .HasMaxLength(100);
+
         builder.Metadata
             .FindNavigation(nameof(Branch.Members))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);

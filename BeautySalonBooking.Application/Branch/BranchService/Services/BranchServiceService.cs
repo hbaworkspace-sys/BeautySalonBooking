@@ -46,7 +46,17 @@ public sealed class BranchServiceService : IBranchServiceService
 
                     Price = x.Price,
                     Duration = x.Duration,
-                    DisplayOrder = x.DisplayOrder
+                    DisplayOrder = x.DisplayOrder,
+                    Media = x.Media
+                    .Select(m => new BranchMediaDto
+                    {
+                        FileName = m.FileName,
+                        ContentType = m.ContentType,
+                        FileSize = m.FileSize,
+                        Content = m.Content,
+                        DisplayOrder = m.DisplayOrder
+                    })
+                    .ToList()
                 })
                 .ToList()
         };

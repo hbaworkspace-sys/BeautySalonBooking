@@ -1,4 +1,6 @@
 ﻿using BeautySalonBooking.Application.Booking.Interfaces;
+using BeautySalonBooking.Application.Common.Interfaces;
+using BeautySalonBooking.Application.Common.Services;
 using BeautySalonBooking.Contracts.Booking.Availability.Dtos;
 using BeautySalonBooking.Contracts.Booking.Availability.Requests;
 using BeautySalonBooking.Contracts.Booking.Availability.Responses;
@@ -17,17 +19,20 @@ namespace BeautySalonBooking.Application.Booking.Services;
 public sealed class BookingService
     : IBookingService
 {
+    private readonly ICurrentUserService _currentUserService;
     private readonly IBookingAvailabilityQuery _bookingAvailabilityQuery;
     private readonly AvailabilityCalculator _availabilityCalculator;
     private readonly IAppointmentRepository _appointmentRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public BookingService(
+        ICurrentUserService currentUserService,
         IBookingAvailabilityQuery bookingAvailabilityQuery,
         AvailabilityCalculator availabilityCalculator,
         IAppointmentRepository appointmentRepository,
         IUnitOfWork unitOfWork)
     {
+        _currentUserService = currentUserService;
         _bookingAvailabilityQuery = bookingAvailabilityQuery;
         _availabilityCalculator = availabilityCalculator;
         _appointmentRepository = appointmentRepository;
@@ -38,7 +43,7 @@ public sealed class BookingService
         GetAvailabilityAsync(
             GetBookingAvailabilityRequest request,
             CancellationToken cancellationToken = default)
-    {
+    { 
         if (request.BranchMemberServiceId <= 0)
         {
             return new ApiResponse_New<GetBookingAvailabilityResponse>
@@ -128,7 +133,7 @@ public sealed class BookingService
         // Request Validation
         // ============================
 
-        if (request.CustomerUserId <= 0)
+        if (_currentUserService.UserId <= 0)
         {
             return new ApiResponse_New<CreateBookingResponse>
             {
@@ -317,7 +322,7 @@ public sealed class BookingService
 
             var appointment =
                 AppointmentEntity.Create(
-                    request.CustomerUserId,
+                    _currentUserService.UserId,
                     request.BranchMemberServiceId,
                     request.Date,
                     requestedSlot.StartTime,

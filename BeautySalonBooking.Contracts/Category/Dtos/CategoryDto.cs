@@ -11,4 +11,6 @@ public sealed class CategoryDto
     public string? Description { get; init; }
 
     public int DisplayOrder { get; init; }
+
+    public IReadOnlyList<CategoryMediaDto> Media { get; init; } = [];
 }

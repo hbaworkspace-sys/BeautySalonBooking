@@ -1,8 +1,8 @@
 ﻿using BeautySalonBooking.Application.Authentication.Interfaces;
+using BeautySalonBooking.Contracts.Authentication.Dtos;
 using BeautySalonBooking.Contracts.Authentication.Requests;
 using BeautySalonBooking.Contracts.Authentication.Responses;
 using BeautySalonBooking.Contracts.Common;
-//using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,14 +14,13 @@ namespace BeautySalonBooking.API.Controllers;
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;
-    //private readonly IValidator<LoginInitiateRequest> _validator;
 
     public AuthenticationController(IAuthenticationService authenticationService/*, IValidator<LoginInitiateRequest> validator*/)
     {
         _authenticationService = authenticationService;
-        //  _validator = validator;
     }
 
+    [AllowAnonymous]
     [HttpPost("register/request-otp")]
     public async Task<IActionResult> RegisterInitiate(
         [FromBody] RegisterInitiateRequest request,
@@ -32,6 +31,7 @@ public class AuthenticationController : ControllerBase
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpPost("register/verify-otp")]
     public async Task<IActionResult> VerifyRegistrationOtp([FromBody] VerifyOtpRequest request, CancellationToken cancellationToken)
     {
@@ -39,18 +39,15 @@ public class AuthenticationController : ControllerBase
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpPost("login/request-otp")]
     public async Task<IActionResult> LoginInitiate([FromBody] LoginInitiateRequest request, CancellationToken cancellationToken)
     {
-        //var validationResult = await _validator.ValidateAsync(request);
-        //if (!validationResult.IsValid)
-        //{
-        //    return BadRequest(validationResult.Errors);
-        //}
         var result = await _authenticationService.RequestLoginOtpAsync(request, cancellationToken);
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpPost("login/verify-otp")]
     public async Task<IActionResult> VerifyLoginOtp([FromBody] VerifyOtpRequest request, CancellationToken cancellationToken)
     {
@@ -59,9 +56,8 @@ public class AuthenticationController : ControllerBase
     }
 
 
-    // ========== متد جدید برای Refresh Token ==========
+    [AllowAnonymous]
     [HttpPost("refresh-token")]
-    [AllowAnonymous] // یا [Authorize] اگر نیاز دارید
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
     {
         try
@@ -116,8 +112,8 @@ public class AuthenticationController : ControllerBase
     }
 
     // ========== متد Logout ==========
-    [HttpPost("logout")]
     [Authorize]
+    [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
         try
@@ -142,6 +138,35 @@ public class AuthenticationController : ControllerBase
     }
 
 
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> GetCurrentUser(
+    CancellationToken cancellationToken)
+    {
+        var userIdClaim =
+            User.FindFirst(
+                System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
+        if (!long.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized(new ApiResponse_New<UserDto>
+            {
+                IsSuccess = false,
+                Code = 401,
+                Message = "کاربر احراز هویت نشده است"
+            });
+        }
+
+        var result =
+            await _authenticationService
+                .GetCurrentUserAsync(
+                    userId,
+                    cancellationToken);
+
+        if (!result.IsSuccess)
+            return NotFound(result);
+
+        return Ok(result);
+    }
 
 }
