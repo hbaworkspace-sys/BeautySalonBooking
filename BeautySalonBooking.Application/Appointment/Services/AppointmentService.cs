@@ -1,11 +1,10 @@
 ﻿using BeautySalonBooking.Application.Appointment.Interfaces;
-using BeautySalonBooking.Application.Common.Interfaces;
+using BeautySalonBooking.Application.Authentication.Interfaces;
 using BeautySalonBooking.Contracts.Appointment.Dtos;
 using BeautySalonBooking.Contracts.Appointment.Enums;
 using BeautySalonBooking.Contracts.Appointment.Requests;
 using BeautySalonBooking.Contracts.Appointment.Responses;
 using BeautySalonBooking.Contracts.Authentication.Dtos;
-using BeautySalonBooking.Contracts.Booking.CreateBooking.Responses;
 using BeautySalonBooking.Contracts.Branch.BranchService.Dtos;
 using BeautySalonBooking.Contracts.Common;
 using BeautySalonBooking.Domain.AppointmentAggregate.Queries;

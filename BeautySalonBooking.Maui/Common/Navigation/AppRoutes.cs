@@ -24,4 +24,11 @@ public static class AppRoutes
     //Shell root
     public const string RegistrationSuccess = "registration-success";
     public const string BookingSuccess = "booking-success";
+
+    //Profile
+    public const string EditProfile = "profile/edit";
+    public const string ChangeMobile = "profile/change-mobile";
+    public const string Security = "profile/security";
+    public const string NotificationSettings = "profile/notification-settings";
+    public const string Privacy = "profile/privacy";
 }

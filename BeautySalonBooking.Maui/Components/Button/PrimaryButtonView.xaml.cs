@@ -264,7 +264,7 @@ public partial class PrimaryButtonView : ContentView
 
             case AppearanceMode.Secondary:
 
-                Button.Background = Colors.White;
+                Button.Background = Colors.Transparent;
                 Button.TextColor = Color.FromArgb("#F05C80");
 
                 Button.BorderColor = Color.FromArgb("#F05C80");

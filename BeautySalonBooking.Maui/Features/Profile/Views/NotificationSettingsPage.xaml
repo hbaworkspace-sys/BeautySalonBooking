@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Profile.Views.NotificationSettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
+    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:model="clr-namespace:BeautySalonBooking.Maui.Features.Profile.Models"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:profile="clr-namespace:BeautySalonBooking.Maui.Components.Profile"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Profile.ViewModels"
+    x:DataType="vm:NotificationSettingsViewModel"
+    BackgroundColor="#FAF8FA"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasBackButton="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <nav:NavigationHeaderView
+            Title="تنظیمات اعلان‌ها"
+            Grid.Row="0"
+            BackCommand="{Binding GoBackCommand}"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
+
+            <VerticalStackLayout Padding="20,20,20,30" Spacing="18">
+
+                <card:SectionCardView Title="دسته‌بندی اعلان‌ها">
+
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <profile:SettingsRowView
+                            Title="یادآوری نوبت"
+                            Grid.Column="0"
+                            ActionTitle=""
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Static model:ProfileScreen.EditProfile}"
+                            Description="قبل از هر نوبت یادآوری دریافت کنید"
+                            IsIconVisible="False" />
+
+                        <Switch
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            IsToggled="{Binding AppointmentReminderEnabled}"
+                            OnColor="#ED5F91"
+                            ThumbColor="PaleVioletRed" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <profile:SettingsRowView
+                            Title="تأیید یا تغییر وضعیت نوبت"
+                            Grid.Column="0"
+                            ActionTitle=""
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Static model:ProfileScreen.EditProfile}"
+                            Description="اطلاع از تأیید یا تغییر وضعیت نوبت"
+                            IsIconVisible="False" />
+
+                        <Switch
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            IsToggled="{Binding AppointmentStatusEnabled}"
+                            OnColor="#ED5F91"
+                            ThumbColor="PaleVioletRed" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <profile:SettingsRowView
+                            Title="لغو نوبت"
+                            Grid.Column="0"
+                            ActionTitle=""
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Static model:ProfileScreen.EditProfile}"
+                            Description="در صورت لغو نوبت آگاه شوید"
+                            IsIconVisible="False" />
+
+                        <Switch
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            IsToggled="{Binding AppointmentCancellationEnabled}"
+                            OnColor="#ED5F91"
+                            ThumbColor="PaleVioletRed" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <profile:SettingsRowView
+                            Title="پیام‌های حساب کاربری"
+                            Grid.Column="0"
+                            ActionTitle=""
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Static model:ProfileScreen.EditProfile}"
+                            Description="اطلاعیه‌های امنیتی و حسابی"
+                            IsIconVisible="False" />
+
+                        <Switch
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            IsToggled="{Binding AccountNotificationsEnabled}"
+                            OnColor="#ED5F91"
+                            ThumbColor="PaleVioletRed" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <profile:SettingsRowView
+                            Title="پیشنهادها و تخفیف‌ها"
+                            Grid.Column="0"
+                            ActionTitle=""
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Static model:ProfileScreen.EditProfile}"
+                            Description="اطلاع‌رسانی‌های تبلیغاتی و پیشنهادها"
+                            IsIconVisible="False" />
+
+                        <Switch
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            IsToggled="{Binding MarketingNotificationsEnabled}"
+                            OnColor="#ED5F91"
+                            ThumbColor="PaleVioletRed" />
+                    </Grid>
+
+                </card:SectionCardView>
+
+                <card:InfoActionCardView
+                    Title="اخطار"
+                    Description="غیرفعال کردن اعلان‌های تأیید و لغو نوبت ممکن است باعث شود اطلاعات مهم مربوط به نوبت خود را از دست بدهید."
+                    IconColor="#C18425"
+                    IconGlyph="warning"
+                    IsIconVisibility="True"
+                    TitleColor="#C18425" />
+
+                <!--  Save  -->
+                <btn:PrimaryButtonView Title="ذخیره تنظیمات" Command="{Binding SaveNotificationsCommand}" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>
+
+

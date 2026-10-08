@@ -29,7 +29,7 @@
             RowSpacing="25">
 
             <uc:TitleSubtitleView
-                Title="کد تایید"
+                Title="{Binding PageTitle}"
                 Grid.Row="0"
                 Subtitle="{Binding NavigationModel.MobileNumber, StringFormat='کد 6 رقمی برای شماره 0{0} ارسال شد، لطفا آن را وارد کنید'}" />
 
@@ -58,16 +58,9 @@
                     Duration="{Binding CountdownSeconds, Mode=TwoWay}" />
 
                 <btn:PrimaryButtonView
-                    Title="ورود"
+                    Title="{Binding SubmitButtonTitle}"
                     Grid.Row="3"
-                    Command="{Binding VerifyOtpCommand}">
-                    <btn:PrimaryButtonView.FillBrush>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Offset="0.0" Color="#ccFFBB80" />
-                            <GradientStop Offset="1.1" Color="#ccEA6A96" />
-                        </LinearGradientBrush>
-                    </btn:PrimaryButtonView.FillBrush>
-                </btn:PrimaryButtonView>
+                    Command="{Binding VerifyOtpCommand}" />
             </VerticalStackLayout>
 
             <indicator:LoadingIndicator

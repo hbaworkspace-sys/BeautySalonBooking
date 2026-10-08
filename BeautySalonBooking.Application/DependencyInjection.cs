@@ -17,7 +17,6 @@ using BeautySalonBooking.Application.Organization.Interfaces;
 using BeautySalonBooking.Application.Organization.Services;
 using BeautySalonBooking.Application.Service.Interfaces;
 using BeautySalonBooking.Application.Service.Services;
-using BeautySalonBooking.Domain.OrganizationAggregate.Repositories;
 using BeautySalonBooking.Domain.SchedulingAggregate.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,14 +59,13 @@ public static class DependencyInjection
         services.AddScoped<IBookingService, BookingService>();
         services.AddScoped<AvailabilityCalculator>();
         services.AddScoped<IAppointmentService, AppointmentService>();
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         // Validation
         services.AddValidatorsFromAssemblyContaining<LoginInitiateRequestValidator>();
         services.AddScoped<IValidationService, ValidationService>();
 
 
-        //Organizition
+        //Organization
         services.AddScoped<IOrganizationService, OrganizationService>();
         return services;
     }

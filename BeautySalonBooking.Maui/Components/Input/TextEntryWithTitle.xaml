@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Input.TextEntryWithTitle"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <VerticalStackLayout Spacing="2">
+
+        <Border
+            x:Name="EntryBorder"
+            BackgroundColor="{x:StaticResource White}"
+            Stroke="#EEE8ED"
+            StrokeThickness="0">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+            </Border.GestureRecognizers>
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10" />
+            </Border.StrokeShape>
+
+            <Border.Shadow>
+                <Shadow Brush="{x:StaticResource ShadowColor}" Offset="0,0.5" />
+            </Border.Shadow>
+            <HorizontalStackLayout>
+                <Label
+                    x:Name="GlyphLabel"
+                    Margin="10,0,0,0"
+                    Background="White"
+                    IsVisible="Collapse"
+                    Style="{x:StaticResource GlyphLable}" />
+
+                <VerticalStackLayout Margin="6,3,0,0" Spacing="-10">
+
+                    <Label
+                        x:Name="TitleLable"
+                        Margin="10,0"
+                        FontSize="12"
+                        HeightRequest="28"
+                        HorizontalOptions="StartAndExpand"
+                        TextColor="#ED5F91" />
+
+                    <Entry
+                        x:Name="MainEntry"
+                        Completed="MainEntry_Completed"
+                        FlowDirection="RightToLeft"
+                        Focused="MainEntry_Focused"
+                        FontSize="13"
+                        HeightRequest="38"
+                        TextChanged="MainEntry_TextChanged"
+                        TextColor="Gray"
+                        WidthRequest="350" />
+
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+        </Border>
+
+        <Label
+            x:Name="ErrorLabel"
+            Margin="15,0"
+            FontAttributes="None"
+            FontSize="11"
+            IsVisible="False"
+            TextColor="#EA6A96" />
+
+    </VerticalStackLayout>
+</ContentView>

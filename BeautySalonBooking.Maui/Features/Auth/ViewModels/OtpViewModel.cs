@@ -22,11 +22,6 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
     private readonly IUserContext _userContext;
     private readonly AuthValidator _authValidator;
 
-
-    [ObservableProperty]
-    private OtpNavigationModel? navigationModel;
-    const int timeSecond = 120;
-
     public OtpViewModel(
         IAuthApiService authApiService,
         IDialogService dialogService,
@@ -43,17 +38,27 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
         _authValidator = authValidator;
     }
 
-    [ObservableProperty]
-    private string otpCode = string.Empty;
+    [ObservableProperty] private string otpCode = string.Empty;
+    [ObservableProperty] private bool isBusy;
+    [ObservableProperty] private int countdownSeconds = timeSecond;
+    [ObservableProperty] private bool isCountdownRunning;
+    [ObservableProperty] private OtpNavigationModel? navigationModel;
 
-    [ObservableProperty]
-    private bool isBusy;
 
-    [ObservableProperty]
-    private int countdownSeconds = timeSecond;
+    const int timeSecond = 120;
 
-    [ObservableProperty]
-    private bool isCountdownRunning;
+    public string PageTitle => NavigationModel?.Purpose switch
+    {
+        OtpPurpose.ChangeMobile => "تأیید شماره همراه",
+        _ => "کد تأیید"
+    };
+    public string SubmitButtonTitle => NavigationModel?.Purpose switch
+    {
+        OtpPurpose.ChangeMobile => "تأیید شماره",
+        OtpPurpose.Login => "ورود",
+        _ => "تأیید"
+    };
+
 
     [RelayCommand]
     private async Task VerifyOtpAsync()
@@ -197,6 +202,9 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
                             });
                     isSuccess = registerResult.IsSuccess;
                     break;
+                case OtpPurpose.ChangeMobile:
+                    isSuccess = true;
+                    break;
             }
             if (isSuccess)
             {
@@ -234,6 +242,8 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
         if (query.TryGetValue("OtpNavigation", out var value))
         {
             NavigationModel = value as OtpNavigationModel;
+            OnPropertyChanged(nameof(PageTitle));
+            OnPropertyChanged(nameof(SubmitButtonTitle));
         }
 
         CountdownSeconds = timeSecond;

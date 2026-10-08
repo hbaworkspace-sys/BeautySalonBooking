@@ -15,9 +15,13 @@ using BeautySalonBooking.Maui.Features.Home.ViewModels;
 using BeautySalonBooking.Maui.Features.Home.Views;
 using BeautySalonBooking.Maui.Features.Main.ViewModels;
 using BeautySalonBooking.Maui.Features.Main.Views;
+using BeautySalonBooking.Maui.Features.Profile.Services;
+using BeautySalonBooking.Maui.Features.Profile.ViewModels;
+using BeautySalonBooking.Maui.Features.Profile.Views;
 using BeautySalonBooking.Maui.Features.Service.Cache;
 using BeautySalonBooking.Maui.Features.Splash.ViewModels;
 using BeautySalonBooking.Maui.Features.Splash.Views;
+using CommunityToolkit.Maui;
 
 namespace BeautySalonBooking.Maui.Common.DependencyInjection;
 
@@ -48,6 +52,9 @@ public static class PresentationDependencyInjection
         services.AddTransient<AppointmentsView>();
         services.AddTransient<AppointmentsViewModel>();
 
+        services.AddTransient<ProfileView>();
+        services.AddTransient<ProfileViewModel>();
+
         services.AddSingleton<MainPage>();
         services.AddSingleton<MainViewModel>();
 
@@ -69,6 +76,21 @@ public static class PresentationDependencyInjection
         services.AddTransient<SuccessPage>();
         services.AddTransient<SuccessViewModel>();
 
+        services.AddTransient<EditProfile>();
+        services.AddTransient<EditProfileViewModel>();
+
+        services.AddTransient<ChangeMobilePage>();
+        services.AddTransient<ChangeMobileViewModel>();
+
+        services.AddTransient<SecurityPage>();
+        services.AddTransient<SecurityViewModel>();
+
+        services.AddTransient<NotificationSettingsPage>();
+        services.AddTransient<NotificationSettingsViewModel>();
+
+        services.AddTransient<PrivacyPage>();
+        services.AddTransient<PrivacyViewModel>();
+
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IViewService, ViewService>();
@@ -78,6 +100,7 @@ public static class PresentationDependencyInjection
         services.AddSingleton<IBookingResultState, BookingResultState>();
         services.AddSingleton<IAuthSessionService, AuthSessionService>();
         services.AddSingleton<IUserContext, UserContext>();
+        services.AddSingleton<IProfileDemoService, ProfileDemoService>();
         services.AddSingleton<AuthValidator>();
 
         return services;

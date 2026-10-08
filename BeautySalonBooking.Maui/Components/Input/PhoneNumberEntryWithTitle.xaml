@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="BeautySalonBooking.Maui.Components.Input.PhoneNumberEntryWithTitle"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <VerticalStackLayout Spacing="2">
+
+        <Border
+            x:Name="EntryBorder"
+            BackgroundColor="{x:StaticResource White}"
+            Stroke="#EEE8ED"
+            StrokeThickness="0">
+
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+            </Border.GestureRecognizers>
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10" />
+            </Border.StrokeShape>
+
+
+            <Grid ColumnDefinitions="Auto,*,Auto">
+
+                <!--  Glyph  -->
+                <Label
+                    x:Name="GlyphLabel"
+                    Grid.Column="0"
+                    Margin="10,0,4,0"
+                    IsVisible="False"
+                    Style="{x:StaticResource GlyphLable}"
+                    VerticalOptions="Center" />
+
+                <!--  Title + Entry  -->
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Margin="6,3,0,0"
+                    Spacing="-10">
+
+                    <Label
+                        x:Name="TitleLabel"
+                        Margin="10,0"
+                        FontSize="12"
+                        HeightRequest="28"
+                        HorizontalOptions="Fill"
+                        TextColor="#ED5F91"
+                        VerticalTextAlignment="Center" />
+
+                    <HorizontalStackLayout HorizontalOptions="End">
+
+                        <Entry
+                            x:Name="MainEntry"
+                            Completed="MainEntry_Completed"
+                            FlowDirection="LeftToRight"
+                            Focused="MainEntry_Focused"
+                            FontSize="13"
+                            HorizontalOptions="EndAndExpand"
+                            Keyboard="Numeric"
+                            MaxLength="10"
+                            TextChanged="MainEntry_TextChanged"
+                            TextColor="Gray"
+                            Unfocused="MainEntry_Unfocused" />
+
+                        <Label
+                            x:Name="CountryCodeLabel"
+                            Margin="8,0,12,-10"
+                            FontSize="13"
+                            HorizontalOptions="EndAndExpand"
+                            TextColor="{x:StaticResource PrimaryText}"
+                            VerticalTextAlignment="End" />
+
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+
+            </Grid>
+
+        </Border>
+
+        <Label
+            x:Name="ErrorLabel"
+            Margin="15,0"
+            FontSize="11"
+            IsVisible="False"
+            TextColor="#EA6A96" />
+
+    </VerticalStackLayout>
+
+
+</ContentView>

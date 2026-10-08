@@ -1,5 +1,6 @@
 ﻿using BeautySalonBooking.Maui.Common.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui;
 
 namespace BeautySalonBooking.Maui;
 
@@ -11,6 +12,7 @@ public static class MauiProgram
 
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("IRANSans.ttf", "Sans");

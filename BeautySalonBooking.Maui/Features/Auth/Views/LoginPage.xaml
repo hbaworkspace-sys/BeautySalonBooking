@@ -72,6 +72,7 @@
                     ImageMargin="10"
                     ImageSource="geography.png"
                     Shape="RoundedRectangle">
+
                     <media:MediaView.Shadow>
                         <Shadow Brush="{StaticResource ShadowColor}" Offset="0,0.5" />
                     </media:MediaView.Shadow>

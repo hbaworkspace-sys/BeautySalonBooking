@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Profile.Views.EditProfile"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
+    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:input="clr-namespace:BeautySalonBooking.Maui.Components.Input"
+    xmlns:model="clr-namespace:BeautySalonBooking.Maui.Features.Profile.Models"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:profile="clr-namespace:BeautySalonBooking.Maui.Components.Profile"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Profile.ViewModels"
+    x:DataType="vm:EditProfileViewModel"
+    BackgroundColor="#FAF8FA">
+
+    <Grid RowDefinitions="Auto,*" RowSpacing="0">
+
+        <nav:NavigationHeaderView
+            x:Name="HeaderView"
+            Title="ویرایش پروفایل"
+            Grid.Row="0"
+            BackCommand="{Binding GoBackCommand}"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="0" Spacing="20">
+
+                <VerticalStackLayout Margin="0,15" Spacing="0">
+
+                    <profile:ProfileAvatarView
+                        HeightRequest="100"
+                        Image="{Binding ProfileImage}"
+                        Initials="{Binding Initials}"
+                        WidthRequest="100" />
+
+                    <HorizontalStackLayout
+                        Margin="20"
+                        HorizontalOptions="Center"
+                        Spacing="5">
+
+                        <btn:PrimaryButtonView
+                            Title="تغییر تصویر"
+                            Command="{Binding ChangeImageCommand}"
+                            FillBrush="#FFF0F5"
+                            FontSize="11"
+                            HeightRequest="30"
+                            TextColor="#D94B7D"
+                            WidthRequest="70" />
+
+                        <btn:PrimaryButtonView
+                            Title="حذف تصویر"
+                            Command="{Binding NavigateCommand}"
+                            FillBrush="#FFF0F5"
+                            FontSize="11"
+                            HeightRequest="30"
+                            TextColor="#D64550"
+                            WidthRequest="70" />
+
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <card:SectionCardView
+                    Title="اطلاعات شخصی"
+                    Grid.Row="2"
+                    Margin="16,0">
+
+                    <input:TextEntryWithTitle
+                        Title="نام"
+                        Placeholder="نام خود را وارد کنید"
+                        Text="هستی" />
+
+                    <input:TextEntryWithTitle
+                        Title="نام خانوادگی"
+                        Placeholder="نام خانوادگی خود را وارد کنید"
+                        Text="نوری" />
+
+                    <input:TextEntryWithTitle Title="نام پدر" Placeholder="نام پدر خود را وارد کنید" />
+
+                    <input:TextEntryWithTitle
+                        Title="تاریخ تولد (اختیاری)"
+                        Placeholder="1377/09/24"
+                        Text="1377/09/24" />
+
+                </card:SectionCardView>
+
+                <card:SectionCardView
+                    Title="اطلاعات هویتی"
+                    Grid.Row="3"
+                    Margin="16,0">
+
+                    <input:TextEntryWithTitle
+                        Title="کد ملی"
+                        IsEnabled="False"
+                        Placeholder="1234567890"
+                        Text="1234567890" />
+
+                    <input:TextEntryWithTitle
+                        Title="شماره سریال"
+                        IsEnabled="False"
+                        Placeholder="123G45697"
+                        Text="123G45697" />
+
+                </card:SectionCardView>
+
+                <card:SectionCardView
+                    Title="اطلاعات تماس (اعتبار سنجی با موبایل)"
+                    Grid.Row="4"
+                    Margin="16,0">
+
+                    <input:TextEntryWithTitle
+                        Title="ایمیل (اختیاری)"
+                        Placeholder="example@gmail.com"
+                        Text="HastiNouri.cs.dev@gmail.com" />
+
+                    <input:PhoneNumberEntryWithTitle
+                        Title="شماره موبایل"
+                        IsEnabled="False"
+                        Placeholder="09121234567"
+                        Text="09103778796" />
+
+                </card:SectionCardView>
+
+                <card:SectionCardView
+                    Title="حساب و امنیت"
+                    Grid.Row="5"
+                    Margin="16,0">
+
+                    <input:TextEntryWithTitle
+                        Title="نام کاربری"
+                        Placeholder="UserName#1234"
+                        Text="Nouri_Hasti" />
+
+                    <input:TextEntryWithTitle
+                        Title="رمز عبور"
+                        Placeholder="Abc@1234"
+                        Text="**********" />
+
+                    <input:TextEntryWithTitle
+                        Title="تکرار رمز عبور"
+                        Placeholder="Abc@1234"
+                        Text="**********" />
+
+                </card:SectionCardView>
+
+                <btn:PrimaryButtonView
+                    Title="ذخیره تغییرات"
+                    Margin="16,16,16,30"
+                    Command="{Binding SaveProfileCommand}" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

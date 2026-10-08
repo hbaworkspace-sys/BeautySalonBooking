@@ -1,6 +1,5 @@
-﻿using BeautySalonBooking.Application.Booking.Interfaces;
-using BeautySalonBooking.Application.Common.Interfaces;
-using BeautySalonBooking.Application.Common.Services;
+﻿using BeautySalonBooking.Application.Authentication.Interfaces;
+using BeautySalonBooking.Application.Booking.Interfaces;
 using BeautySalonBooking.Contracts.Booking.Availability.Dtos;
 using BeautySalonBooking.Contracts.Booking.Availability.Requests;
 using BeautySalonBooking.Contracts.Booking.Availability.Responses;
@@ -43,7 +42,7 @@ public sealed class BookingService
         GetAvailabilityAsync(
             GetBookingAvailabilityRequest request,
             CancellationToken cancellationToken = default)
-    { 
+    {
         if (request.BranchMemberServiceId <= 0)
         {
             return new ApiResponse_New<GetBookingAvailabilityResponse>
