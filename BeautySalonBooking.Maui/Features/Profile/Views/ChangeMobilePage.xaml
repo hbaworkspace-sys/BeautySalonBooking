@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Profile.Views.ChangeMobilePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
+    xmlns:indicator="clr-namespace:BeautySalonBooking.Maui.Components.Indicator"
+    xmlns:input="clr-namespace:BeautySalonBooking.Maui.Components.Input"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Profile.ViewModels"
+    x:DataType="vm:ChangeMobileViewModel"
+    BackgroundColor="#FAF8FA"
+    NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,*" RowSpacing="0">
+
+        <nav:NavigationHeaderView
+            Title="تغییر شماره همراه"
+            Grid.Row="0"
+            BackCommand="{Binding GoBackCommand}"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+
+        <ScrollView
+            Grid.Row="1"
+            Orientation="Vertical"
+            VerticalScrollBarVisibility="Never">
+
+            <Grid
+                Padding="15"
+                RowDefinitions="*,0.5*"
+                RowSpacing="10">
+
+                <VerticalStackLayout
+                    Grid.Row="0"
+                    Spacing="20"
+                    VerticalOptions="Center">
+
+                    <shared:TitleDescriptionView Title="شماره جدید" Description="لطفاً شماره همراه جدید خود را وارد کنید" />
+
+                    <input:PhoneNumberEntryWithTitle
+                        Title="شماره موبایل فعلی"
+                        Margin="10,0"
+                        IsEnabled="False"
+                        PhoneType="Mobile"
+                        Text="9100917784" />
+
+                    <input:PhoneNumberEntry
+                        x:Name="PhoneEntry"
+                        Completed="PhoneEntry_Completed"
+                        PhoneType="Mobile"
+                        ReturnType="Done"
+                        Text="{Binding NewMobileNumber, Mode=OneWayToSource}"
+                        VerticalOptions="Start" />
+
+                    <btn:PrimaryButtonView
+                        Title="ارسال کد تأیید"
+                        Command="{Binding RequestMobileChangeCommand}"
+                        VerticalOptions="Start" />
+
+                </VerticalStackLayout>
+
+                <indicator:LoadingIndicator
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    IsLoading="{Binding IsBusy}"
+                    Message="لطفاً صبر کنید..."
+                    OverlayColor="#CCFFFFFF"
+                    SpinnerColor="#7d0a26"
+                    SpinnerSize="50" />
+
+            </Grid>
+
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

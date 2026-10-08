@@ -1,7 +1,7 @@
 using BeautySalonBooking.API.Common.Exceptions;
 using BeautySalonBooking.API.Common.Services;
 using BeautySalonBooking.Application;
-using BeautySalonBooking.Application.Common.Interfaces;
+using BeautySalonBooking.Application.Authentication.Interfaces;
 using BeautySalonBooking.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

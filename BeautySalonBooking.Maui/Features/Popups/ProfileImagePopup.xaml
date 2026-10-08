@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Class="BeautySalonBooking.Maui.Features.Popups.ProfileImagePopup"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:icon="clr-namespace:BeautySalonBooking.Maui.Resources"
+    xmlns:media="clr-namespace:BeautySalonBooking.Maui.Components.Media"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Name="root"
+    HorizontalOptions="Fill"
+    Size="380,160"
+    VerticalOptions="End"
+    Color="Transparent">
+
+    <Border
+        Padding="15"
+        BackgroundColor="White"
+        StrokeShape="RoundRectangle 20,20,0,0"
+        StrokeThickness="0">
+
+        <VerticalStackLayout Spacing="15">
+            <Border
+                BackgroundColor="#D0D0D0"
+                HeightRequest="5"
+                HorizontalOptions="Center"
+                StrokeShape="RoundRectangle 3"
+                StrokeThickness="0"
+                WidthRequest="45" />
+
+            <Label
+                FontAttributes="Bold"
+                FontSize="13"
+                HorizontalOptions="Center"
+                Text="انتخاب تصویر از ..."
+                TextColor="#222222" />
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="30">
+                <Button
+                    x:Name="BtnLibrary"
+                    BackgroundColor="#FFF0F5"
+                    BorderColor="#ED7F89"
+                    BorderWidth="1.5"
+                    Clicked="BtnLibrary_Clicked"
+                    CornerRadius="12"
+                    FontFamily="MaterialIconsRnd"
+                    FontSize="28"
+                    HeightRequest="55"
+                    Text="photo_library"
+                    TextColor="#ED7F89"
+                    WidthRequest="55" />
+                <Button
+                    x:Name="BtnTakePhoto"
+                    BackgroundColor="#FFF0F5"
+                    BorderColor="#ED7F89"
+                    BorderWidth="1.5"
+                    Clicked="BtnTakePhoto_Clicked"
+                    CornerRadius="12"
+                    FontFamily="MaterialIconsRnd"
+                    FontSize="28"
+                    HeightRequest="55"
+                    Text="photo_camera"
+                    TextColor="#ED7F89"
+                    WidthRequest="55" />
+
+                <Button
+                    x:Name="BtnFile"
+                    BackgroundColor="#FFF0F5"
+                    BorderColor="#ED7F89"
+                    BorderWidth="1.5"
+                    Clicked="BtnFile_Clicked"
+                    CornerRadius="12"
+                    FontFamily="MaterialIconsRnd"
+                    FontSize="28"
+                    HeightRequest="55"
+                    Text="folder"
+                    TextColor="#ED7F89"
+                    WidthRequest="55" />
+
+            </HorizontalStackLayout>
+
+
+        </VerticalStackLayout>
+
+    </Border>
+</toolkit:Popup>

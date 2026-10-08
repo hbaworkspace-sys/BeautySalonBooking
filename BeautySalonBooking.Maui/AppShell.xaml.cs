@@ -1,6 +1,7 @@
 ﻿using BeautySalonBooking.Maui.Common.Navigation;
 using BeautySalonBooking.Maui.Features.Auth.Views;
 using BeautySalonBooking.Maui.Features.Booking.Views;
+using BeautySalonBooking.Maui.Features.Profile.Views;
 using BeautySalonBooking.Maui.Features.Splash.Views;
 
 namespace BeautySalonBooking.Maui;
@@ -29,5 +30,12 @@ public partial class AppShell : Shell
 
         //Routing.RegisterRoute(AppRoutes.RegistrationSuccess, typeof(RegistrationSuccessPage));
         //Routing.RegisterRoute(AppRoutes.BookingSuccess, typeof(SuccessPage));
+
+        //PROFILE
+        Routing.RegisterRoute(AppRoutes.EditProfile, typeof(EditProfile));
+        Routing.RegisterRoute(AppRoutes.ChangeMobile, typeof(ChangeMobilePage));
+        Routing.RegisterRoute(AppRoutes.Security, typeof(SecurityPage));
+        Routing.RegisterRoute(AppRoutes.NotificationSettings, typeof(NotificationSettingsPage));
+        Routing.RegisterRoute(AppRoutes.Privacy, typeof(PrivacyPage));
     }
 }

@@ -3,7 +3,6 @@ using System.Security.Claims;
 using BeautySalonBooking.Application.Authentication.Interfaces;
 using BeautySalonBooking.Contracts.Authentication.Dtos;
 using BeautySalonBooking.Domain.Base.UnitOfWork;
-using BeautySalonBooking.Domain.PersonAggregate.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace BeautySalonBooking.Application.Authentication.Services;
@@ -22,6 +21,23 @@ public class CurrentUserService : ICurrentUserService
         _httpContextAccessor = httpContextAccessor;
         _unitOfWork = unitOfWork;
         _userPermissionService = userPermissionService;
+    }
+    public long UserId
+    {
+        get
+        {
+            var userId =
+                _httpContextAccessor
+                    .HttpContext?
+                    .User?
+                    .FindFirst(ClaimTypes.NameIdentifier)
+                    ?.Value;
+
+            if (int.TryParse(userId, out var id))
+                return id;
+
+            return 0;
+        }
     }
 
     public async Task<UserDto?> GetCurrentUserAsync(CancellationToken cancellationToken = default)

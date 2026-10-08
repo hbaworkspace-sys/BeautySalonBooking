@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Profile.Views.PrivacyPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:profile="clr-namespace:BeautySalonBooking.Maui.Components.Profile"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Profile.ViewModels"
+    x:DataType="vm:PrivacyViewModel"
+    BackgroundColor="#FAF8FA"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <nav:NavigationHeaderView
+            Title="حریم خصوصی"
+            Grid.Row="0"
+            BackCommand="{Binding GoBackCommand}"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
+
+            <VerticalStackLayout Padding="20,20,20,30" Spacing="18">
+
+                <!--  Privacy Settings  -->
+
+                <card:SectionCardView Title="تنظیمات حریم خصوصی">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <profile:SettingsRowView
+                                Title="نمایش پروفایل"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Description="پروفایل شما فقط برای سالن‌هایی که نوبت فعال دارید نمایش داده می‌شود."
+                                IsIconVisible="False" />
+
+                            <Switch
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                IsToggled="{Binding IsBiometricEnabled}"
+                                OnColor="#ED5F91"
+                                ThumbColor="PaleVioletRed" />
+                        </Grid>
+
+
+                        <Grid ColumnDefinitions="*,Auto">
+
+                            <profile:SettingsRowView
+                                Title="پیشنهادهای شخصی‌سازی‌شده"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Description="استفاده از اطلاعات و سوابق شما برای نمایش پیشنهادهای مرتبط‌تر."
+                                IsIconVisible="False" />
+
+                            <Switch
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                IsToggled="{Binding IsBiometricEnabled}"
+                                OnColor="#ED5F91"
+                                ThumbColor="PaleVioletRed" />
+                        </Grid>
+
+                    </VerticalStackLayout>
+
+                </card:SectionCardView>
+
+                <card:InfoActionCardView Title="استفاده از داده‌ها" Description="ما اطلاعات شما را فقط برای ارائه خدمات رزرو نوبت و بهبود تجربه استفاده می‌کنیم و اطلاعات شما با اشخاص ثالث به اشتراک گذاشته نمی‌شود." />
+
+                <card:SectionCardView Title="اسناد قانونی">
+
+                    <VerticalStackLayout Spacing="4">
+
+                        <profile:SettingsRowView
+                            Title="سیاست حریم خصوصی"
+                            Command="{Binding OpenPrivacyPolicyCommand}"
+                            Description="نحوه جمع‌آوری، استفاده و نگهداری از اطلاعات"
+                            Icon="description" />
+
+                        <profile:SettingsRowView
+                            Title="شرایط استفاده از خدمات"
+                            Command="{Binding OpenTermsCommand}"
+                            Description="قوانین و شرایط استفاده از BeautySalonBooking"
+                            Icon="article" />
+
+                    </VerticalStackLayout>
+
+                </card:SectionCardView>
+
+                <card:SectionCardView Title="مدیریت داده‌ها">
+
+                    <VerticalStackLayout Spacing="4">
+
+                        <profile:SettingsRowView
+                            Title="دانلود داده‌های من"
+                            Command="{Binding DownloadDataCommand}"
+                            Description="دریافت اطلاعات و سوابق حساب کاربری"
+                            Icon="download" />
+
+                        <profile:SettingsRowView
+                            Title="حذف حساب کاربری"
+                            Command="{Binding DeleteAccountCommand}"
+                            Description="حذف حساب و اطلاعات مربوط به آن"
+                            Icon="delete_outline" />
+
+                    </VerticalStackLayout>
+
+                </card:SectionCardView>
+
+
+                <Button
+                    Command="{Binding SavePrivacyCommand}"
+                    Style="{StaticResource Primary}"
+                    Text="ذخیره تنظیمات" />
+
+            </VerticalStackLayout>
+
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>

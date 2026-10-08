@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="BeautySalonBooking.Maui.Features.Profile.Views.SecurityPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:card="clr-namespace:BeautySalonBooking.Maui.Components.Card"
+    xmlns:model="clr-namespace:BeautySalonBooking.Maui.Features.Profile.Models"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:profile="clr-namespace:BeautySalonBooking.Maui.Components.Profile"
+    xmlns:shared="clr-namespace:BeautySalonBooking.Maui.Components.Shared"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Profile.ViewModels"
+    x:DataType="vm:SecurityViewModel"
+    BackgroundColor="#FAF8FA"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <nav:NavigationHeaderView
+            Title="امنیت و نشست های فعال"
+            Grid.Row="0"
+            BackCommand="{Binding GoBackCommand}"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
+
+            <VerticalStackLayout Padding="20,20,20,30" Spacing="18">
+
+                <card:InfoActionCardView
+                    Title="ورود با رمز یک‌بار مصرف"
+                    Description="این برنامه از سیستم ورود با OTP استفاده می‌کند. هر بار ورود، یک کد تأیید به شماره همراه شما ارسال می‌شود."
+                    IsStatusVisible="True" />
+
+                <card:SectionCardView Title="تنظیمات امنیتی">
+
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <profile:SettingsRowView
+                            Title="ورود با اثر انگشت"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            ActionTitle=""
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Static model:ProfileScreen.EditProfile}"
+                            Description="برای ورود سریع و امن به برنامه"
+                            Icon="person" />
+
+                        <Switch
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            IsToggled="{Binding IsBiometricEnabled}"
+                            OnColor="#ED5F91"
+                            ThumbColor="PaleVioletRed" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+
+                        <profile:SettingsRowView
+                            Title="تفییر شماره موبایل"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            ActionTitle=""
+                            Command="{Binding NavigateCommand}"
+                            CommandParameter="{x:Static model:ProfileScreen.ChangeMobile}"
+                            Description="مدیریت شماره همراه و تأیید مجدد آن"
+                            Icon="call" />
+
+                        <Button
+                            Grid.Column="1"
+                            BackgroundColor="White"
+                            Command="{Binding GoToChangeMobileCommand}"
+                            FontAttributes="Bold"
+                            Text="تغییر"
+                            TextColor="#D94B7D" />
+
+                    </Grid>
+
+                </card:SectionCardView>
+
+                <card:SectionCardView Title="{Binding ActiveDevices.Count, StringFormat='دستگاه های فعال - {0} دستگاه'}">
+
+                    <CollectionView
+                        ItemsSource="{Binding ActiveDevices}"
+                        SelectionMode="None"
+                        VerticalScrollBarVisibility="Never">
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="model:ActiveDeviceModel">
+
+
+                                <Grid ColumnDefinitions="*,Auto">
+
+                                    <profile:SettingsRowView
+                                        Title="{Binding DeviceName}"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        ActionTitle=""
+                                        Description="{Binding LastActivity, StringFormat='آخرین فعالیت : {0}'}"
+                                        Icon="mobile"
+                                        IconBackgroundBrush="Transparent"
+                                        IconTextColor="#555555" />
+
+                                    <shared:BadgeView
+                                        Grid.Column="1"
+                                        Margin="10,0"
+                                        FillBrush="#3323865B"
+                                        HeightRequest="35"
+                                        IsVisible="{Binding IsCurrentDevice}"
+                                        Text="فعال"
+                                        TextColor="#23865B"
+                                        WidthRequest="60" />
+
+                                    <shared:BadgeView
+                                        Grid.Column="1"
+                                        Margin="10,0"
+                                        HeightRequest="35"
+                                        IsVisible="{Binding CanLogout}"
+                                        Text="خروج"
+                                        TextColor="#D64550"
+                                        WidthRequest="60" />
+
+                                </Grid>
+
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                        <CollectionView.EmptyView>
+                            <Label
+                                HorizontalOptions="Center"
+                                Style="{StaticResource Caption}"
+                                Text="دستگاه فعالی وجود ندارد."
+                                VerticalOptions="Center" />
+                        </CollectionView.EmptyView>
+
+                    </CollectionView>
+                </card:SectionCardView>
+
+                <card:InfoActionCardView
+                    Title="خروج از همه دستگاه‌ها"
+                    ActionCommand="{Binding LogoutAllDevicesCommand}"
+                    ActionText="خروج"
+                    ActionTextColor="#D64550"
+                    Description="تمام نشست‌های فعال در دستگاه‌های دیگر پایان داده می‌شوند."
+                    IsActionVisible="True"
+                    TitleColor="#D64550" />
+
+            </VerticalStackLayout>
+
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>

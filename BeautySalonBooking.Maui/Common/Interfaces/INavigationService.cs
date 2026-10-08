@@ -30,4 +30,12 @@ public interface INavigationService
     Task GoToRegistrationSuccessAsync();
     Task GoToMainAsync(MainTab tab);
     Task GoToBookingSuccessAsync();
+
+
+    //profil
+    Task GoToEditProfileAsync();
+    Task GoToChangeMobileAsync();
+    Task GoToSecurityAsync();
+    Task GoToNotificationSettingsAsync();
+    Task GoToPrivacyAsync();
 }

@@ -267,6 +267,42 @@
 
     </Style>
 
+    <Style x:Key="Card" TargetType="Border">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Stroke" Value="#EEE8ED" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Padding" Value="14" />
+        <Setter Property="StrokeShape">
+            <Setter.Value>
+                <RoundRectangle CornerRadius="18" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Primary" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="#ED5F91" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontFamily" Value="Sans" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="15" />
+        <Setter Property="HeightRequest" Value="50" />
+    </Style>
+
+    <Style x:Key="Caption" TargetType="Label">
+        <Setter Property="FontFamily" Value="Sans" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextColor" Value="#77717A" />
+    </Style>
+    <Style x:Key="Subhead" TargetType="Label">
+        <Setter Property="FontFamily" Value="Sans" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="#77717A" />
+    </Style>
+
+
+
+
+
     <!--<Style x:Key="ItemCardViewStyle" TargetType="card:CardView">
         <Setter Property="BackgroundColor" Value="{x:StaticResource White}" />
         <Setter Property="StrokeThickness" Value="1.5" />

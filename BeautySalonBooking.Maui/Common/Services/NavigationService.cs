@@ -48,7 +48,7 @@ public sealed class NavigationService : INavigationService
         {
             ["OtpNavigation"] = model
         });
-    }    
+    }
     #endregion
 
     #region Booking
@@ -97,6 +97,31 @@ public sealed class NavigationService : INavigationService
     public Task GoToBookingSuccessAsync()
     {
         return Shell.Current.GoToAsync($"//{AppRoutes.BookingSuccess}");
+    }
+
+    public Task GoToEditProfileAsync()
+    {
+        return Shell.Current.GoToAsync(AppRoutes.EditProfile);
+    }
+
+    public Task GoToChangeMobileAsync()
+    {
+        return Shell.Current.GoToAsync(AppRoutes.ChangeMobile);
+    }
+
+    public Task GoToSecurityAsync()
+    {
+        return Shell.Current.GoToAsync(AppRoutes.Security);
+    }
+
+    public Task GoToNotificationSettingsAsync()
+    {
+        return Shell.Current.GoToAsync(AppRoutes.NotificationSettings);
+    }
+
+    public Task GoToPrivacyAsync()
+    {
+        return Shell.Current.GoToAsync(AppRoutes.Privacy);
     }
     #endregion
 }

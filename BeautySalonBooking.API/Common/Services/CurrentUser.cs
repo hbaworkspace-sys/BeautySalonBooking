@@ -1,4 +1,5 @@
-﻿using BeautySalonBooking.Application.Common.Interfaces;
+﻿using BeautySalonBooking.Application.Authentication.Interfaces;
+using BeautySalonBooking.Contracts.Authentication.Dtos;
 using System.Security.Claims;
 
 namespace BeautySalonBooking.API.Common.Services;
@@ -26,5 +27,25 @@ public sealed class CurrentUserService : ICurrentUserService
 
             return userId;
         }
+    }
+
+    public Task<UserDto?> GetCurrentUserAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public long? GetCurrentUserId()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> HasPermissionAsync(string permissionCode, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> IsCurrentUserInRoleAsync(string role, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }
