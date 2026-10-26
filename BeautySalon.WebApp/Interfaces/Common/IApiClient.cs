@@ -19,5 +19,14 @@
         Task<TResponse> DeleteAsync<TResponse>(
             string endpoint,
             CancellationToken cancellationToken = default);
+
+        Task<TResponse> GetPublicAsync<TResponse>(
+       string endpoint,
+       CancellationToken cancellationToken = default);
+
+        Task<TResponse> PostPublicAsync<TRequest, TResponse>(
+            string endpoint,
+            TRequest request,
+            CancellationToken cancellationToken = default);
     }
 }

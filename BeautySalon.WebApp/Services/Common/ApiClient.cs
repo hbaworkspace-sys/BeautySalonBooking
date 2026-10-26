@@ -412,6 +412,119 @@ namespace BeautySalonBooking.WebApp.Services.Common
             }
         }
 
+
+
+        // ========== Private Helper: Public Send ==========
+        private async Task<HttpResponseMessage> SendPublicAsync(
+            Func<Task<HttpResponseMessage>> sendRequest,
+            CancellationToken cancellationToken)
+        {
+            // ⚠️ هیچ هدر Authorization اضافه نمی‌کنیم — اندپوینت public است
+            // ⚠️ در صورت 401، فقط exception می‌دهیم (بدون refresh، بدون logout)
+
+            var response = await sendRequest();
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _logger.LogWarning(
+                    "Public endpoint returned 401 — this endpoint may require authentication");
+                throw new UnauthorizedAccessException(
+                    "این بخش نیاز به ورود دارد. لطفاً وارد شوید.");
+            }
+
+            return response;
+        }
+
+        // ========== GetPublicAsync ==========
+        public async Task<TResponse> GetPublicAsync<TResponse>(
+            string endpoint,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var fullUrl = BuildUrl(endpoint);
+
+                var response = await SendPublicAsync(
+                    () => _httpClient.GetAsync(fullUrl, cancellationToken),
+                    cancellationToken);
+
+                var content = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError(
+                        "API Error (public): {StatusCode} - {Content}",
+                        response.StatusCode, content);
+                    throw new HttpRequestException(
+                        $"خطا در ارتباط با سرور: {response.StatusCode}");
+                }
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+
+                var result = JsonSerializer.Deserialize<TResponse>(content, options);
+
+                return result ?? throw new JsonException("پاسخ نامعتبر از سرور");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in GetPublicAsync for endpoint: {Endpoint}", endpoint);
+                throw;
+            }
+        }
+
+        // ========== PostPublicAsync ==========
+        public async Task<TResponse> PostPublicAsync<TRequest, TResponse>(
+            string endpoint,
+            TRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var fullUrl = BuildUrl(endpoint);
+                var json = JsonSerializer.Serialize(request);
+                using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await SendPublicAsync(
+                    () => _httpClient.PostAsync(fullUrl, content, cancellationToken),
+                    cancellationToken);
+
+                var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError(
+                        "API Error (public): {StatusCode} - {Content}",
+                        response.StatusCode, responseContent);
+                    throw new HttpRequestException(
+                        $"خطا در ارتباط با سرور: {response.StatusCode}");
+                }
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+
+                var result = JsonSerializer.Deserialize<TResponse>(responseContent, options);
+
+                return result ?? throw new JsonException("پاسخ نامعتبر از سرور");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in PostPublicAsync for endpoint: {Endpoint}", endpoint);
+                throw;
+            }
+        }
         private string BuildUrl(string endpoint)
         {
             var cleanEndpoint = endpoint.StartsWith("/") ? endpoint[1..] : endpoint;

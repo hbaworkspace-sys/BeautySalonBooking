@@ -1,12 +1,933 @@
 ﻿@page "/"
+@using BeautySalonBooking.Contracts.Authentication.Dtos
+@using BeautySalonBooking.Contracts.Booking.Availability.Dtos
+@using BeautySalonBooking.Contracts.Branch.BranchMemberService.Dtos
+@using BeautySalonBooking.Contracts.Branch.BranchService.Dtos
+@using BeautySalonBooking.Contracts.Category.Dtos
+@using BeautySalonBooking.Contracts.Service.Dtos
+@using BeautySalonBooking.Contracts.Booking.Availability.Responses
+@using BeautySalonBooking.WebApp.Constants
+@using BeautySalonBooking.WebApp.Interfaces.Categories
+@using BeautySalonBooking.WebApp.Interfaces.Services
+@using BeautySalonBooking.WebApp.Interfaces.Branches
+@using BeautySalonBooking.WebApp.Interfaces.Booking
+@inject ICategoryApiService CategoryApiService
+@inject IServiceApiService ServiceApiService
+@inject IBranchServiceApiService BranchServiceApiService
+@inject IBranchMemberServiceApiService BranchMemberServiceApiService
+@inject IBookingApiService BookingApiService
+@inject ILogger<Home> Logger
 @inject NavigationManager NavigationManager
+@inject BeautySalonBooking.WebApp.Interfaces.Login.ILoginService LoginService
 
-<PageTitle>صفحه اصلی</PageTitle>
+<PageTitle>زیبانو | خانه</PageTitle>
+
+<div class="home-page">
+    <!-- هدر و Hero -->
+    <header class="glass-header">
+        <div class="header-container">
+            <a href="/" class="brand-logo">
+                <span class="logo-icon">✨</span>
+                <span class="logo-text">زیبانو</span>
+            </a>
+            <div class="header-actions">
+                <button class="btn-login" @onclick="GoToLogin">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" /></svg>
+                    <span>ورود / ثبت‌نام</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-bg-shapes">
+            <div class="glow-one"></div>
+            <div class="glow-two"></div>
+        </div>
+        <div class="hero-content">
+            <span class="hero-badge">✨ پلتفرم تخصصی زیبایی زیبانو</span>
+            <h1>زیبایی رویایی خود را<br />با یک کلیک رزرو کنید</h1>
+            <p>دسترسی به بهترین سالن‌ها، متخصصین و خدمات زیبایی در نزدیک‌ترین نقطه به شما</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- ویزارد ۷ مرحله‌ای -->
+        <section class="stepper-wrapper animate-slide-up">
+            <div class="stepper">
+                @for (int i = 0; i < Steps.Count; i++)
+                {
+                    var step = Steps[i];
+                    var stepClass = "";
+
+                    if (step.Number < CurrentStep) stepClass = "completed";
+                    else if (step.Number == CurrentStep) stepClass = "active";
+                    else stepClass = "pending";
+
+                    <div class="step-item @stepClass"
+                         @onclick="() => GoToStep(step.Number)"
+                         style="cursor: @(step.Number < CurrentStep ? "pointer" : "default");">
+                        <div class="step-icon">
+                            @if (step.Number < CurrentStep)
+                            {
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            }
+                            else
+                            {
+                                <span>@step.Number</span>
+                            }
+                        </div>
+                        <span class="step-title">@step.Title</span>
+                    </div>
+                    @if (i < Steps.Count - 1)
+                    {
+                        <div class="step-line @(step.Number < CurrentStep ? "line-completed" : "")"></div>
+                    }
+                }
+            </div>
+        </section>
+
+        <!-- مرحله 1 -->
+        @if (CurrentStep == 1)
+        {
+            <section class="categories-section animate-slide-up">
+                <div class="section-header">
+                    <h2>دسته‌بندی‌های خدمات</h2>
+                    <span class="subtitle">دسته‌بندی مورد نظر خود را انتخاب کنید</span>
+                </div>
+                @if (IsLoading)
+                {
+                    <div class="loading-state"><div class="spinner"></div><p>در حال آماده‌سازی...</p></div>
+                }
+                else if (Error is not null)
+                {
+                    <div class="error-state"><p>@Error</p><button @onclick="LoadRootCategoriesAsync">تلاش مجدد</button></div>
+                }
+                else
+                {
+                    <div class="categories-grid">
+                        @foreach (var cat in RootCategories)
+                        {
+                            <button class="category-card" @onclick="() => SelectCategoryAsync(cat)">
+                                <div class="card-shine"></div>
+                                <div class="category-icon-wrapper">
+                                    <div class="category-icon">
+                                        @if (cat.Media.Count > 0)
+                                        {
+                                            <img src="@GetMediaSrc(cat.Media)" alt="@cat.Title" />
+                                        }
+                                        else
+                                        {
+                                            <span class="fallback-icon">✨</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="category-info">
+                                    <h3>@cat.Title</h3>
+                                    @if (!string.IsNullOrWhiteSpace(cat.Description))
+                                    {
+                                        <p>@cat.Description</p>
+                                    }
+                                </div>
+                            </button>
+                        }
+                    </div>
+                }
+            </section>
+        }
+
+        <!-- مرحله 2 -->
+        @if (CurrentStep == 2 && IsSubCategoriesVisible)
+        {
+            <section class="subcategories-section animate-slide-up">
+                <div class="section-header">
+                    <h2>زیرمجموعه‌های @SelectedCategory?.Title</h2>
+                    <span class="subtitle">یک گزینه را انتخاب کنید</span>
+                </div>
+                <div class="subcategories-grid">
+                    @foreach (var sub in SubCategories)
+                    {
+                        <button class="subcategory-card" @onclick="() => SelectSubCategoryAsync(sub)">
+                            <div class="subcategory-icon">
+                                @if (sub.Media.Count > 0)
+                                {
+                                    <img src="@GetMediaSrc(sub.Media)" alt="@sub.Title" />
+                                }
+                                else
+                                {
+                                    <span class="fallback-icon">💅</span>
+                                }
+                            </div>
+                            <h4>@sub.Title</h4>
+                        </button>
+                    }
+                </div>
+            </section>
+        }
+
+        <!-- مرحله 3 -->
+        @if (CurrentStep == 3 && IsServicesVisible)
+        {
+            <section class="services-section animate-slide-up">
+                <div class="section-header">
+                    <h2>سرویس‌های @(SelectedSubCategory?.Title ?? SelectedCategory?.Title)</h2>
+                    <span class="subtitle">سرویس مورد نظر خود را انتخاب و رزرو کنید</span>
+                </div>
+                <div class="services-list">
+                    @foreach (var service in Services)
+                    {
+                        <div class="service-card">
+                            <div class="service-card-header">
+                                @if (service.Media != null && service.Media.Count > 0)
+                                {
+                                    <div class="service-image"><img src="@GetServiceMediaSrc(service.Media)" alt="@service.Title" /></div>
+                                }
+                                <h4>@service.Title</h4>
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(service.Description))
+                            {
+                                <p class="service-desc">@service.Description</p>
+                            }
+                            <div class="service-meta">
+                                <span class="price">@service.BasePrice.ToString("N0") تومان</span>
+                                <span class="duration">@service.BaseDuration.TotalMinutes دقیقه</span>
+                            </div>
+                            <button class="btn-book" @onclick="() => SelectServiceAsync(service)">
+                                <span>انتخاب سالن و رزرو</span>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+
+        <!-- مرحله 4 -->
+        @if (CurrentStep == 4)
+        {
+            <section class="branches-section animate-slide-up">
+                <div class="section-header">
+                    <h2>سالن‌های ارائه‌دهنده @SelectedService?.Title</h2>
+                </div>
+                @if (IsBranchLoading)
+                {
+                    <div class="loading-state"><div class="spinner"></div><p>در حال دریافت لیست سالن‌ها...</p></div>
+                }
+                else if (Branches.Count == 0)
+                {
+                    <div class="empty-state"><p>سالنی یافت نشد.</p></div>
+                }
+                else
+                {
+                    <div class="branches-grid">
+                        @foreach (var branch in Branches)
+                        {
+                            <div class="branch-card">
+                                <div class="branch-card-header">
+                                    @if (branch.Media.Count > 0)
+                                    {
+                                        <div class="branch-image"><img src="@GetBranchMediaSrc(branch.Media)" alt="@branch.BranchTitle" /></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="branch-image placeholder-image"><span>🏢</span></div>
+                                    }
+                                </div>
+                                <div class="branch-card-body">
+                                    <h4>@branch.BranchTitle</h4>
+                                    <div class="branch-org">@branch.OrganizationTitle</div>
+                                    <div class="branch-meta">
+                                        <span class="branch-price">@branch.Price.ToString("N0") تومان</span>
+                                        <span class="branch-duration">@branch.Duration.TotalMinutes دقیقه</span>
+                                    </div>
+                                </div>
+                                <div class="branch-card-footer">
+                                    <button class="btn-book" @onclick="() => SelectBranchAsync(branch)">انتخاب و ادامه</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </section>
+        }
+
+        <!-- مرحله 5 -->
+        @if (CurrentStep == 5)
+        {
+            <section class="members-section animate-slide-up">
+                <div class="section-header">
+                    <h2>انتخاب متخصص</h2>
+                    <span class="subtitle">در @SelectedBranch?.BranchTitle</span>
+                </div>
+                @if (IsMemberLoading)
+                {
+                    <div class="loading-state"><div class="spinner"></div><p>در حال دریافت لیست متخصصین...</p></div>
+                }
+                else if (Members.Count == 0)
+                {
+                    <div class="empty-state"><p>متخصصی یافت نشد.</p></div>
+                }
+                else
+                {
+                    <div class="members-grid">
+                        @foreach (var member in Members)
+                        {
+                            <div class="member-card @(SelectedMember?.BranchMemberId == member.BranchMemberId ? "selected" : "")"
+                                 @onclick="() => SelectMemberAsync(member)">
+                                <div class="member-avatar">
+                                    @if (member.Media.Count > 0)
+                                    {
+                                        <img src="@GetUserMediaSrc(member.Media)" alt="@member.FullName" />
+                                    }
+                                    else
+                                    {
+                                        <span class="avatar-fallback">👤</span>
+                                    }
+                                </div>
+                                <div class="member-info">
+                                    <h4>@member.FullName</h4>
+                                    <div class="member-meta">
+                                        <span class="member-price">@member.Price.ToString("N0") تومان</span>
+                                    </div>
+                                </div>
+                                <div class="member-check">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="action-footer">
+                        <button class="btn-book" @onclick="GoToDateTimeStepAsync">
+                            <span>ادامه و انتخاب تاریخ</span>
+                        </button>
+                    </div>
+                }
+            </section>
+        }
+
+        <!-- مرحله 6: زمان‌بندی -->
+        @if (CurrentStep == 6)
+        {
+            <section class="datetime-section animate-slide-up">
+                <div class="section-header">
+                    <h2>انتخاب تاریخ و زمان</h2>
+                </div>
+
+                @if (IsAvailabilityLoading)
+                {
+                    <div class="loading-state"><div class="spinner"></div><p>در حال دریافت زمان‌های خالی...</p></div>
+                }
+                else if (AvailableDates.Count == 0)
+                {
+                    <div class="empty-state"><p>متأسفانه در ۱۰ روز آینده زمان خالی وجود ندارد.</p></div>
+                }
+                else
+                {
+                    <!-- اسکرول افقی تاریخ‌ها -->
+                    <div class="dates-scroll-wrapper">
+                        @foreach (var date in AvailableDates)
+                        {
+                            <div class="date-card @(SelectedDate?.Date == date.Date ? "selected" : "")"
+                                 @onclick="() => SelectDate(date)">
+                                <span class="day-name">@GetPersianDayName(date.Date)</span>
+                                <span class="day-number">@GetPersianDayNumber(date.Date)</span>
+                                <span class="month-name">@GetPersianMonthName(date.Date)</span>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- گرید زمان‌های خالی -->
+                    @if (SelectedDate != null)
+                    {
+                        <div class="times-section">
+                            <h3 class="times-title">تایم‌های خالی - @GetPersianDayName(SelectedDate.Date) @GetPersianDayNumber(SelectedDate.Date) @GetPersianMonthName(SelectedDate.Date)</h3>
+
+                            <div class="times-grid">
+                                @foreach (var time in AvailableTimes)
+                                {
+                                    <button class="time-btn @(SelectedTime?.StartTime == time.StartTime ? "selected" : "")"
+                                            @onclick="() => SelectTime(time)">
+                                        @if (SelectedTime?.StartTime == time.StartTime)
+                                        {
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        }
+                                        <span>@time.StartTime.ToString("hh\\:mm") تا @time.EndTime.ToString("hh\\:mm")</span>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- کارت خلاصه متخصص -->
+                    <div class="summary-card">
+                        <div class="summary-avatar">
+                            @if (SelectedMember?.Media.Count > 0)
+                            {
+                                <img src="@GetUserMediaSrc(SelectedMember.Media)" alt="@SelectedMember.FullName" />
+                            }
+                            else
+                            {
+                                <span class="avatar-fallback">👤</span>
+                            }
+                        </div>
+                        <div class="summary-info">
+                            <h4>@SelectedMember?.FullName</h4>
+                            <div class="summary-meta">
+                                <span class="summary-price">@SelectedMember?.Price.ToString("N0") تومان</span>
+                                <span class="summary-duration">@SelectedMember?.Duration.TotalMinutes دقیقه</span>
+                            </div>
+                            @if (SelectedTime != null)
+                            {
+                                <span class="summary-time">اولین تایم آزاد: @SelectedTime.StartTime.ToString("hh\\:mm")</span>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- دکمه تایید -->
+                    <div class="action-footer">
+                        <button class="btn-book" @onclick="() => CurrentStep = 7" disabled="@(SelectedTime == null)">
+                            <span>ادامه و تایید</span>
+                        </button>
+                    </div>
+                }
+            </section>
+        }
+
+        <!-- مرحله 7: تایید نهایی و پرداخت -->
+        @if (CurrentStep == 7)
+        {
+            <section class="confirmation-section animate-slide-up">
+                <div class="section-header">
+                    <h2>تایید نهایی و رزرو</h2>
+                </div>
+
+                <!-- خلاصه سفارش -->
+                <div class="order-summary-card">
+                    <h3>خلاصه سفارش شما</h3>
+
+                    <div class="summary-row">
+                        <span class="label">سرویس:</span>
+                        <span class="value">@SelectedService?.Title</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">سالن:</span>
+                        <span class="value">@SelectedBranch?.BranchTitle</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">متخصص:</span>
+                        <span class="value">@SelectedMember?.FullName</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">تاریخ و زمان:</span>
+                        <span class="value">
+                            @GetPersianDayName(SelectedDate!.Date) @GetPersianDayNumber(SelectedDate.Date) @GetPersianMonthName(SelectedDate.Date)
+                            - ساعت @SelectedTime?.StartTime.ToString("hh\\:mm")
+                        </span>
+                    </div>
+                    <div class="summary-row total">
+                        <span class="label">مبلغ قابل پرداخت:</span>
+                        <span class="value">@SelectedMember?.Price.ToString("N0") تومان</span>
+                    </div>
+                </div>
+
+                <!-- فرم رزرو (شماره موبایل و کد تایید) -->
+                @if (!IsBookingCompleted)
+                {
+                    <div class="auth-form-card">
+                        @if (!IsOtpSent)
+                        {
+                            <!-- مرحله ورود شماره موبایل -->
+                            <h4>برای تایید نهایی، شماره موبایل خود را وارد کنید</h4>
+                            <div class="input-group">
+                                <input type="tel" class="input-field" placeholder="مثلاً 09123456789" @bind="MobileNumber" />
+                            </div>
+                            <button class="btn-book" @onclick="SendOtpAsync" disabled="@(string.IsNullOrWhiteSpace(MobileNumber) || IsProcessing)">
+                                @if (IsProcessing)
+                                {
+                                    <span>در حال ارسال...</span>
+                                }
+                                else
+                                {
+                                    <span>دریافت کد تایید</span>
+                                }
+                            </button>
+                        }
+                        else
+                        {
+                            <!-- مرحله وارد کردن کد تایید -->
+                            <h4>کد تایید به شماره @MobileNumber ارسال شد</h4>
+                            <div class="input-group">
+                                <input type="text" class="input-field otp-input" placeholder="کد تایید را وارد کنید" @bind="OtpCode" maxlength="6" />
+                            </div>
+                            <button class="btn-book" @onclick="VerifyOtpAndBookAsync" disabled="@(string.IsNullOrWhiteSpace(OtpCode) || IsProcessing)">
+                                @if (IsProcessing)
+                                {
+                                    <span>در حال ثبت رزرو...</span>
+                                }
+                                else
+                                {
+                                    <span>تایید و ثبت نهایی</span>
+                                }
+                            </button>
+
+                            @if (!string.IsNullOrEmpty(ErrorMessage))
+                            {
+                                <div class="error-message">@ErrorMessage</div>
+                            }
+
+                            <button class="btn-text" @onclick="() => IsOtpSent = false" style="margin-top: 15px; color: #9c7e8d;">ویرایش شماره موبایل</button>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <!-- پیام موفقیت‌آمیز بودن رزرو -->
+                    <div class="success-card animate-slide-up">
+                        <div class="success-icon">✓</div>
+                        <h3>رزرو شما با موفقیت ثبت شد!</h3>
+                        <p>جزئیات نوبت برای شما پیامک خواهد شد.</p>
+
+                    </div>
+                }
+            </section>
+        }
+    </div>
+</div>
 
 @code {
-    protected override void OnInitialized()
+    private int CurrentStep = 1;
+    private List<StepModel> Steps = new()
     {
-        // کاربر رو به صفحه لاگین بفرست
-        NavigationManager.NavigateTo("/login", true);
+        new StepModel { Number = 1, Title = "انتخاب دسته" },
+        new StepModel { Number = 2, Title = "زیرمجموعه" },
+        new StepModel { Number = 3, Title = "انتخاب سرویس" },
+        new StepModel { Number = 4, Title = "انتخاب سالن" },
+        new StepModel { Number = 5, Title = "انتخاب متخصص" },
+        new StepModel { Number = 6, Title = "تاریخ و زمان" },
+        new StepModel { Number = 7, Title = "پرداخت" }
+    };
+    public class StepModel { public int Number { get; set; } public string Title { get; set; } = string.Empty; }
+
+    // داده‌ها
+    private List<CategoryDto> RootCategories = [];
+    private List<CategoryDto> SubCategories = [];
+    private List<ServiceDto> Services = [];
+    private List<BranchServiceOrganizationDto> Branches = [];
+    private List<BranchMemberServiceDto> Members = [];
+
+    private CategoryDto? SelectedCategory;
+    private CategoryDto? SelectedSubCategory;
+    private ServiceDto? SelectedService;
+    private BranchServiceOrganizationDto? SelectedBranch;
+    private BranchMemberServiceDto? SelectedMember;
+
+    // داده‌های زمان‌بندی
+    private List<AvailableDateDto> AvailableDates = [];
+    private List<AvailableTimeSlotDto> AvailableTimes = [];
+    private AvailableDateDto? SelectedDate;
+    private AvailableTimeSlotDto? SelectedTime;
+    private GetBookingAvailabilityResponse? _availability;
+    private bool IsAvailabilityLoading;
+
+    private bool IsLoading = true;
+    private bool IsBranchLoading;
+    private bool IsMemberLoading;
+    private bool IsBusy;
+    private bool IsSubCategoriesVisible;
+    private bool IsServicesVisible;
+    private string? Error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadRootCategoriesAsync();
+    }
+
+    private void GoToLogin() => NavigationManager.NavigateTo("/login");
+
+    private void GoToStep(int stepNumber)
+    {
+        if (stepNumber < CurrentStep)
+        {
+            if (stepNumber == 1)
+            {
+                SelectedCategory = null; SelectedSubCategory = null; SelectedService = null; SelectedBranch = null; SelectedMember = null;
+                SubCategories.Clear(); Services.Clear(); Branches.Clear(); Members.Clear();
+                IsSubCategoriesVisible = false; IsServicesVisible = false;
+            }
+            else if (stepNumber == 2)
+            {
+                SelectedSubCategory = null; SelectedService = null; SelectedBranch = null; SelectedMember = null;
+                Services.Clear(); Branches.Clear(); Members.Clear(); IsServicesVisible = false;
+            }
+            else if (stepNumber == 3)
+            {
+                SelectedService = null; SelectedBranch = null; SelectedMember = null;
+                Branches.Clear(); Members.Clear();
+            }
+            else if (stepNumber == 4)
+            {
+                SelectedBranch = null; SelectedMember = null;
+                Members.Clear();
+            }
+            CurrentStep = stepNumber;
+        }
+    }
+
+    private async Task LoadRootCategoriesAsync()
+    {
+        IsLoading = true; Error = null;
+        try
+        {
+            var result = await CategoryApiService.GetChildrenAsync(CategoryCodes.Service);
+            if (!result.IsSuccess || result.Payload?.Categories is null) { Error = result.Message ?? "خطا در دریافت دسته‌بندی‌ها"; return; }
+            RootCategories = result.Payload.Categories.OrderBy(x => x.DisplayOrder).ToList();
+        }
+        catch (Exception ex) { Logger.LogError(ex, "Error loading root categories"); Error = "خطای غیرمنتظره رخ داد"; }
+        finally { IsLoading = false; }
+    }
+
+    private async Task SelectCategoryAsync(CategoryDto category)
+    {
+        if (IsBusy) return;
+        IsBusy = true;
+        SelectedCategory = category; SelectedSubCategory = null; SelectedService = null; SelectedBranch = null; SelectedMember = null;
+        SubCategories.Clear(); Services.Clear(); Branches.Clear(); Members.Clear();
+        IsSubCategoriesVisible = false; IsServicesVisible = false;
+
+        try
+        {
+            var result = await CategoryApiService.GetChildrenAsync(category.Code);
+            if (!result.IsSuccess) return;
+            var subCategoryDtos = result.Payload?.Categories;
+            if (subCategoryDtos is { Count: > 0 })
+            {
+                SubCategories = subCategoryDtos.OrderBy(x => x.DisplayOrder).ToList();
+                IsSubCategoriesVisible = true;
+                CurrentStep = 2;
+            }
+            else
+            {
+                CurrentStep = 3;
+                await LoadServicesAsync(category.Id);
+            }
+        }
+        finally { IsBusy = false; }
+    }
+
+    private async Task SelectSubCategoryAsync(CategoryDto sub)
+    {
+        if (IsBusy) return;
+        IsBusy = true;
+        SelectedSubCategory = sub; SelectedService = null; SelectedBranch = null; SelectedMember = null;
+        Services.Clear(); Branches.Clear(); Members.Clear(); IsServicesVisible = false;
+
+        try
+        {
+            CurrentStep = 3;
+            await LoadServicesAsync(sub.Id);
+        }
+        finally { IsBusy = false; }
+    }
+
+    private async Task LoadServicesAsync(int categoryId)
+    {
+        try
+        {
+            var result = await ServiceApiService.GetByCategoryAsync(categoryId);
+            if (!result.IsSuccess || result.Payload?.Services is null) return;
+            Services = result.Payload.Services.ToList();
+            IsServicesVisible = true;
+        }
+        catch (Exception ex) { Logger.LogError(ex, "Error loading services"); }
+    }
+
+    private async Task SelectServiceAsync(ServiceDto service)
+    {
+        if (IsBusy) return;
+        IsBusy = true;
+        SelectedService = service; SelectedBranch = null; SelectedMember = null;
+        Branches.Clear(); Members.Clear();
+        CurrentStep = 4;
+        IsBranchLoading = true;
+
+        try
+        {
+            var result = await BranchServiceApiService.GetOrganizationsByServiceAsync(service.Id);
+            if (result.IsSuccess && result.Payload?.Organizations is not null)
+            {
+                Branches = result.Payload.Organizations.OrderBy(x => x.DisplayOrder).ToList();
+            }
+        }
+        catch (Exception ex) { Logger.LogError(ex, "Error loading branches"); }
+        finally { IsBranchLoading = false; IsBusy = false; }
+    }
+
+    private async Task SelectBranchAsync(BranchServiceOrganizationDto branch)
+    {
+        if (IsBusy) return;
+        IsBusy = true;
+        SelectedBranch = branch; SelectedMember = null;
+        Members.Clear();
+        CurrentStep = 5;
+        IsMemberLoading = true;
+
+        try
+        {
+            var result = await BranchMemberServiceApiService.GetAsync(branch.BranchId, SelectedService!.Id);
+            if (result.IsSuccess && result.Payload?.Members is not null)
+            {
+                Members = result.Payload.Members.ToList();
+            }
+        }
+        catch (Exception ex) { Logger.LogError(ex, "Error loading members"); }
+        finally { IsMemberLoading = false; IsBusy = false; }
+    }
+
+    private void SelectMemberAsync(BranchMemberServiceDto member)
+    {
+        SelectedMember = member;
+    }
+
+    private async Task GoToDateTimeStepAsync()
+    {
+        if (SelectedMember == null) return;
+
+        CurrentStep = 6;
+        IsAvailabilityLoading = true;
+
+        try
+        {
+            var request = new BeautySalonBooking.Contracts.Booking.Availability.Requests.GetBookingAvailabilityRequest
+                {
+                    BranchMemberServiceId = SelectedMember.BranchMemberServiceId,
+                    FromDate = DateOnly.FromDateTime(DateTime.Today),
+                    ToDate = DateOnly.FromDateTime(DateTime.Today.AddDays(10)),
+                    SlotInterval = TimeSpan.FromMinutes(15)
+                };
+
+            var result = await BookingApiService.GetAvailabilityAsync(request);
+
+            if (result.IsSuccess && result.Payload?.Dates != null)
+            {
+                _availability = result.Payload;
+                AvailableDates = result.Payload.Dates.Where(x => x.Slots.Count > 0).ToList();
+
+                if (AvailableDates.Count > 0)
+                {
+                    SelectDate(AvailableDates.First());
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading availability");
+        }
+        finally
+        {
+            IsAvailabilityLoading = false;
+        }
+    }
+
+    private void SelectDate(AvailableDateDto date)
+    {
+        SelectedDate = date;
+        SelectedTime = null;
+
+        if (_availability?.Dates is null) return;
+
+        var dateData = _availability.Dates.FirstOrDefault(x => x.Date == date.Date);
+
+        if (dateData?.Slots != null)
+        {
+            AvailableTimes = dateData.Slots.ToList();
+        }
+        else
+        {
+            AvailableTimes = [];
+        }
+    }
+
+    private void SelectTime(AvailableTimeSlotDto time)
+    {
+        SelectedTime = time;
+    }
+
+    // توابع تبدیل تاریخ (با اصلاح DateOnly)
+    private string GetPersianDayName(DateOnly date)
+    {
+        var pc = new System.Globalization.PersianCalendar();
+        // تبدیل DateOnly به DateTime برای PersianCalendar
+        var dateTime = date.ToDateTime(TimeOnly.MinValue);
+        return pc.GetDayOfWeek(dateTime) switch
+        {
+            DayOfWeek.Saturday => "شنبه",
+            DayOfWeek.Sunday => "یکشنبه",
+            DayOfWeek.Monday => "دوشنبه",
+            DayOfWeek.Tuesday => "سه‌شنبه",
+            DayOfWeek.Wednesday => "چهارشنبه",
+            DayOfWeek.Thursday => "پنجشنبه",
+            DayOfWeek.Friday => "جمعه",
+            _ => ""
+        };
+    }
+
+    private string GetPersianDayNumber(DateOnly date)
+    {
+        var pc = new System.Globalization.PersianCalendar();
+        var dateTime = date.ToDateTime(TimeOnly.MinValue);
+        return pc.GetDayOfMonth(dateTime).ToString();
+    }
+
+    private string GetPersianMonthName(DateOnly date)
+    {
+        var pc = new System.Globalization.PersianCalendar();
+        var dateTime = date.ToDateTime(TimeOnly.MinValue);
+        return pc.GetMonth(dateTime) switch
+        {
+            1 => "فروردین",
+            2 => "اردیبهشت",
+            3 => "خرداد",
+            4 => "تیر",
+            5 => "مرداد",
+            6 => "شهریور",
+            7 => "مهر",
+            8 => "آبان",
+            9 => "آذر",
+            10 => "دی",
+            11 => "بهمن",
+            12 => "اسفند",
+            _ => ""
+        };
+    }
+
+    // توابع عکس
+    private static string GetMediaSrc(IReadOnlyList<CategoryMediaDto> media)
+    {
+        if (media.Count == 0) return string.Empty;
+        var first = media.OrderBy(m => m.DisplayOrder).First();
+        if (first.Content.Length == 0) return string.Empty;
+        return $"data:{first.ContentType};base64,{Convert.ToBase64String(first.Content)}";
+    }
+    private static string GetServiceMediaSrc(IReadOnlyList<ServiceMediaDto> media)
+    {
+        if (media.Count == 0) return string.Empty;
+        var first = media.OrderBy(m => m.DisplayOrder).First();
+        if (first.Content.Length == 0) return string.Empty;
+        return $"data:{first.ContentType};base64,{Convert.ToBase64String(first.Content)}";
+    }
+    private static string GetBranchMediaSrc(IReadOnlyList<BranchMediaDto> media)
+    {
+        if (media.Count == 0) return string.Empty;
+        var first = media.OrderBy(m => m.DisplayOrder).First();
+        if (first.Content.Length == 0) return string.Empty;
+        return $"data:{first.ContentType};base64,{Convert.ToBase64String(first.Content)}";
+    }
+    private static string GetUserMediaSrc(IReadOnlyList<UserMediaDto> media)
+    {
+        if (media.Count == 0) return string.Empty;
+        var first = media.OrderBy(m => m.DisplayOrder).First();
+        if (first.Content.Length == 0) return string.Empty;
+        return $"data:{first.ContentType};base64,{Convert.ToBase64String(first.Content)}";
+    }
+
+    // ==========================================
+    // متغیرهای مرحله 7 (رزرو و احراز هویت)
+    // ==========================================
+    private string MobileNumber = string.Empty;
+    private string OtpCode = string.Empty;
+    private bool IsOtpSent = false;
+    private bool IsProcessing = false;
+    private bool IsBookingCompleted = false;
+    private string? ErrorMessage;
+
+    private async Task SendOtpAsync()
+    {
+        if (string.IsNullOrWhiteSpace(MobileNumber)) return;
+
+        IsProcessing = true;
+        ErrorMessage = null;
+
+        try
+        {
+            var request = new BeautySalonBooking.Contracts.Authentication.Requests.LoginInitiateRequest
+                {
+                    MobileNumber = MobileNumber
+                };
+
+            var result = await LoginService.RequestLoginOtpAsync(request);
+
+            if (result.IsSuccess)
+            {
+                IsOtpSent = true;
+            }
+            else
+            {
+                ErrorMessage = result.Message ?? "خطا در ارسال کد تایید";
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error sending OTP");
+            ErrorMessage = "خطای غیرمنتظره رخ داد";
+        }
+        finally
+        {
+            IsProcessing = false;
+        }
+    }
+
+    private async Task VerifyOtpAndBookAsync()
+    {
+        if (string.IsNullOrWhiteSpace(OtpCode)) return;
+
+        IsProcessing = true;
+        ErrorMessage = null;
+
+        try
+        {
+            // 1. تایید کد OTP
+            var verifyRequest = new BeautySalonBooking.Contracts.Authentication.Requests.VerifyOtpRequest
+                {
+                    MobileNumber = MobileNumber,
+                    OtpCode = OtpCode // نام فیلد را با DTO واقعی خود تطبیق دهید
+                };
+
+            var authResult = await LoginService.VerifyLoginOtpAsync(verifyRequest);
+
+            if (!authResult.IsSuccess)
+            {
+                ErrorMessage = authResult.Message ?? "کد تایید نامعتبر است";
+                return;
+            }
+
+            // 2. ثبت نهایی رزرو
+            var bookingRequest = new BeautySalonBooking.Contracts.Booking.CreateBooking.Requests.CreateBookingRequest
+                {
+                    BranchMemberServiceId = SelectedMember!.BranchMemberServiceId,
+                    Date = SelectedDate!.Date,
+                    StartTime = SelectedTime!.StartTime,
+                    Note = string.Empty // می‌توانید یک فیلد ورودی برای یادداشت اضافه کنید
+                };
+
+            var bookingResult = await BookingApiService.CreateBookingAsync(bookingRequest);
+
+            if (bookingResult.IsSuccess)
+            {
+                IsBookingCompleted = true;
+            }
+            else
+            {
+                ErrorMessage = bookingResult.Message ?? "خطا در ثبت رزرو";
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error verifying OTP or creating booking");
+            ErrorMessage = "خطای غیرمنتظره در ثبت رزرو";
+        }
+        finally
+        {
+            IsProcessing = false;
+        }
     }
 }

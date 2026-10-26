@@ -8,7 +8,7 @@ namespace BeautySalonBooking.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[AllowAnonymous]
 
 public sealed class BookingController : ControllerBase
 {

@@ -6,7 +6,7 @@ namespace BeautySalonBooking.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[AllowAnonymous]
 public class BranchController : ControllerBase
 {
     private readonly IBranchService _branchService;

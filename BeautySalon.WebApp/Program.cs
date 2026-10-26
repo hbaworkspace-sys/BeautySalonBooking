@@ -1,11 +1,19 @@
 ﻿using BeautySalonBooking.WebApp.Authentication;
 using BeautySalonBooking.WebApp.Components;
+using BeautySalonBooking.WebApp.Interfaces.Booking;
+using BeautySalonBooking.WebApp.Interfaces.Branches;
+using BeautySalonBooking.WebApp.Interfaces.Categories;
 using BeautySalonBooking.WebApp.Interfaces.Common;
 using BeautySalonBooking.WebApp.Interfaces.Login;
 using BeautySalonBooking.WebApp.Interfaces.Roles;
+using BeautySalonBooking.WebApp.Interfaces.Services;
+using BeautySalonBooking.WebApp.Services.Booking;
+using BeautySalonBooking.WebApp.Services.Branches;
+using BeautySalonBooking.WebApp.Services.Categories;
 using BeautySalonBooking.WebApp.Services.Common;
 using BeautySalonBooking.WebApp.Services.Login;
 using BeautySalonBooking.WebApp.Services.Roles;
+using BeautySalonBooking.WebApp.Services.Services;
 using BeautySalonBooking.WebApp.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -54,6 +62,11 @@ namespace BeautySalonBooking.WebApp
             builder.Services.AddScoped<ILoginService, LoginService>();
 
             builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<ICategoryApiService, CategoryApiService>();
+            builder.Services.AddScoped<IServiceApiService, ServiceApiService>();
+            builder.Services.AddScoped<IBranchServiceApiService, BranchServiceApiService>();
+            builder.Services.AddScoped<IBranchMemberServiceApiService, BranchMemberServiceApiService>();
+            builder.Services.AddScoped<IBookingApiService, BookingApiService>();
 
 
             // ==========================
