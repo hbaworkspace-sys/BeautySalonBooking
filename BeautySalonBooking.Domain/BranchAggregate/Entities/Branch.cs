@@ -20,4 +20,19 @@ public class Branch : AuditableSoftDeleteEntity<long>
 
     public ICollection<BranchMedia> Media { get; private set; }
     = new List<BranchMedia>();
+
+    private Branch() { }
+
+    public Branch(long organizationId, string title, string? description = null, string? glyph = null)
+    {
+        OrganizationId = organizationId;
+        Title = title;
+        Description = description;
+        Glyph = glyph;
+    }
+
+    public void AddMember(BranchMember member) => _members.Add(member);
+    public void AddService(BranchService service) => _services.Add(service);
+    public void AddMedia(BranchMedia media) => Media.Add(media);
+
 }

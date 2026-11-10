@@ -12,4 +12,12 @@ public class OrganizationOwner : AuditableEntity<long>
     public User OwnerUser { get; private set; } = null!;
 
     public bool IsPrimary { get; private set; }
+
+    private OrganizationOwner() { }
+
+    public OrganizationOwner(long ownerUserId, bool isPrimary)
+    {
+        OwnerUserId = ownerUserId;
+        IsPrimary = isPrimary;
+    }
 }

@@ -9,6 +9,8 @@ using BeautySalonBooking.Domain.OrganizationAggregate.Repositories;
 using BeautySalonBooking.Domain.PersonAggregate.Repositories;
 using BeautySalonBooking.Domain.Repositories;
 using BeautySalonBooking.Domain.SchedulingAggregate.Queries;
+using BeautySalonBooking.Domain.SchedulingAggregate.Repositories;
+using BeautySalonBooking.Domain.ServiceAggregate.Entities;
 using BeautySalonBooking.Domain.ServiceAggregate.Repositories;
 using BeautySalonBooking.Infrastructure.Persistence.Queries;
 using BeautySalonBooking.Infrastructure.Persistence.Repositories;
@@ -36,6 +38,19 @@ public static class DependencyInjection
         services.AddScoped<IBranchServiceRepository, BranchServiceRepository>();
         services.AddScoped<IBranchMemberRepository, BranchMemberRepository>();
         services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+        services.AddScoped<IBranchRoleRepository, BranchRoleRepository>();
+        services.AddScoped<IBranchMemberServiceRepository, BranchMemberServiceRepository>();
+
+        // Repositories
+        services.AddScoped<IBranchScheduleRepository, BranchScheduleRepository>();
+        services.AddScoped<IBranchWorkingHourRepository, BranchWorkingHourRepository>();
+        services.AddScoped<IBranchHolidayRepository, BranchHolidayRepository>();
+        services.AddScoped<IBranchMemberScheduleRepository, BranchMemberScheduleRepository>();
+        services.AddScoped<IWorkingShiftRepository, WorkingShiftRepository>();
+        services.AddScoped<IScheduleExceptionRepository, ScheduleExceptionRepository>();
+        services.AddScoped<ITimeOffRepository, TimeOffRepository>();
+
+
 
         services.AddScoped<IBookingAvailabilityQuery, BookingAvailabilityQuery>();
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();

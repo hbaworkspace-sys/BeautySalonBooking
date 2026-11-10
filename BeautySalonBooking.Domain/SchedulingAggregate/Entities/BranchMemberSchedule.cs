@@ -19,4 +19,16 @@ public class BranchMemberSchedule : AuditableSoftDeleteEntity<long>
 
     private readonly List<TimeOff> _timeOffs = new();
     public IReadOnlyCollection<TimeOff> TimeOffs => _timeOffs;
+
+    private BranchMemberSchedule() { }
+
+    public BranchMemberSchedule(long branchMemberId)
+    {
+        BranchMemberId = branchMemberId;
+    }
+
+    public void AddWorkingShift(WorkingShift shift) => _workingShifts.Add(shift);
+    public void AddException(ScheduleException ex) => _exceptions.Add(ex);
+    public void AddTimeOff(TimeOff timeOff) => _timeOffs.Add(timeOff);
+
 }

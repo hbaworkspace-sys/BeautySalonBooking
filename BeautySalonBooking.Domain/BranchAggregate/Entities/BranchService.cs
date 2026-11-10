@@ -21,4 +21,47 @@ public class BranchService : AuditableSoftDeleteEntity<long>
 
     private readonly List<BranchMemberService> _branchMemberServices = new();
     public IReadOnlyCollection<BranchMemberService> BranchMemberServices => _branchMemberServices;
+
+
+    // 👇 سازنده خالی برای EF Core
+    private BranchService() { }
+
+    // 👇 سازنده برای استفاده در کد
+    public BranchService(
+        long branchId,
+        long serviceId,
+        decimal price,
+        TimeSpan duration,
+        DateOnly fromDate,
+        DateOnly toDate,
+        string? description = null,
+        int displayOrder = 0)
+    {
+        BranchId = branchId;
+        ServiceId = serviceId;
+        Price = price;
+        Duration = duration;
+        FromDate = fromDate;
+        ToDate = toDate;
+        Description = description;
+        DisplayOrder = displayOrder;
+    }
+
+    // 👇 متد برای به‌روزرسانی
+    public void Update(
+        decimal price,
+        TimeSpan duration,
+        DateOnly fromDate,
+        DateOnly toDate,
+        string? description,
+        int displayOrder)
+    {
+        Price = price;
+        Duration = duration;
+        FromDate = fromDate;
+        ToDate = toDate;
+        Description = description;
+        DisplayOrder = displayOrder;
+        //IsActive = isActive;
+    }
 }

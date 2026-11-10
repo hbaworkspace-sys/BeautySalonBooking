@@ -14,4 +14,23 @@ public class BranchSchedule : AuditableSoftDeleteEntity<long>
 
     private readonly List<BranchWorkingHour> _workingHours = new();
     public IReadOnlyCollection<BranchWorkingHour> WorkingHours => _workingHours;
+
+
+    private BranchSchedule() { }
+
+    public BranchSchedule(long branchId, DayOfWeek dayOfWeek, bool isWorkingDay)
+    {
+        BranchId = branchId;
+        DayOfWeek = dayOfWeek;
+        IsWorkingDay = isWorkingDay;
+    }
+
+    public void Update(DayOfWeek dayOfWeek, bool isWorkingDay)
+    {
+        DayOfWeek = dayOfWeek;
+        IsWorkingDay = isWorkingDay;
+    }
+
+    public void AddWorkingHour(BranchWorkingHour hour) => _workingHours.Add(hour);
+    public void ClearWorkingHours() => _workingHours.Clear();
 }

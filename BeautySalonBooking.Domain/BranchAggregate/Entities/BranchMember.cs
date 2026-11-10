@@ -17,7 +17,28 @@ public class BranchMember : AuditableSoftDeleteEntity<long>
     public DateOnly StartDate { get; private set; }
     public DateOnly? EndDate { get; private set; }
 
-
     private readonly List<BranchMemberService> _services = new();
     public IReadOnlyCollection<BranchMemberService> Services => _services;
+
+    private BranchMember() { }
+
+    public BranchMember(long branchId, long personId, int branchRoleId, DateOnly startDate)
+    {
+        BranchId = branchId;
+        PersonId = personId;
+        BranchRoleId = branchRoleId;
+        StartDate = startDate;
+    }
+
+    // 👇 متد Update
+    public void Update(int branchRoleId, DateOnly startDate, DateOnly? endDate)
+    {
+        BranchRoleId = branchRoleId;
+        StartDate = startDate;
+        EndDate = endDate;
+    }
+
+    // 👇 متدهای مدیریت سرویس‌ها
+    public void AddService(BranchMemberService service) => _services.Add(service);
+    public void RemoveService(BranchMemberService service) => _services.Remove(service);
 }

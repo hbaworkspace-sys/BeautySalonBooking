@@ -12,4 +12,15 @@ public interface IBranchMemberRepository
             long branchId,
             long serviceId,
             CancellationToken cancellationToken = default);
+    Task<List<long>> GetBranchIdsByUserIdAsync(long userId, CancellationToken ct = default);
+    Task<BranchMember?> GetWithDetailsAsync(long id, CancellationToken ct = default);
+
+    Task<(List<BranchMember> Items, int TotalCount)> GetFilteredAsync(
+        long? branchId,
+        int? branchRoleId,
+        string? searchTerm,
+        bool? isActive,
+        int pageNumber,
+        int pageSize,
+        CancellationToken ct = default);
 }

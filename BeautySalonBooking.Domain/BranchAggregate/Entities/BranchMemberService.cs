@@ -12,4 +12,21 @@ public class BranchMemberService : AuditableSoftDeleteEntity<long>
 
     public decimal? Price { get; private set; }
     public TimeSpan? Duration { get; private set; }
+
+    private BranchMemberService() { }
+
+    public BranchMemberService(long branchServiceId, decimal? price = null, TimeSpan? duration = null)
+    {
+        BranchServiceId = branchServiceId;
+        Price = price;
+        Duration = duration;
+    }
+
+    public void SetBranchMemberId(long branchMemberId) => BranchMemberId = branchMemberId;
+
+    public void Update(decimal? price, TimeSpan? duration)
+    {
+        Price = price;
+        Duration = duration;
+    }
 }

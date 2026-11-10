@@ -30,8 +30,33 @@ public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organiz
             .HasMaxLength(150);
 
         builder.Property(x => x.Glyph)
-          .HasMaxLength(100);
+            .HasMaxLength(100);
 
+        // 👇 رابطه یک به یک با OrganizationDetail
+        builder.HasOne(x => x.Detail)
+            .WithOne(d => d.Organization)
+            .HasForeignKey<OrganizationDetail>(d => d.OrganizationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // 👇 رابطه یک به چند با Branch
+        builder.HasMany(x => x.Branches)
+            .WithOne(b => b.Organization)
+            .HasForeignKey(b => b.OrganizationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // 👇 رابطه یک به چند با OrganizationOwner
+        builder.HasMany(x => x.Owners)
+            .WithOne(o => o.Organization)
+            .HasForeignKey(o => o.OrganizationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // 👇 رابطه یک به چند با OrganizationMedia
+        builder.HasMany(x => x.Media)
+            .WithOne(m => m.Organization)
+            .HasForeignKey(m => m.OrganizationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // تنظیم Field Access Mode
         builder.Metadata
             .FindNavigation(nameof(Organization.Owners))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
