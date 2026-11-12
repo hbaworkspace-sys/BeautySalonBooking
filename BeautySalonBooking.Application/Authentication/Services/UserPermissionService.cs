@@ -85,4 +85,43 @@ public sealed class UserPermissionService : IUserPermissionService
             role.Title
         };
     }
+
+    public async Task<List<RoleDto>> GetRolsAsync(
+           long userId,
+           CancellationToken cancellationToken)
+    {
+        var user =
+            await _unitOfWork
+                .UserRepository
+                .GetByIdAsync(
+                    userId,
+                    cancellationToken);
+
+        if (user == null)
+            return new List<RoleDto>();
+
+        var role =
+            await _unitOfWork
+                .RoleRepository
+                .GetByIdAsync(
+                    user.UserRole.RoleId,
+                    cancellationToken);
+
+        if (role == null)
+            return new List<RoleDto>();
+
+        List<RoleDto> ListRoles = new List<RoleDto>();
+        ListRoles.Add(new RoleDto
+        {
+            Code = role.Code.ToString(),
+            Description = role.Description,
+            Id = role.Id,
+            IsActive = role.IsActive,
+            Title = role.Title,
+
+        });
+        return ListRoles;
+
+
+    }
 }

@@ -10,4 +10,13 @@ public class WorkingShift : AuditableSoftDeleteEntity<long>
     public DayOfWeek DayOfWeek { get; private set; }
     public TimeOnly StartTime { get; private set; }
     public TimeOnly EndTime { get; private set; }
+    public void SetBranchMemberScheduleId(long id) => BranchMemberScheduleId = id;
+    private WorkingShift() { }
+    public WorkingShift(DayOfWeek dayOfWeek, TimeOnly startTime, TimeOnly endTime)
+    {
+        DayOfWeek = dayOfWeek;
+        StartTime = startTime;
+        EndTime = endTime;
+    }
+
 }

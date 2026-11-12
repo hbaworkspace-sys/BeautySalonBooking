@@ -15,7 +15,7 @@ public sealed class RequestConfiguration : IEntityTypeConfiguration<Request>
 
         builder.Property(x => x.TrackingCode)
             .IsRequired()
-            .HasMaxLength(8);
+            .HasMaxLength(50);
 
         builder.Property(x => x.Status)
             .IsRequired();

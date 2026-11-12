@@ -12,4 +12,23 @@ public class BranchHoliday : AuditableSoftDeleteEntity<long>
     public string? Title { get; private set; }
     public string? Description { get; private set; }
     public bool IsNationalHoliday { get; private set; }
+
+    private BranchHoliday() { }
+
+    public BranchHoliday(long branchId, DateOnly date, string? title, string? description, bool isNationalHoliday)
+    {
+        BranchId = branchId;
+        Date = date;
+        Title = title;
+        Description = description;
+        IsNationalHoliday = isNationalHoliday;
+    }
+
+    public void Update(string? title, string? description, bool isNationalHoliday)
+    {
+        Title = title;
+        Description = description;
+        IsNationalHoliday = isNationalHoliday;
+    }
+
 }

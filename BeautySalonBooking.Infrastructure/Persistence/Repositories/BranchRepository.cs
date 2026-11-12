@@ -4,23 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeautySalonBooking.Infrastructure.Persistence.Repositories;
 
-public class BranchRepository : IBranchRepository
+public class BranchRepository : Repository<Branch, long>, IBranchRepository
 {
-    private readonly BeautyDbContext _context;
+    public BranchRepository(BeautyDbContext context) : base(context) { }
 
-    public BranchRepository(BeautyDbContext context)
-    {
-        _context = context;
-    }
-
-    public async Task<IReadOnlyList<Branch>> GetAllAsync(
-        CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Branch>> GetAllWithMediaAsync(CancellationToken cancellationToken = default)
     {
         return await _context.Branches
-                   .AsNoTracking()
-                   .Where(x => x.IsActive && !x.IsDeleted)
-                   .Include(x => x.Media)
-                   .OrderBy(x => x.Title)
-                   .ToListAsync(cancellationToken);
+            .AsNoTracking()
+            .Where(x => x.IsActive && !x.IsDeleted)
+            .Include(x => x.Media)
+            .OrderBy(x => x.Title)
+            .ToListAsync(cancellationToken);
     }
 }

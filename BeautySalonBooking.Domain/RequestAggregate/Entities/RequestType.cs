@@ -20,4 +20,22 @@ public class RequestType : AuditableSoftDeleteEntity<int>
 
     private readonly List<RequestRequiredDocument> _requiredDocuments = new();
     public IReadOnlyCollection<RequestRequiredDocument> RequiredDocuments => _requiredDocuments;
+
+    private RequestType() { }
+
+    public RequestType(string title, string code, string? description, bool isPaymentRequired)
+    {
+        Title = title;
+        Code = code;
+        Description = description;
+        IsPaymentRequired = isPaymentRequired;
+    }
+
+    public void Update(string title, string code, string? description, bool isPaymentRequired)
+    {
+        Title = title;
+        Code = code;
+        Description = description;
+        IsPaymentRequired = isPaymentRequired;
+    }
 }

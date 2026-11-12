@@ -9,4 +9,12 @@ public class BranchWorkingHour : AuditableSoftDeleteEntity<long>
 
     public TimeOnly StartTime { get; private set; }
     public TimeOnly EndTime { get; private set; }
+
+    private BranchWorkingHour() { }
+
+    public BranchWorkingHour(TimeOnly startTime, TimeOnly endTime)
+    {
+        StartTime = startTime;
+        EndTime = endTime;
+    }
 }

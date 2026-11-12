@@ -40,7 +40,12 @@ public class PersonRepository : IPersonRepository
     {
         throw new NotImplementedException();
     }
-
+    public async Task<Person?> GetByUserIdAsync(long userId, CancellationToken ct = default)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId && !x.IsDeleted, ct);
+        return await _context.Persons
+            .FirstOrDefaultAsync(x => x.Id == user.PersonId && !x.IsDeleted, ct);
+    }
     public void Remove(Person person, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

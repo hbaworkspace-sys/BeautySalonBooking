@@ -29,6 +29,7 @@ public class UserDto
     public List<PermissionDto> Permissions { get; set; } = new();
 
     public List<PermissionDto> Menus { get; set; } = new();
+    public List<RoleDto> ListRoles { get; set; } = new();
 }
 
 public class CreateUserRequest

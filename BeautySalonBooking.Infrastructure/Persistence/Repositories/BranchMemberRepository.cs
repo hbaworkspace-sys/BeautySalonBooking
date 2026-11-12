@@ -101,4 +101,84 @@ public sealed class BranchMemberRepository
 })
 .ToListAsync(cancellationToken);
     }
+
+    public async Task<List<long>> GetBranchIdsByUserIdAsync(long userId, CancellationToken ct = default)
+    {
+        // 1. پیدا کردن PersonId مربوط به این User
+        var personId = await _context.Users
+            .AsNoTracking()
+            .Where(x => x.Id == userId)
+            .Select(x => x.PersonId)
+            .FirstOrDefaultAsync(ct);
+
+        if (personId == 0)
+            return new List<long>();
+
+        // 2. پیدا کردن شعبه‌هایی که این Person در آن‌ها عضو است
+        return await _context.BranchMembers
+            .AsNoTracking()
+            .Where(x => x.PersonId == personId && !x.IsDeleted)
+            .Select(x => x.BranchId)
+            .Distinct()
+            .ToListAsync(ct);
+    }
+    public async Task<BranchMember?> GetWithDetailsAsync(long id, CancellationToken ct = default)
+    {
+        return await _context.BranchMembers
+            .AsNoTracking()
+            .Include(x => x.Person)
+            .Include(x => x.Branch)
+            .Include(x => x.BranchRole)
+            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted, ct);
+    }
+
+
+    public async Task<(List<BranchMember> Items, int TotalCount)> GetFilteredAsync(
+        long? branchId,
+        int? branchRoleId,
+        string? searchTerm,
+        bool? isActive,
+        int pageNumber,
+        int pageSize,
+        CancellationToken ct = default)
+    {
+        var query = _context.BranchMembers
+            .AsNoTracking()
+            .Include(x => x.Person)
+                .ThenInclude(x => x.Users)
+                    .ThenInclude(x => x.PhoneNumbers)
+            .Include(x => x.Branch)
+            .Include(x => x.BranchRole)
+            .Include(x => x.Services)
+                .ThenInclude(x => x.BranchService)
+                    .ThenInclude(x => x.Service)
+            .Where(x => !x.IsDeleted);
+
+        if (branchId.HasValue)
+            query = query.Where(x => x.BranchId == branchId.Value);
+
+        if (branchRoleId.HasValue)
+            query = query.Where(x => x.BranchRoleId == branchRoleId.Value);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var term = searchTerm.Trim();
+            query = query.Where(x =>
+                x.Person.FirstName.Contains(term) ||
+                x.Person.LastName.Contains(term));
+        }
+
+        if (isActive.HasValue)
+            query = query.Where(x => x.IsActive == isActive.Value);
+
+        var totalCount = await query.CountAsync(ct);
+
+        var items = await query
+            .OrderByDescending(x => x.CreatedAt)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(ct);
+
+        return (items, totalCount);
+    }
 }

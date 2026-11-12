@@ -16,4 +16,19 @@ public class DocumentType : AuditableSoftDeleteEntity<int>
     private readonly List<RequestRequiredDocument> _requiredDocuments = new();
     public IReadOnlyCollection<RequestRequiredDocument> RequiredDocuments => _requiredDocuments;
 
+    private DocumentType() { }
+
+    public DocumentType(string title, string code, string? description)
+    {
+        Title = title;
+        Code = code;
+        Description = description;
+    }
+
+    public void Update(string title, string code, string? description)
+    {
+        Title = title;
+        Code = code;
+        Description = description;
+    }
 }

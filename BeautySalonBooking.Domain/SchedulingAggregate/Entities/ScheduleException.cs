@@ -12,4 +12,14 @@ public class ScheduleException : AuditableSoftDeleteEntity<long>
     public TimeOnly EndTime { get; private set; }
     public bool IsWorkingDay { get; private set; }
     public string? Description { get; private set; }
+    public void SetBranchMemberScheduleId(long id) => BranchMemberScheduleId = id;
+    private ScheduleException() { }
+    public ScheduleException(DateOnly date, TimeOnly startTime, TimeOnly endTime, bool isWorkingDay, string? description)
+    {
+        Date = date;
+        StartTime = startTime;
+        EndTime = endTime;
+        IsWorkingDay = isWorkingDay;
+        Description = description;
+    }
 }

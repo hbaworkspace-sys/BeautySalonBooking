@@ -572,7 +572,10 @@ public class AuthenticationService : IAuthenticationService
                     user.Id,
                     cancellationToken);
 
-
+        var listRoles = await _userPermissionService
+                .GetRolsAsync(
+                    user.Id,
+                    cancellationToken);
 
 
         return new UserDto
@@ -634,6 +637,7 @@ public class AuthenticationService : IAuthenticationService
             Roles =
                 roles,
 
+            ListRoles = listRoles,
 
             Permissions =
                 permissions,

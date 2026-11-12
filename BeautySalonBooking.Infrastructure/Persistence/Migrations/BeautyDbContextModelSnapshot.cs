@@ -1414,6 +1414,9 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.Property<long>("OrganizationId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("OrganizationId1")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("ToDate")
                         .HasColumnType("datetime2");
 
@@ -1434,6 +1437,10 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("OrganizationId")
                         .IsUnique();
+
+                    b.HasIndex("OrganizationId1")
+                        .IsUnique()
+                        .HasFilter("[OrganizationId1] IS NOT NULL");
 
                     b.ToTable("ORGANIZATION_DETAILS", "GT");
                 });
@@ -1803,6 +1810,9 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Biography")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
@@ -1810,6 +1820,9 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.Property<string>("Certifications")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("CodePosti")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -1828,6 +1841,9 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
+
+                    b.Property<string>("LicenseNo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("RequestId")
                         .HasColumnType("bigint");
@@ -1894,8 +1910,8 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("TrackingCode")
                         .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -2924,7 +2940,7 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                     b.HasOne("BeautySalonBooking.Domain.OrganizationAggregate.Entities.Organization", "Organization")
                         .WithMany("Branches")
                         .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Organization");
@@ -3182,6 +3198,10 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
                         .HasForeignKey("BeautySalonBooking.Domain.OrganizationAggregate.Entities.OrganizationDetail", "OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("BeautySalonBooking.Domain.OrganizationAggregate.Entities.Organization", null)
+                        .WithOne("Detail")
+                        .HasForeignKey("BeautySalonBooking.Domain.OrganizationAggregate.Entities.OrganizationDetail", "OrganizationId1");
 
                     b.Navigation("Organization");
                 });
@@ -3543,6 +3563,9 @@ namespace BeautySalonBooking.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("BeautySalonBooking.Domain.OrganizationAggregate.Entities.Organization", b =>
                 {
                     b.Navigation("Branches");
+
+                    b.Navigation("Detail")
+                        .IsRequired();
 
                     b.Navigation("Media");
 

@@ -22,4 +22,17 @@ public class RequestDocument : AuditableEntity<long>
 
     public DateTime? ReviewedAt { get; private set; }
     public string? ReviewDescription { get; private set; }
+
+    private RequestDocument() { }
+
+    // سازنده برای استفاده در کد
+    public RequestDocument(int documentTypeId, string fileName, string contentType, byte[] content)
+    {
+        DocumentTypeId = documentTypeId;
+        FileName = fileName;
+        ContentType = contentType;
+        Content = content;
+        FileSize = content.Length;
+        Status = RequestDocumentStatus.Pending; // یا هر وضعیت اولیه‌ای که دارید
+    }
 }

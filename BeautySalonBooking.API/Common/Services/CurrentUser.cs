@@ -36,7 +36,15 @@ public sealed class CurrentUserService : ICurrentUserService
 
     public long? GetCurrentUserId()
     {
-        throw new NotImplementedException();
+        var claim =
+                _httpContextAccessor.HttpContext?
+                    .User
+                    .FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (!long.TryParse(claim, out var userId))
+            throw new UnauthorizedAccessException();
+
+        return userId;
     }
 
     public Task<bool> HasPermissionAsync(string permissionCode, CancellationToken cancellationToken = default)

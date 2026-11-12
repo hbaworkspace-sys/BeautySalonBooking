@@ -16,4 +16,15 @@ public class RequestHistory : AuditableEntity<long>
     public User? ChangedByUser { get; private set; }
 
     public string? Description { get; private set; }
+
+    private RequestHistory() { }
+
+    public RequestHistory(long requestId, RequestStatus status, RequestHistoryAction action, long? changedByUserId, string? description)
+    {
+        RequestId = requestId;
+        Status = status;
+        Action = action;
+        ChangedByUserId = changedByUserId;
+        Description = description;
+    }
 }

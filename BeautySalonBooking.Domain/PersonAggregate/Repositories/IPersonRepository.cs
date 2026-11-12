@@ -10,4 +10,5 @@ public interface IPersonRepository
     Task AddAsync(Person person, CancellationToken cancellationToken);
     void Update(Person person, CancellationToken cancellationToken);
     void Remove(Person person, CancellationToken cancellationToken);
+    Task<Person?> GetByUserIdAsync(long userId, CancellationToken ct = default);
 }
