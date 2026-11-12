@@ -1,4 +1,5 @@
 ﻿using BeautySalonBooking.Domain.Base.Entities;
+using BeautySalonBooking.Domain.ContentAggregate.Entities;
 using BeautySalonBooking.Domain.OrganizationAggregate.Entities;
 
 namespace BeautySalonBooking.Domain.BranchAggregate.Entities;
@@ -20,4 +21,7 @@ public class Branch : AuditableSoftDeleteEntity<long>
 
     public ICollection<BranchMedia> Media { get; private set; }
     = new List<BranchMedia>();
+
+    private readonly List<ContentItem> _contents = new();
+    public IReadOnlyCollection<ContentItem> Contents => _contents.AsReadOnly();
 }

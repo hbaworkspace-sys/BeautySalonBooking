@@ -7,6 +7,9 @@
     Background="White"
     NavigationPage.HasNavigationBar="False">
 
-    <ucCard:OnboardingCardView Grid.Row="1" OnboardingCompleted="OnboardingCardView_OnboardingCompleted" />
+    <ucCard:OnboardingCardView
+        x:Name="OnboardingCardView"
+        Grid.Row="1"
+        OnboardingCompleted="OnboardingCardView_OnboardingCompleted" />
 
 </ContentPage>

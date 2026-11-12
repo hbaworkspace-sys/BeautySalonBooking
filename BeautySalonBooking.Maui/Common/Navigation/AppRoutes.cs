@@ -31,4 +31,6 @@ public static class AppRoutes
     public const string Security = "profile/security";
     public const string NotificationSettings = "profile/notification-settings";
     public const string Privacy = "profile/privacy";
+    public const string DeleteAccount = "profile/delete-account";
+    public const string DeleteAccountConfirmation = "profile/delete-account-confirmation";
 }

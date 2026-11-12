@@ -1,4 +1,5 @@
 ﻿using BeautySalonBooking.Maui.Common.Interfaces;
+using BeautySalonBooking.Maui.Features.Main.Models;
 using BeautySalonBooking.Maui.Features.Popups;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -42,6 +43,6 @@ public partial class EditProfileViewModel :
     [RelayCommand]
     private Task GoBackAsync()
     {
-        return _navigationService.GoBackAsync();
+        return _navigationService.GoToMainAsync(MainTab.Profile);
     }
 }

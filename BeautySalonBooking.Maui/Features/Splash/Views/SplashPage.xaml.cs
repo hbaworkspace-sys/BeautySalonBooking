@@ -16,7 +16,7 @@ public partial class SplashPage : ContentPage
         if (BindingContext is SplashViewModel vm)
         {
             await vm.InitializeAsync(
-                Indicator.StartAnimationAsync());
+              Indicator.StartAnimationAsync());
         }
     }
 }

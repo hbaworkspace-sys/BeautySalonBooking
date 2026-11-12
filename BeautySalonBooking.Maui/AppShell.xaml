@@ -18,4 +18,5 @@
     <ShellContent ContentTemplate="{DataTemplate main:MainPage}" Route="main" />
 
     <ShellContent ContentTemplate="{DataTemplate booking:SuccessPage}" Route="booking-success" />
+
 </Shell>

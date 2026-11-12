@@ -32,6 +32,7 @@
         <Setter Property="FontFamily" Value="MaterialIconsOut" />
         <Setter Property="FontSize" Value="25" />
         <Setter Property="TextColor" Value="#ED7F89" />
+        <!--  #D64550  -->
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
     </Style>

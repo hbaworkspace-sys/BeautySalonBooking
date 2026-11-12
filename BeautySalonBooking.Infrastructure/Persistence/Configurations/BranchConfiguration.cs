@@ -35,5 +35,9 @@ public sealed class BranchConfiguration : IEntityTypeConfiguration<Branch>
         builder.Metadata
             .FindNavigation(nameof(Branch.Services))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.Metadata
+            .FindNavigation(nameof(Branch.Contents))!
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

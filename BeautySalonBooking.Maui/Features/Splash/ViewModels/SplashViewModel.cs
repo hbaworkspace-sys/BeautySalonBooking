@@ -29,21 +29,34 @@ public partial class SplashViewModel : ObservableObject
 
     public async Task InitializeAsync(Task animationTask)
     {
+        // بررسی وضعیت ورود و اجرای انیمیشن به‌صورت هم‌زمان
         var loginCheckTask = CheckLoginStatusAsync();
 
         await Task.WhenAll(
             animationTask,
             loginCheckTask);
+
+        // فقط بعد از پایان هر دو عملیات، صفحه تغییر می‌کند
+        var isLoggedIn = await loginCheckTask;
+
+        if (isLoggedIn)
+        {
+            await _navigationService.GoToMainAsync(
+                MainTab.Dashboard);
+        }
+        else
+        {
+            await _navigationService.GoToOnboardingAsync();
+        }
     }
 
-    public async Task CheckLoginStatusAsync()
+    public async Task<bool> CheckLoginStatusAsync()
     {
         var session = await _authSessionService.GetAsync();
 
         if (session is null)
         {
-            await _navigationService.GoToOnboardingAsync();
-            return;
+            return false;
         }
 
         // Access Token منقضی شده → Refresh
@@ -68,8 +81,7 @@ public partial class SplashViewModel : ObservableObject
                 await _authSessionService.ClearAsync();
                 _userContext.Clear();
 
-                await _navigationService.GoToOnboardingAsync();
-                return;
+                return false;
             }
 
             await _authSessionService.SaveAsync(
@@ -90,12 +102,10 @@ public partial class SplashViewModel : ObservableObject
             await _authSessionService.ClearAsync();
             _userContext.Clear();
 
-            await _navigationService.GoToOnboardingAsync();
-            return;
+            return false;
         }
 
         _userContext.SetUser(userResponse.Payload);
-
-        await _navigationService.GoToMainAsync(MainTab.Dashboard);
+        return true;
     }
 }

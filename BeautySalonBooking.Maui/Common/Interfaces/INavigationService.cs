@@ -38,4 +38,6 @@ public interface INavigationService
     Task GoToSecurityAsync();
     Task GoToNotificationSettingsAsync();
     Task GoToPrivacyAsync();
+    Task GoToDeleteAccountAsync();
+    Task GoToDeleteAccountConfirmationAsync();
 }

@@ -1,5 +1,4 @@
 using BeautySalonBooking.Maui.Common.Interfaces;
-using BeautySalonBooking.Maui.Features.Auth;
 
 namespace BeautySalonBooking.Maui.Features.Splash.Views;
 
@@ -15,5 +14,18 @@ public partial class OnboardingPage : ContentPage
     private async void OnboardingCardView_OnboardingCompleted(object sender, EventArgs e)
     {
         await _navigationService.GoToLoginAsync();
+    }
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        OnboardingCardView.StartRotation();
+    }
+
+    protected override void OnDisappearing()
+    {
+        OnboardingCardView.StopRotation();
+
+        base.OnDisappearing();
     }
 }

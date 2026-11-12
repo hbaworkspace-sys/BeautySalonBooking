@@ -1,6 +1,7 @@
 ﻿using BeautySalonBooking.Maui.Common.Enums;
 using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Features.Auth.Models;
+using BeautySalonBooking.Maui.Features.Main.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -41,9 +42,10 @@ public partial class ChangeMobileViewModel : ObservableObject
         }
     }
 
+
     [RelayCommand]
     private Task GoBackAsync()
     {
-        return _navigationService.GoBackAsync();
+        return _navigationService.GoToMainAsync(MainTab.Profile);
     }
 }

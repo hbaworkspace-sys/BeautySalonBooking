@@ -7,7 +7,9 @@ public partial class ProfileView : ContentView
     public ProfileView(ProfileViewModel viewModel)
     {
         InitializeComponent();
+
         BindingContext = viewModel;
+
         Loaded += OnLoaded;
     }
 

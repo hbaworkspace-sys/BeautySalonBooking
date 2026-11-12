@@ -20,6 +20,5 @@
             HorizontalOptions="Fill"
             RowSpacing="0"
             VerticalOptions="Fill" />
-
     </Border>
 </ContentView>

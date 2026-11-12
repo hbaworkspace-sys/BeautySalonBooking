@@ -1,8 +1,13 @@
 namespace BeautySalonBooking.Maui.UserControls.OnboardingCard;
 
-class OnboardingCardData
+public class OnboardingCardData
 {
-    public OnboardingCardData(int id, string mainImageBoxSource, string circularImageSource, string title, string description)
+    public OnboardingCardData(
+        int id,
+        string mainImageBoxSource,
+        string circularImageSource,
+        string title,
+        string description)
     {
         Id = id;
         MainImageBoxSource = mainImageBoxSource;
@@ -10,82 +15,146 @@ class OnboardingCardData
         Title = title;
         Description = description;
     }
+
     public int Id { get; set; }
     public string MainImageBoxSource { get; set; }
     public string CircularImageSource { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
 }
+
 public partial class OnboardingCardView : ContentView
 {
-    List<OnboardingCardData> Data;
-    int Selected;
+    private readonly List<OnboardingCardData> _data;
+    private int _selected;
+    private CancellationTokenSource? _rotationCts;
+
     public event EventHandler? OnboardingCompleted;
+
     public OnboardingCardView()
     {
         InitializeComponent();
-        Data =
+
+        _data =
         [
-            new OnboardingCardData(0, "onboarding_chair.png", "beauty_chair.png", "همه چیز برای زیبایی شما", "از پیدا کردن بهترین سالن ها تا مدیریت \n وقت های شما، همه در یکجا"),
-            new OnboardingCardData(1, "onboarding_product.png", "calneder.png", "رزرو آسان و سریع ", "با چند کلیک ساده نوبت دلخواه خود را\n از بین بهترین سالن ها رزرو کنید"),
-            new OnboardingCardData(2, "onboarding_mobile.png", "message.png", "بررسی و انتخاب هوشمند", "با مشاهده نظرات کابران و تصاویر واقعی\n بهترین انتخاب را داشته باشید"),
+            new OnboardingCardData(
+                0,
+                "onboarding_chair.png",
+                "beauty_chair.png",
+                "همه چیز برای زیبایی شما",
+                "از پیدا کردن بهترین سالن ها تا مدیریت \n وقت های شما، همه در یکجا"),
+
+            new OnboardingCardData(
+                1,
+                "onboarding_product.png",
+                "calneder.png",
+                "رزرو آسان و سریع",
+                "با چند کلیک ساده نوبت دلخواه خود را\n از بین بهترین سالن ها رزرو کنید"),
+
+            new OnboardingCardData(
+                2,
+                "onboarding_mobile.png",
+                "message.png",
+                "بررسی و انتخاب هوشمند",
+                "با مشاهده نظرات کابران و تصاویر واقعی\n بهترین انتخاب را داشته باشید"),
         ];
-        Selected = 0;
-        SwitchOnboarding();
+
+        _selected = 0;
+
+        ShowCard(_selected);
+
+        Loaded += OnboardingCardView_Loaded;
+        Unloaded += OnboardingCardView_Unloaded;
     }
 
-    private void btnNext_Clicked(object sender, EventArgs e)
+    private void OnboardingCardView_Loaded(
+        object? sender,
+        EventArgs e)
     {
-        if (Selected == 2)
-        {
-            OnboardingCompleted?.Invoke(this, EventArgs.Empty);
+        StartRotation();
+    }
+
+    private void OnboardingCardView_Unloaded(
+        object? sender,
+        EventArgs e)
+    {
+        StopRotation();
+    }
+
+    public void StartRotation()
+    {
+        // جلوگیری از اجرای چند حلقه هم‌زمان
+        if (_rotationCts is not null)
             return;
-        }
-        Selected++;
-        SwitchOnboarding();
+
+        _rotationCts = new CancellationTokenSource();
+
+        _ = RotateCardsAsync(_rotationCts.Token);
     }
-    private void btnBack_Clicked(object sender, EventArgs e)
+
+    public void StopRotation()
     {
-        if (Selected == 0)
-        {
+        var cts = _rotationCts;
+
+        if (cts is null)
             return;
-        }
-        Selected--;
-        SwitchOnboarding();
+
+        _rotationCts = null;
+
+        cts.Cancel();
+        cts.Dispose();
     }
-    void SwitchOnboarding()
+    public async Task RotateCardsAsync(CancellationToken token)
     {
-        imgMainBox.Source = Data[Selected].MainImageBoxSource;
-        imgCircularIcon.ImageSource = Data[Selected].CircularImageSource;
-        textContent.Title = Data[Selected].Title;
-        textContent.Description = Data[Selected].Description;
-
-        switch (Selected)
+        try
         {
-            case 0:
-                btnBack.IsVisible = false;
-                btnNext.IsVisible = true;
-                Indicator_1.Color = Color.FromArgb("#F59DB4");
-                Indicator_2.Color = Indicator_3.Color = Color.FromArgb("#D9D9D9");
-                imgCircularIcon.ImageMargin = 20;
+            while (true)
+            {
+                // مدت نمایش هر کارت
+                await Task.Delay(3000, token);
 
-                break;
+                _selected = (_selected + 1) % _data.Count;
 
-            case 1:
-                btnBack.IsVisible = true;
-                btnNext.IsVisible = true;
-                Indicator_1.Color = Indicator_2.Color = Color.FromArgb("#F59DB4");
-                Indicator_3.Color = Color.FromArgb("#D9D9D9");
-                imgCircularIcon.ImageMargin = 20;
-                break;
-
-            case 2:
-                btnBack.IsVisible = true;
-                btnNext.IsVisible = true;
-                Indicator_1.Color = Indicator_2.Color = Indicator_3.Color = Color.FromArgb("#F59DB4");
-                imgCircularIcon.ImageMargin = 20;
-
-                break;
+                ShowCard(_selected);
+            }
         }
+        catch (OperationCanceledException)
+        {
+            // توقف عادی چرخش کارت‌ها
+        }
+    }
+
+    private void ShowCard(int index)
+    {
+        var card = _data[index];
+
+        imgMainBox.Source = card.MainImageBoxSource;
+        imgCircularIcon.ImageSource = card.CircularImageSource;
+
+        textContent.Title = card.Title;
+        textContent.Description = card.Description;
+
+        var activeColor = Color.FromArgb("#F59DB4");
+        var inactiveColor = Color.FromArgb("#D9D9D9");
+
+        Indicator_1.Color =
+            index == 0 ? activeColor : inactiveColor;
+
+        Indicator_2.Color =
+            index == 1 ? activeColor : inactiveColor;
+
+        Indicator_3.Color =
+            index == 2 ? activeColor : inactiveColor;
+
+        imgCircularIcon.ImageMargin = 20;
+    }
+
+
+
+    private void SkipButton_Clicked(object sender, EventArgs e)
+    {
+        StopRotation();
+
+        OnboardingCompleted?.Invoke(this, EventArgs.Empty);
     }
 }
