@@ -60,7 +60,8 @@
                 <btn:PrimaryButtonView
                     Title="{Binding SubmitButtonTitle}"
                     Grid.Row="3"
-                    Command="{Binding VerifyOtpCommand}" />
+                    Command="{Binding VerifyOtpCommand}"
+                    IsButtonEnabled="{Binding IsButtonEnabled}" />
             </VerticalStackLayout>
 
             <indicator:LoadingIndicator

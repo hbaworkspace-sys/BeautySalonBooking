@@ -97,6 +97,7 @@
                                     HorizontalTextAlignment="Center"
                                     Text="دنبال‌شونده"
                                     TextColor="#77717A" />
+
                             </VerticalStackLayout>
 
                             <BoxView
@@ -169,8 +170,6 @@
                         Title="کل نوبت ها"
                         Grid.Row="0"
                         Grid.Column="0"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="{x:Static model:ProfileScreen.AppointmentHistory}"
                         Detail="calendar_today"
                         Value="33" />
 
@@ -178,8 +177,6 @@
                         Title="نوبت های انجام شده"
                         Grid.Row="0"
                         Grid.Column="1"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="{x:Static model:ProfileScreen.AppointmentDetails}"
                         Detail="schedule"
                         Value="27" />
 
@@ -187,8 +184,6 @@
                         Title="نوبت‌های پیش رو"
                         Grid.Row="1"
                         Grid.Column="0"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="{x:Static model:ProfileScreen.AppointmentHistory}"
                         Detail="check_circle"
                         Value="6" />
 
@@ -196,8 +191,6 @@
                         Title="مجموع هزینه ها"
                         Grid.Row="1"
                         Grid.Column="1"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="{x:Static model:ProfileScreen.SpendingSummary}"
                         Detail="paid"
                         Value="2.680.000 تومان" />
                 </Grid>
@@ -251,14 +244,10 @@
                         CommandParameter="{x:Static model:ProfileScreen.NotificationSettings}"
                         Icon="notifications" />
 
-                    <profile:SettingsRowView
-                        Title="ظاهر"
-                        CommandParameter="{x:Static model:ProfileScreen.Appearance}"
-                        Icon="palette" />
+                    <profile:SettingsRowView Title="ظاهر" Icon="palette" />
 
                     <profile:SettingsRowView
                         Title="زبان"
-                        CommandParameter="{x:Static model:ProfileScreen.Language}"
                         Icon="language"
                         Value="فارسی" />
 
@@ -275,29 +264,13 @@
                     Grid.Row="5"
                     Margin="16,0">
 
-                    <profile:SettingsRowView
-                        Title="راهنمای استفاده"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="{x:Static model:ProfileScreen.Favorites}"
-                        Icon="Menu_book" />
+                    <profile:SettingsRowView Title="راهنمای استفاده" Icon="Menu_book" />
 
-                    <profile:SettingsRowView
-                        Title="سوالات متداول"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="{x:Static model:ProfileScreen.HelpCenter}"
-                        Icon="question_exchange" />
+                    <profile:SettingsRowView Title="سوالات متداول" Icon="question_exchange" />
 
-                    <profile:SettingsRowView
-                        Title="تماس با پشتیبانی"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="{x:Static model:ProfileScreen.ContactSupport}"
-                        Icon="support_agent" />
+                    <profile:SettingsRowView Title="تماس با پشتیبانی" Icon="support_agent" />
 
-                    <profile:SettingsRowView
-                        Title="درباره ما"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="{x:Static model:ProfileScreen.About}"
-                        Icon="info" />
+                    <profile:SettingsRowView Title="درباره ما" Icon="info" />
 
                 </card:SectionCardView>
 
@@ -306,15 +279,10 @@
                     Grid.Row="6"
                     Margin="16,0">
 
-                    <profile:SettingsRowView
-                        Title="خروج از حساب"
-                        Command="{Binding LogoutCommand}"
-                        Icon="logout" />
+                    <profile:SettingsRowView Title="خروج از حساب" Icon="logout" />
 
                     <profile:SettingsRowView
                         Title="حذف حساب کاربری"
-                        Command="{Binding NavigateCommand}"
-                        CommandParameter="{x:Static model:ProfileScreen.DeleteAccount}"
                         Icon="delete_forever"
                         IsDestructive="True" />
 
@@ -661,7 +629,7 @@
                 </Border>
             </VerticalStackLayout>
         </ScrollView>
-        
+
         <Grid BackgroundColor="#80FFFFFF" IsVisible="{Binding IsBusy}">
             <ActivityIndicator
                 HorizontalOptions="Center"

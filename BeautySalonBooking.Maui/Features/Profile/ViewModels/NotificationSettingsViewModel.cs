@@ -1,4 +1,5 @@
 ﻿using BeautySalonBooking.Maui.Common.Interfaces;
+using BeautySalonBooking.Maui.Features.Main.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -11,9 +12,11 @@ public partial class NotificationSettingsViewModel : ObservableObject
     {
         _navigationService = navigationService;
     }
+
+
     [RelayCommand]
     private Task GoBackAsync()
     {
-        return _navigationService.GoBackAsync();
+        return _navigationService.GoToMainAsync(MainTab.Profile);
     }
 }

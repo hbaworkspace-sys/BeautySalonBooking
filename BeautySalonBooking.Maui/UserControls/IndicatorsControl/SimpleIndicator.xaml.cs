@@ -10,16 +10,16 @@ public partial class SimpleIndicator : ContentView
     {
         Reset();
 
-        await Task.Delay(1200);
+        await Task.Delay(900);
         Indicator_Border1.Background = Colors.PaleVioletRed;
 
-        await Task.Delay(1200);
+        await Task.Delay(900);
         Indicator_Border2.Background = Colors.PaleVioletRed;
 
-        await Task.Delay(1200);
+        await Task.Delay(900);
         Indicator_Border3.Background = Colors.PaleVioletRed;
 
-        await Task.Delay(1200);
+        await Task.Delay(900);
     }
 
     public void Reset()

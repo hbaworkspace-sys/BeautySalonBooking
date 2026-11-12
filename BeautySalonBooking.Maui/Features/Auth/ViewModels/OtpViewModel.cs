@@ -43,7 +43,7 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
     [ObservableProperty] private int countdownSeconds = timeSecond;
     [ObservableProperty] private bool isCountdownRunning;
     [ObservableProperty] private OtpNavigationModel? navigationModel;
-
+    [ObservableProperty] private bool isButtonEnabled = false;
 
     const int timeSecond = 120;
 
@@ -254,5 +254,13 @@ public partial class OtpViewModel : ObservableObject, IQueryAttributable
     private Task GoBackAsync()
     {
         return _navigationService.GoBackAsync();
+    }
+
+    partial void OnOtpCodeChanged(string value)
+    {
+        if (value.Length == 6)
+            IsButtonEnabled = true;
+        else
+            IsButtonEnabled = false;
     }
 }

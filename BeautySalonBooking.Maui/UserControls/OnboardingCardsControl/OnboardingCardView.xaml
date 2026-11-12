@@ -45,16 +45,6 @@
 
         <Grid Grid.Row="2" ColumnDefinitions="100,*,100">
 
-            <Button
-                x:Name="btnBack"
-                Grid.Column="2"
-                BackgroundColor="Transparent"
-                Clicked="btnBack_Clicked"
-                FontFamily="Sans"
-                HorizontalOptions="End"
-                Text="Back"
-                TextColor="#777777" />
-
             <HorizontalStackLayout
                 Grid.Column="1"
                 FlowDirection="LeftToRight"
@@ -81,13 +71,13 @@
             </HorizontalStackLayout>
 
             <Button
-                x:Name="btnNext"
+                x:Name="SkipButton"
                 Grid.Column="0"
                 BackgroundColor="Transparent"
-                Clicked="btnNext_Clicked"
+                Clicked="SkipButton_Clicked"
                 FontFamily="Sans"
                 HorizontalOptions="Start"
-                Text="Next"
+                Text="رد کردن"
                 TextColor="#777777" />
         </Grid>
     </Grid>

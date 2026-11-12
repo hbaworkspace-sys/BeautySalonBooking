@@ -1,4 +1,4 @@
-using BeautySalonBooking.Maui.Components.Shared.Enums;
+﻿using BeautySalonBooking.Maui.Components.Shared.Enums;
 using System.Windows.Input;
 
 namespace BeautySalonBooking.Maui.Components.Button;
@@ -253,7 +253,7 @@ public partial class PrimaryButtonView : ContentView
         switch (AppearanceMode)
         {
             case AppearanceMode.Primary:
-
+                
                 Button.Background = FillBrush;
                 Button.TextColor = TextColor;
 
@@ -336,10 +336,13 @@ public partial class PrimaryButtonView : ContentView
 
     private void UpdateState()
     {
-        Button.IsEnabled =
-            IsButtonEnabled;
-    }
+        Button.IsEnabled = IsButtonEnabled;
 
+        if (IsButtonEnabled == false)
+            FillBrush = Colors.LightGray;
+        else
+           FillBrush = new SolidColorBrush(Color.FromArgb("#F05C80"));
+    }
     #endregion
 
 

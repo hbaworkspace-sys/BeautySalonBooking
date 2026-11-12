@@ -68,5 +68,9 @@ public sealed class OrganizationConfiguration : IEntityTypeConfiguration<Organiz
         builder.Metadata
             .FindNavigation(nameof(Organization.Branches))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.Metadata
+            .FindNavigation(nameof(Organization.Contents))!
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

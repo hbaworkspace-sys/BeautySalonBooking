@@ -57,7 +57,8 @@ public static class ApiDependencyInjection
         //var response = await client.GetAsync("http://94.183.31.34:4545/swagger/index.html");
         //await Shell.Current.DisplayAlert("نتیجه تست", $"HTTP Status: {(int)response.StatusCode}", "OK");
 
-        client.BaseAddress = new Uri("https://192.168.1.109:7036/");
+        //client.BaseAddress = new Uri("https://192.168.1.109:7036/");
+        client.BaseAddress = new Uri("http://94.183.31.34:4545/");
         //client.Timeout = TimeSpan.FromSeconds(30);
 
         //client.BaseAddress = new Uri(

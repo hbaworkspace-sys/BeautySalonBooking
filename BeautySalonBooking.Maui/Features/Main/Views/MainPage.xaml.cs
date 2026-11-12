@@ -1,9 +1,7 @@
-using BeautySalonBooking.Maui.Common.Interfaces;
+﻿using BeautySalonBooking.Maui.Common.Interfaces;
 using BeautySalonBooking.Maui.Features.Home.Views;
 using BeautySalonBooking.Maui.Features.Main.Models;
 using BeautySalonBooking.Maui.Features.Main.ViewModels;
-using BeautySalonBooking.Maui.Features.Appointment.Views;
-using BeautySalonBooking.Maui.Features.Profile.Views;
 using System.ComponentModel;
 
 namespace BeautySalonBooking.Maui.Features.Main.Views;
@@ -23,10 +21,14 @@ public partial class MainPage : ContentPage, IQueryAttributable
 
         vm.PropertyChanged += OnViewModelPropertyChanged;
 
+        // هماهنگ کردن تب انتخاب‌شده با ViewModel
+        MainTabBar.SelectedIndex = GetTabIndex(vm.SelectedTab);
+
         ShowView(vm.SelectedTab);
     }
 
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    public void ApplyQueryAttributes(
+        IDictionary<string, object> query)
     {
         if (query.TryGetValue("SelectedTab", out var value) &&
             value is MainTab tab &&
@@ -40,11 +42,30 @@ public partial class MainPage : ContentPage, IQueryAttributable
         object? sender,
         PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(MainViewModel.SelectedTab) &&
-            BindingContext is MainViewModel vm)
+        if (e.PropertyName != nameof(MainViewModel.SelectedTab) ||
+            BindingContext is not MainViewModel vm)
         {
-            ShowView(vm.SelectedTab);
+            return;
         }
+
+        // به‌روزرسانی ظاهر TabBar
+        MainTabBar.SelectedIndex = GetTabIndex(vm.SelectedTab);
+
+        // به‌روزرسانی محتوای صفحه
+        ShowView(vm.SelectedTab);
+    }
+
+    private static int GetTabIndex(MainTab tab)
+    {
+        return tab switch
+        {
+            MainTab.Messages => 0,
+            MainTab.Search => 1,
+            MainTab.Dashboard => 2,
+            MainTab.Appointments => 3,
+            MainTab.Profile => 4,
+            _ => -1
+        };
     }
 
     private void ShowView(MainTab tab)
@@ -52,13 +73,13 @@ public partial class MainPage : ContentPage, IQueryAttributable
         PageContainer.Content = tab switch
         {
             MainTab.Dashboard =>
-            _viewService.GetView<HomeView>(),
+                _viewService.GetView<HomeView>(),
 
-            MainTab.Appointments =>
-                _viewService.GetView<AppointmentsView>(),
+            //MainTab.Appointments =>
+            //    _viewService.GetView<AppointmentsView>(),
 
-            MainTab.Profile =>
-                _viewService.GetView<ProfileView>(),
+            //MainTab.Profile =>
+            //    _viewService.GetView<ProfileView>(),
 
             _ => null
         };

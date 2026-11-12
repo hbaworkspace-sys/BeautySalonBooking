@@ -123,5 +123,15 @@ public sealed class NavigationService : INavigationService
     {
         return Shell.Current.GoToAsync(AppRoutes.Privacy);
     }
+    public Task GoToDeleteAccountAsync()
+    {
+        return Shell.Current.GoToAsync(AppRoutes.DeleteAccount);
+    }
+
+    public Task GoToDeleteAccountConfirmationAsync()
+    {
+        return Shell.Current.GoToAsync(AppRoutes.DeleteAccountConfirmation);
+    }
+
     #endregion
 }

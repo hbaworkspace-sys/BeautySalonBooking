@@ -37,5 +37,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(AppRoutes.Security, typeof(SecurityPage));
         Routing.RegisterRoute(AppRoutes.NotificationSettings, typeof(NotificationSettingsPage));
         Routing.RegisterRoute(AppRoutes.Privacy, typeof(PrivacyPage));
+        Routing.RegisterRoute(AppRoutes.DeleteAccount, typeof(DeleteAccountPage));
+        Routing.RegisterRoute(AppRoutes.DeleteAccountConfirmation, typeof(DeleteAccountConfirmationPage));
     }
 }

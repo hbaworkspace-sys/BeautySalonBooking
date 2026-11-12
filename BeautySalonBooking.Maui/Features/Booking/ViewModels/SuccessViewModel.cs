@@ -101,7 +101,6 @@ public partial class SuccessViewModel : ObservableObject
     #endregion
 
     #region Navigation
-
     [RelayCommand]
     private Task GoToDashboardAsync()
     {

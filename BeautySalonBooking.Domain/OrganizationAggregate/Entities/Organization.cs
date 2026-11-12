@@ -1,5 +1,6 @@
 ﻿using BeautySalonBooking.Domain.Base.Entities;
 using BeautySalonBooking.Domain.BranchAggregate.Entities;
+using BeautySalonBooking.Domain.ContentAggregate.Entities;
 using BeautySalonBooking.Domain.OrganizationAggregate.Enums;
 
 namespace BeautySalonBooking.Domain.OrganizationAggregate.Entities
@@ -30,7 +31,16 @@ namespace BeautySalonBooking.Domain.OrganizationAggregate.Entities
         public string? Glyph { get; private set; }
         public OrganizationDetail Detail { get; private set; }
 
+
+    public string? Signature { get; private set; }
+    public string? Slogan { get; private set; }
+    public string? Glyph { get; private set; }
+
+
+    private readonly List<OrganizationOwner> _owners = new();
+    public IReadOnlyCollection<OrganizationOwner> Owners => _owners;
         private Organization() { }
+
 
         public Organization(string title, string licenseNumber, OrganizationType type, string? slogan = null)
         {
@@ -49,6 +59,10 @@ namespace BeautySalonBooking.Domain.OrganizationAggregate.Entities
 
         //public void AddDetail(OrganizationDetail detail) => _details.Add(detail);
 
+
+
+    private readonly List<ContentItem> _contents = new();
+    public IReadOnlyCollection<ContentItem> Contents => _contents.AsReadOnly();
 
     }
 }

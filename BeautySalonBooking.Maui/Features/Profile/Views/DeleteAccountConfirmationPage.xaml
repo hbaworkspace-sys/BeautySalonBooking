@@ -3,11 +3,60 @@
     x:Class="BeautySalonBooking.Maui.Features.Profile.Views.DeleteAccountConfirmationPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="DeleteAccountConfirmationPage">
-    <VerticalStackLayout>
-        <Label
-            HorizontalOptions="Center"
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+    xmlns:btn="clr-namespace:BeautySalonBooking.Maui.Components.Button"
+    xmlns:input="clr-namespace:BeautySalonBooking.Maui.Components.Input"
+    xmlns:nav="clr-namespace:BeautySalonBooking.Maui.Components.Navigation"
+    xmlns:vm="clr-namespace:BeautySalonBooking.Maui.Features.Profile.ViewModels"
+    x:DataType="vm:DeleteAccountConfirmationViewModel"
+    BackgroundColor="#FAF8FA"
+    FlowDirection="RightToLeft"
+    NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <nav:NavigationHeaderView
+            Title="حذف حساب کاربری"
+            Grid.Row="0"
+            BackCommand="{Binding GoBackCommand}"
+            IsBackEnabled="True"
+            IsBackVisible="True" />
+
+        <VerticalStackLayout
+            Grid.Row="1"
+            Padding="20,18,20,30"
+            Spacing="10">
+
+            <Label
+                HorizontalOptions="Center"
+                Style="{StaticResource Caption}"
+                Text="برای تأیید، عبارت حذف حساب را تایپ کنید" />
+
+            <Entry
+                Margin="0,5,0,0"
+                FontSize="12"
+                Placeholder="حذف حساب"
+                Text="{Binding DeleteConfirmationText}" />
+
+            <!--<Label
+                FontFamily="Sans"
+                FontSize="12"
+                IsVisible="{Binding HasError}"
+                Text="{Binding ErrorMessage}"
+                TextColor="#D64550" />-->
+
+
+            <btn:PrimaryButtonView
+                Title=" حذف حساب"
+                Command="{Binding GoToDeleteAccountConfirmationCommand}"
+                IsButtonEnabled="False" />
+
+            <btn:PrimaryButtonView
+                Title="انصراف و بازگشت"
+                AppearanceMode="Secondary"
+                Command="{Binding GoBackCommand}" />
+
+        </VerticalStackLayout>
+
+    </Grid>
+
 </ContentPage>

@@ -91,6 +91,9 @@ public static class PresentationDependencyInjection
         services.AddTransient<PrivacyPage>();
         services.AddTransient<PrivacyViewModel>();
 
+        services.AddTransient<DeleteAccountPage>();
+        services.AddTransient<DeleteAccountViewModel>();
+
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IViewService, ViewService>();
