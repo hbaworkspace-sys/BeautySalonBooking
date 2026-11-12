@@ -19,5 +19,8 @@ namespace BeautySalonBooking.Application.Authentication.Interfaces
         Task<List<string>> GetRoleNamesAsync(
             long userId,
             CancellationToken cancellationToken);
+        Task<List<RoleDto>> GetRolsAsync(
+           long userId,
+           CancellationToken cancellationToken);
     }
 }
