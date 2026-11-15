@@ -8,5 +8,5 @@ public enum RoleCode
     Receptionist = 4,
     SystemAdmin = 90,
     Developer = 99,
-    Other = 100,
+    Other = 100
 }

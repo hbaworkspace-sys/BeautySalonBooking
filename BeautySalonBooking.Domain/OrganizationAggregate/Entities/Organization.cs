@@ -31,14 +31,6 @@ namespace BeautySalonBooking.Domain.OrganizationAggregate.Entities
         public string? Glyph { get; private set; }
         public OrganizationDetail Detail { get; private set; }
 
-
-    public string? Signature { get; private set; }
-    public string? Slogan { get; private set; }
-    public string? Glyph { get; private set; }
-
-
-    private readonly List<OrganizationOwner> _owners = new();
-    public IReadOnlyCollection<OrganizationOwner> Owners => _owners;
         private Organization() { }
 
 
@@ -61,8 +53,8 @@ namespace BeautySalonBooking.Domain.OrganizationAggregate.Entities
 
 
 
-    private readonly List<ContentItem> _contents = new();
-    public IReadOnlyCollection<ContentItem> Contents => _contents.AsReadOnly();
+        private readonly List<ContentItem> _contents = new();
+        public IReadOnlyCollection<ContentItem> Contents => _contents.AsReadOnly();
 
     }
 }
