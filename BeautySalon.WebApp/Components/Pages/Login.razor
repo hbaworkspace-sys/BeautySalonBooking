@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            <EditForm Model="phoneModel" OnValidSubmit="SendOtp" class="login-form">
+            <EditForm Model="phoneModel" OnValidSubmit="SendOtp" class="login-form" FormName="login-form">
                 <DataAnnotationsValidator />
 
                 <div class="field-group">
@@ -91,13 +91,21 @@
         if (!firstRender)
             return;
 
-
-        var valid = await TokenService.IsSessionValidAsync();
-
-
-        if (valid)
+        try
         {
-            Navigation.NavigateTo("/dashboard");
+            // صبر کوتاه برای اطمینان از آماده بودن JS
+            await Task.Delay(100);
+
+            var valid = await TokenService.IsSessionValidAsync();
+            if (valid)
+            {
+                Navigation.NavigateTo("/dashboard");
+            }
+        }
+        catch (Exception ex)
+        {
+            // لاگ کردن خطا برای دیباگ
+            Console.WriteLine($"Error in OnAfterRenderAsync: {ex.Message}");
         }
     }
     private readonly PhoneModel phoneModel = new();

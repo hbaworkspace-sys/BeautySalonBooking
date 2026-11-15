@@ -1,8 +1,10 @@
 ﻿using BeautySalonBooking.WebApp.Authentication;
 using BeautySalonBooking.WebApp.Components;
+using BeautySalonBooking.WebApp.Interfaces.Categories;
 using BeautySalonBooking.WebApp.Interfaces.Common;
 using BeautySalonBooking.WebApp.Interfaces.Login;
 using BeautySalonBooking.WebApp.Interfaces.Roles;
+using BeautySalonBooking.WebApp.Services.Categories;
 using BeautySalonBooking.WebApp.Services.Common;
 using BeautySalonBooking.WebApp.Services.Login;
 using BeautySalonBooking.WebApp.Services.Roles;
@@ -54,6 +56,7 @@ namespace BeautySalonBooking.WebApp
             builder.Services.AddScoped<ILoginService, LoginService>();
 
             builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 
             // ==========================

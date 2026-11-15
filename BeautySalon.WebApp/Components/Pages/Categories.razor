@@ -1,0 +1,988 @@
+﻿@page "/categories"
+@rendermode InteractiveServer
+@using BeautySalonBooking.WebApp.Interfaces.Categories
+@using BeautySalonBooking.WebApp.Models.Category
+@using MudBlazor
+@layout Layout.SalonLayout
+@inject ICategoryService CategoryService
+@inject ISnackbar Snackbar
+@inject ILogger<Categories> Logger
+@inherits AuthGuard
+
+<PageTitle>مدیریت دسته‌بندی | بیوتی سالن</PageTitle>
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .page-title h1 {
+        margin: 0 0 4px 0;
+        font-size: 1.5rem;
+        color: #333;
+    }
+
+    .page-title p {
+        margin: 0;
+        color: #777;
+        font-size: 0.9rem;
+    }
+
+    .btn-add {
+        background: #f48fb1;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+    }
+
+        .btn-add:hover {
+            background: #ec407a;
+        }
+
+    .category-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+    }
+
+    .panel {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        padding: 20px;
+    }
+
+    .panel-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #444;
+        margin-bottom: 16px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+    }
+
+    .tree-root, .tree-children {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .tree-children {
+        padding-right: 20px;
+        border-right: 1px dashed #d0d0d0;
+        margin-right: 8px;
+    }
+
+    .tree-node {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s, border 0.2s;
+        margin-bottom: 4px;
+        border: 1px solid transparent;
+    }
+
+        .tree-node:hover {
+            background: #f8f9fa;
+            border-color: #e0e0e0;
+        }
+
+        .tree-node.selected {
+            background: #fce4ec;
+            border-color: #f48fb1;
+        }
+
+    .btn-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        width: 24px;
+        color: #777;
+        font-size: 0.8rem;
+    }
+
+    .node-title {
+        font-weight: 500;
+        color: #333;
+        margin-left: 8px;
+        flex-grow: 1;
+    }
+
+    .node-code {
+        color: #999;
+        font-size: 0.8rem;
+        margin-right: 12px;
+    }
+
+    .node-actions {
+        display: flex;
+        gap: 8px;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .tree-node:hover .node-actions {
+        opacity: 1;
+    }
+
+    .btn-icon {
+        background: #f0f0f0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 4px 8px;
+        color: #555;
+        transition: background 0.2s;
+    }
+
+        .btn-icon:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-icon.danger:hover {
+            background: #ffcdd2;
+            color: #d32f2f;
+        }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        backdrop-filter: blur(3px);
+    }
+
+    .modal-box {
+        background: #fff;
+        width: 100%;
+        max-width: 600px;
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        overflow: hidden;
+        animation: fadeIn 0.3s ease-out;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-header {
+        background: #f8f9fa;
+        padding: 16px 20px;
+        border-bottom: 1px solid #e0e0e0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+    .btn-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #777;
+    }
+
+    .modal-body {
+        padding: 20px;
+        overflow-y: auto;
+        flex-grow: 1;
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #555;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-family: inherit;
+        transition: border-color 0.2s;
+    }
+
+        .form-control:focus {
+            border-color: #f48fb1;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(244, 143, 177, 0.2);
+        }
+
+    .modal-footer {
+        padding: 16px 20px;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        background: #f8f9fa;
+    }
+
+    .btn-secondary {
+        background: #e0e0e0;
+        color: #333;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background: #f48fb1;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .code-input-wrapper {
+        display: flex;
+        direction: ltr;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+        .code-input-wrapper:focus-within {
+            border-color: #f48fb1;
+            box-shadow: 0 0 0 3px rgba(244, 143, 177, 0.2);
+        }
+
+    .code-prefix {
+        background: #f0f0f0;
+        padding: 10px 12px;
+        color: #555;
+        border-right: 1px solid #ccc;
+        font-family: monospace;
+        font-size: 1rem;
+        white-space: nowrap;
+    }
+
+    .code-input {
+        border: none;
+        padding: 10px 12px;
+        flex-grow: 1;
+        outline: none;
+        font-family: monospace;
+        font-size: 1rem;
+        direction: ltr;
+    }
+
+    .media-manager {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px;
+        background: #fafafa;
+    }
+
+    .media-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        transition: box-shadow 0.2s;
+    }
+
+        .media-item:hover {
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+    .media-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        overflow: hidden;
+    }
+
+    .media-thumb {
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+    }
+
+    .media-name {
+        font-size: 0.9rem;
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+    }
+
+    .media-actions {
+        display: flex;
+        gap: 6px;
+    }
+
+    .btn-media-action {
+        background: none;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 4px 8px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.2s;
+    }
+
+        .btn-media-action:hover {
+            background: #f0f0f0;
+        }
+
+        .btn-media-action.delete {
+            color: #d32f2f;
+            border-color: #ffcdd2;
+        }
+
+            .btn-media-action.delete:hover {
+                background: #ffebee;
+            }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="page-header">
+    <div class="page-title">
+        <h1>مدیریت دسته‌بندی</h1>
+        <p>مدیریت درختی دسته‌بندی‌های خدمات</p>
+    </div>
+    <button class="btn-add" @onclick="() => OpenCreateModal(null)">
+        + افزودن ریشه
+    </button>
+</div>
+
+<div class="category-layout">
+    <article class="panel">
+        <h3 class="panel-title">درخت دسته‌بندی</h3>
+        @if (IsLoadingTree)
+        {
+            <div class="text-center py-4">در حال بارگذاری...</div>
+        }
+        else if (Roots == null || !Roots.Any())
+        {
+            <div class="text-center py-4 text-muted">دسته‌بندی‌ای یافت نشد.</div>
+        }
+        else
+        {
+            <ul class="tree-root">
+                @foreach (var root in Roots)
+                {
+                    @RenderNode(root, 1)
+                }
+            </ul>
+        }
+    </article>
+
+    <article class="panel">
+        @if (SelectedNode == null)
+        {
+            <div class="text-center py-4 text-muted">یک نود را از درخت انتخاب کنید.</div>
+        }
+        else
+        {
+            <h3 class="panel-title">اطلاعات دسته‌بندی</h3>
+            <div style="margin-bottom: 12px;"><strong>عنوان:</strong> @SelectedNode.Title</div>
+            <div style="margin-bottom: 12px;"><strong>کد:</strong> @SelectedNode.Code</div>
+            <div style="margin-bottom: 12px;"><strong>سطح:</strong> @SelectedNode.Level</div>
+            <div style="margin-bottom: 12px;"><strong>نوع:</strong> @GetTypeTitle(SelectedNode.Type)</div>
+            <div style="margin-bottom: 12px;"><strong>ترتیب نمایش:</strong> @SelectedNode.DisplayOrder</div>
+            <div style="margin-bottom: 12px;">
+                <strong>آیکون:</strong>
+                @if (!string.IsNullOrEmpty(SelectedNode.Glyph))
+                {
+                    <i class="@SelectedNode.Glyph"></i> <span dir="ltr">(@SelectedNode.Glyph)</span>
+                }
+                else
+                {
+                    <span>—</span>
+                }
+            </div>
+            <div style="margin-bottom: 12px;"><strong>توضیحات:</strong> @(SelectedNode.Description ?? "—")</div>
+
+            @if (SelectedNode.Media != null && SelectedNode.Media.Any())
+            {
+                <div style="margin-top: 16px;">
+                    <strong>تصاویر:</strong>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                        @foreach (var img in SelectedNode.Media)
+                        {
+                            <div style="width: 60px; height: 60px; border-radius: 6px; overflow: hidden; border: 1px solid #ddd;">
+                                <img src="data:@img.ContentType;base64,@Convert.ToBase64String(img.Content)" style="width:100%; height:100%; object-fit:cover;" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </article>
+</div>
+
+<!-- Modal Add/Edit -->
+@if (ShowModal)
+{
+    <div class="modal-overlay" @onclick="CloseModal">
+        <div class="modal-box" @onclick:stopPropagation>
+            <div class="modal-header">
+                <h2>@(IsEditing ? "ویرایش دسته‌بندی" : "افزودن دسته‌بندی جدید")</h2>
+                <button class="btn-close" @onclick="CloseModal">×</button>
+            </div>
+            <div class="modal-body">
+                @if (ParentForCreate != null)
+                {
+                    <div style="background: #e3f2fd; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem; color: #1565c0;">
+                        افزودن فرزند به: <strong>@ParentForCreate.Title</strong>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label>عنوان <span class="text-danger">*</span></label>
+                    <input class="form-control" @bind="CurrentCategory.Title" placeholder="عنوان دسته‌بندی" />
+                </div>
+
+                <div class="form-group">
+                    <label>کد <span class="text-danger">*</span></label>
+                    @if (ParentForCreate == null)
+                    {
+                        <input class="form-control" @bind="CurrentCategory.Code" placeholder="مثلاً SERVICE" disabled="@IsEditing" />
+                    }
+                    else
+                    {
+                        <div class="code-input-wrapper">
+                            <span class="code-prefix">@ParentForCreate.Code-</span>
+                            <input class="code-input" @bind="ChildCodeInput" placeholder="مثلاً HAIR_CUT" disabled="@IsEditing" />
+                        </div>
+                        <small class="text-muted" style="display: block; margin-top: 4px;">کد نهایی: @ParentForCreate.Code-@ChildCodeInput</small>
+                    }
+                </div>
+
+                @if (ParentForCreate == null && !IsEditing)
+                {
+                    <div class="form-group">
+                        <label>نوع <span class="text-danger">*</span></label>
+                        <select class="form-control" @bind="SelectedTypeValue">
+                            <option value="1">خدمات</option>
+                            <option value="2">تخصص</option>
+                            <option value="3">محصول</option>
+                        </select>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label>ترتیب نمایش</label>
+                    <input type="number" class="form-control" @bind="CurrentCategory.DisplayOrder" />
+                </div>
+
+
+                <div class="form-group">
+                    <label>عنوان آیکون (Glyph)</label>
+                    <input class="form-control" @bind="CurrentCategory.Glyph" placeholder="مثلاً: fa-solid fa-scissors" dir="ltr" />
+                    <small class="text-muted">نام کلاس آیکون (مثلاً FontAwesome) را وارد کنید.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>توضیحات</label>
+                    <textarea class="form-control" @bind="CurrentCategory.Description" rows="2"></textarea>
+                </div>
+
+                <!-- 👇 بخش مدیریت تصاویر -->
+                <div class="form-group">
+                    <label>تصاویر</label>
+
+                    <div class="media-manager">
+                        <!-- لیست تصاویر موجود (در حالت ویرایش) -->
+                        @foreach (var existingMedia in ExistingMediaToKeep)
+                        {
+                            <div class="media-item">
+                                <div class="media-info">
+                                    <img class="media-thumb" src="data:@existingMedia.ContentType;base64,@Convert.ToBase64String(existingMedia.Content)" />
+                                    <span class="media-name">@existingMedia.FileName</span>
+                                </div>
+                                <div class="media-actions">
+                                    <button type="button" class="btn-media-action delete" @onclick="() => RemoveExistingMedia(existingMedia)">
+                                        حذف
+                                    </button>
+                                </div>
+                            </div>
+                        }
+
+                        <!-- لیست تصاویر جدید (آپلود شده) -->
+                        @foreach (var newFile in NewFilesToUpload)
+                        {
+                            <div class="media-item">
+                                <div class="media-info">
+                                    <img class="media-thumb" src="@GetBase64Preview(newFile)" />
+                                    <span class="media-name">@newFile.FileName</span>
+                                </div>
+                                <div class="media-actions">
+                                    <button type="button" class="btn-media-action delete" @onclick="() => RemoveNewFile(newFile)">
+                                        حذف
+                                    </button>
+                                </div>
+                            </div>
+                        }
+
+                        <!-- دکمه افزودن تصویر جدید -->
+                        <label class="btn-media-action" style="display: inline-block; margin-top: 8px; background: #e3f2fd; color: #1565c0; border-color: #90caf9;">
+                            <InputFile OnChange="HandleFileSelected" multiple accept="image/*" style="display: none;" />
+                            + افزودن تصویر جدید
+                        </label>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(ModalError))
+                {
+                    <div class="alert alert-danger" style="color: red; margin-top: 10px;">@ModalError</div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" @onclick="CloseModal">لغو</button>
+                <button class="btn-primary" @onclick="SaveCategory" disabled="@(!IsValidCategory())">
+                    @(IsEditing ? "ذخیره تغییرات" : "افزودن")
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal Delete -->
+@if (ShowDeleteModal)
+{
+    <div class="modal-overlay" @onclick="CloseDeleteModal">
+        <div class="modal-box" @onclick:stopPropagation>
+            <div class="modal-header">
+                <h2>حذف دسته‌بندی</h2>
+                <button class="btn-close" @onclick="CloseDeleteModal">×</button>
+            </div>
+            <div class="modal-body">
+                <p>آیا از حذف "<strong>@(SelectedNode?.Title)</strong>" اطمینان دارید؟</p>
+                <p class="text-danger">این عمل غیرقابل بازگشت است.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" @onclick="CloseDeleteModal">لغو</button>
+                <button class="btn-primary" style="background: #d32f2f;" @onclick="DeleteCategory">حذف</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    // 👇 کلاس کمکی برای نگهداری اطلاعات فایل در حافظه
+    public class UploadedFileInfo
+    {
+        public string FileName { get; set; } = string.Empty;
+        public string ContentType { get; set; } = string.Empty;
+        public string Base64Content { get; set; } = string.Empty;
+    }
+
+    private List<CategoryDto> Roots = new();
+    private Dictionary<int, List<CategoryDto>> ChildrenCache = new();
+    private HashSet<int> ExpandedNodes = new();
+    private CategoryDto? SelectedNode;
+    private bool IsLoadingTree = false;
+
+    private bool ShowModal = false;
+    private bool IsEditing = false;
+    private CategoryDto CurrentCategory = new();
+    private CategoryDto? ParentForCreate;
+    private int SelectedTypeValue = 1;
+    private string ModalError = string.Empty;
+    private string ChildCodeInput = string.Empty;
+
+    private bool ShowDeleteModal = false;
+
+    // 👇 لیست‌های مدیریت تصاویر با کلاس جدید
+    private List<CategoryMediaDto> ExistingMediaToKeep = new();
+    private List<UploadedFileInfo> NewFilesToUpload = new();
+
+    private RenderFragment RenderNode(CategoryDto node, int level) => @<li>
+    <div class="tree-node @(SelectedNode?.Id == node.Id ? "selected" : "")" @onclick="() => SelectNode(node)">
+        <button class="btn-toggle" @onclick:stopPropagation @onclick="() => ToggleNode(node)">
+            @(node.HasChildren ? (IsExpanded(node.Id) ? "▼" : "▶") : "•")
+        </button>
+        <span class="node-title">@node.Title</span>
+        <span class="node-code">(@node.Code)</span>
+        <span class="node-actions">
+            @if (level <= 2)
+            {
+                <button class="btn-icon" title="افزودن فرزند" @onclick:stopPropagation @onclick="() => OpenCreateModal(node)">+</button>
+            }
+                <button class="btn-icon" title="ویرایش" @onclick:stopPropagation @onclick="() => OpenEditModal(node)">✎</button>
+                <button class="btn-icon danger" title="حذف" @onclick:stopPropagation @onclick="() => OpenDeleteModal(node)">🗑</button>
+            </span>
+        </div>
+
+    @if (IsExpanded(node.Id) && ChildrenCache.TryGetValue(node.Id, out var children) && children.Any())
+    {
+        <ul class="tree-children">
+            @foreach (var child in children)
+        {
+            @RenderNode(child, level + 1)
+        }
+        </ul>
+    }
+    </li>;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadRoots();
+    }
+
+    private async Task LoadRoots()
+    {
+        try
+        {
+            IsLoadingTree = true;
+            StateHasChanged();
+            Roots = await CategoryService.GetRootsAsync();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading roots");
+            Snackbar.Add("خطا در بارگذاری ریشه‌ها", Severity.Error);
+        }
+        finally
+        {
+            IsLoadingTree = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task RefreshTree()
+    {
+        ChildrenCache.Clear();
+        ExpandedNodes.Clear();
+        SelectedNode = null;
+        await LoadRoots();
+        Snackbar.Add("درخت بازخوانی شد.", Severity.Info);
+    }
+
+    private bool IsExpanded(int id) => ExpandedNodes.Contains(id);
+
+    private async Task ToggleNode(CategoryDto node)
+    {
+        if (!node.HasChildren) return;
+        if (ExpandedNodes.Contains(node.Id))
+        {
+            ExpandedNodes.Remove(node.Id);
+        }
+        else
+        {
+            ExpandedNodes.Add(node.Id);
+            if (!ChildrenCache.ContainsKey(node.Id))
+            {
+                var children = await CategoryService.GetChildrenAsync(node.Code);
+                ChildrenCache[node.Id] = children;
+            }
+        }
+        StateHasChanged();
+    }
+
+    private void SelectNode(CategoryDto node) => SelectedNode = node;
+
+    private void OpenCreateModal(CategoryDto? parent)
+    {
+        IsEditing = false;
+        ParentForCreate = parent;
+        ChildCodeInput = string.Empty;
+        NewFilesToUpload.Clear();
+        ExistingMediaToKeep.Clear();
+
+        string rootCode = parent != null ? $"{parent.Code}-" : "";
+
+        CurrentCategory = new CategoryDto
+            {
+                ParentId = parent?.Id,
+                Title = string.Empty,
+                Code = rootCode,
+                DisplayOrder = 0,
+                Type = parent?.Type ?? 1
+            };
+        SelectedTypeValue = CurrentCategory.Type;
+        ModalError = string.Empty;
+        ShowModal = true;
+    }
+
+    private void OpenEditModal(CategoryDto node)
+    {
+        IsEditing = true;
+        ParentForCreate = null;
+        SelectedNode = node;
+        NewFilesToUpload.Clear();
+
+        // پر کردن لیست تصاویر موجود
+        ExistingMediaToKeep = node.Media?.ToList() ?? new List<CategoryMediaDto>();
+
+        CurrentCategory = new CategoryDto
+            {
+                Id = node.Id,
+                ParentId = node.ParentId,
+                Title = node.Title,
+                Code = node.Code,
+                Type = node.Type,
+                Glyph = node.Glyph,
+                Description = node.Description,
+                DisplayOrder = node.DisplayOrder
+            };
+        SelectedTypeValue = node.Type;
+        ModalError = string.Empty;
+        ShowModal = true;
+    }
+
+    private void CloseModal()
+    {
+        ShowModal = false;
+        CurrentCategory = new CategoryDto();
+        ParentForCreate = null;
+        ChildCodeInput = string.Empty;
+        NewFilesToUpload.Clear();
+        ExistingMediaToKeep.Clear();
+        ModalError = string.Empty;
+    }
+
+    private bool IsValidCategory()
+    {
+        if (string.IsNullOrWhiteSpace(CurrentCategory.Title)) return false;
+
+        if (ParentForCreate != null)
+        {
+            return !string.IsNullOrWhiteSpace(ChildCodeInput);
+        }
+
+        return !string.IsNullOrWhiteSpace(CurrentCategory.Code);
+    }
+
+    // 👇 خواندن فایل‌ها بلافاصله بعد از انتخاب
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        foreach (var file in e.GetMultipleFiles(10))
+        {
+            if (NewFilesToUpload.Any(f => f.FileName == file.Name))
+                continue;
+
+            try
+            {
+                using var stream = file.OpenReadStream(maxAllowedSize: 1024 * 1024 * 5); // 5MB
+                using var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                var bytes = ms.ToArray();
+
+                NewFilesToUpload.Add(new UploadedFileInfo
+                    {
+                        FileName = file.Name,
+                        ContentType = file.ContentType,
+                        Base64Content = Convert.ToBase64String(bytes)
+                    });
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add($"خطا در خواندن فایل {file.Name}: {ex.Message}", Severity.Error);
+            }
+        }
+    }
+
+    private void RemoveNewFile(UploadedFileInfo file)
+    {
+        NewFilesToUpload.Remove(file);
+    }
+
+    private void RemoveExistingMedia(CategoryMediaDto media)
+    {
+        ExistingMediaToKeep.Remove(media);
+    }
+
+    private string GetBase64Preview(UploadedFileInfo file)
+    {
+        return $"data:{file.ContentType};base64,{file.Base64Content}";
+    }
+
+    private async Task SaveCategory()
+    {
+        try
+        {
+            ModalError = string.Empty;
+            if (!IsValidCategory())
+            {
+                ModalError = "لطفاً فیلدهای الزامی را پر کنید.";
+                return;
+            }
+
+            // 👇 استفاده مستقیم از Base64‌های ذخیره شده
+            var newMediaList = NewFilesToUpload.Select(f => new CreateCategoryMediaRequest
+                {
+                    FileName = f.FileName,
+                    ContentType = f.ContentType,
+                    Base64Content = f.Base64Content,
+                    DisplayOrder = 0
+                }).ToList();
+
+            if (IsEditing)
+            {
+                // 👇 1. تولید لیست تصاویر جدید
+                var newMediaList2 = NewFilesToUpload.Select(f => new CreateCategoryMediaRequest
+                    {
+                        FileName = f.FileName,
+                        ContentType = f.ContentType,
+                        Base64Content = f.Base64Content,
+                        DisplayOrder = 0
+                    }).ToList();
+
+                // 👇 2. استخراج شناسه تصاویری که باید بمانند
+                // (تصاویری که در لیست ExistingMediaToKeep باقی مانده‌اند)
+                var idsToKeep = ExistingMediaToKeep.Select(m => m.Id).ToList();
+
+                // 👇 3. ساخت درخواست با فیلدهای جدید
+                var updateReq = new UpdateCategoryRequest
+                    {
+                        Id = CurrentCategory.Id,
+                        Title = CurrentCategory.Title,
+                        Code = CurrentCategory.Code,
+                        Type = SelectedTypeValue,
+                        Description = CurrentCategory.Description,
+                        DisplayOrder = CurrentCategory.DisplayOrder,
+                        Glyph = CurrentCategory.Glyph,
+                        MediaIdsToKeep = idsToKeep, // 👈 لیست تصاویری که باید بمانند
+                        Media = newMediaList2   // 👈 لیست تصاویر جدید
+                    };
+
+                var success = await CategoryService.UpdateAsync(updateReq);
+                if (success)
+                {
+                    Snackbar.Add("دسته‌بندی با موفقیت ویرایش شد.", Severity.Success);
+                    CloseModal();
+                    await RefreshTree();
+                }
+                else ModalError = "خطا در ویرایش دسته‌بندی.";
+            }
+            else
+            {
+                string finalCode = CurrentCategory.Code;
+                if (ParentForCreate != null)
+                {
+                    finalCode = $"{ParentForCreate.Code}-{ChildCodeInput}";
+                }
+
+                // 👇 تولید لیست تصاویر جدید از فایل‌های آپلود شده
+                var newMediaList3 = NewFilesToUpload.Select(f => new CreateCategoryMediaRequest
+                    {
+                        FileName = f.FileName,
+                        ContentType = f.ContentType,
+                        Base64Content = f.Base64Content,
+                        DisplayOrder = 0
+                    }).ToList();
+
+                var createReq = new CreateCategoryRequest
+                    {
+                        Title = CurrentCategory.Title,
+                        Code = finalCode,
+                        Type = SelectedTypeValue,
+                        ParentId = ParentForCreate?.Id,
+                        Description = CurrentCategory.Description,
+                        DisplayOrder = CurrentCategory.DisplayOrder,
+                        Glyph = CurrentCategory.Glyph,
+                        Media = newMediaList3 // 👈 اینجا لیست تصاویر را پاس بدهید
+                    };
+
+                var newId = await CategoryService.CreateAsync(createReq);
+                if (newId > 0)
+                {
+                    Snackbar.Add("دسته‌بندی با موفقیت ایجاد شد.", Severity.Success);
+                    CloseModal();
+                    await RefreshTree();
+                }
+                else ModalError = "خطا در ایجاد دسته‌بندی.";
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error saving category");
+            ModalError = ex.Message;
+        }
+    }
+
+    private void OpenDeleteModal(CategoryDto node)
+    {
+        SelectedNode = node;
+        ShowDeleteModal = true;
+    }
+
+    private void CloseDeleteModal() => ShowDeleteModal = false;
+
+    private async Task DeleteCategory()
+    {
+        try
+        {
+            if (SelectedNode == null) return;
+            var success = await CategoryService.DeleteAsync(SelectedNode.Id);
+            if (success)
+            {
+                Snackbar.Add("دسته‌بندی با موفقیت حذف شد.", Severity.Success);
+                CloseDeleteModal();
+                SelectedNode = null;
+                await RefreshTree();
+            }
+            else
+            {
+                Snackbar.Add("خطا در حذف (احتمالاً دارای فرزند یا سرویس است).", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error deleting category");
+            Snackbar.Add("خطا: " + ex.Message, Severity.Error);
+        }
+    }
+
+    private string GetTypeTitle(int type) => type switch
+    {
+        1 => "خدمات",
+        2 => "تخصص",
+        3 => "محصول",
+        _ => "نامشخص"
+    };
+}

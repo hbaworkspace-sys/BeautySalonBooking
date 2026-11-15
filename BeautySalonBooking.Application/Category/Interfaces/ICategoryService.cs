@@ -6,10 +6,18 @@ namespace BeautySalonBooking.Application.Category.Interfaces;
 
 public interface ICategoryService
 {
-    /// <summary>
-    /// دریافت دسته‌بندی‌های خدمات بر اساس کد دسته‌بندی والد.
-    /// </summary>
+
+    Task<ApiResponse_New<GetRootCategoriesResponse>> GetRootsAsync(
+       GetRootCategoriesRequest request, CancellationToken ct = default);
+
     Task<ApiResponse_New<GetChildCategoriesResponse>> GetChildrenAsync(
-        GetChildCategoriesRequest request,
-        CancellationToken cancellationToken);
+        GetChildCategoriesRequest request, CancellationToken ct = default);
+
+    Task<ApiResponse_New<int>> CreateAsync(
+        CreateCategoryRequest request, CancellationToken ct = default);
+
+    Task<ApiResponse_New<bool>> UpdateAsync(
+        UpdateCategoryRequest request, CancellationToken ct = default);
+
+    Task<ApiResponse_New<bool>> DeleteAsync(int id, CancellationToken ct = default);
 }
